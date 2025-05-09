@@ -9,4 +9,5 @@
     <color name="assu_box">#F4F4F5</color>
     <color name="assu_font_main">#040404</color>
     <color name="assu_font_sub">#8E9398</color>
+    <color name="not_selected_btn">#B4B4B4</color>
 </resources>
