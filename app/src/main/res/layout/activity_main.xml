@@ -19,7 +19,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +29,9 @@
         app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
         app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
         app:labelVisibilityMode="labeled"
+        app:itemActiveIndicatorStyle="@style/BottomNavBackgorundStyle"
         app:itemRippleColor="@android:color/transparent"
-        app:itemBackground="@null"
-        app:itemActiveIndicatorStyle="@null"/>
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
