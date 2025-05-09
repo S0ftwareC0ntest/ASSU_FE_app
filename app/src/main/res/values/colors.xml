@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="assu_main">#0068FE</color>
+    <color name="assu_sub">#66A4FE</color>
+    <color name="assu_sub2">#DBDDE1</color>
+    <color name="assu_sub3">#E5F6FE</color>
+    <color name="assu_box">#F4F4F5</color>
+    <color name="assu_font_main">#040404</color>
+    <color name="assu_font_sub">#8E9398</color>
 </resources>
