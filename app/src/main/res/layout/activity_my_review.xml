@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyReviewActivity">
+
+    <View
+        android:id="@+id/manageReview_mg1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0163"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/manageReview_mg2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0763"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg1"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:id="@+id/btn_manageReview_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg1"
+        app:layout_constraintStart_toEndOf="@id/manageReview_mg2"/>
+
+    <View
+        android:id="@+id/manageReview_mg3"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        app:layout_constraintWidth_percent="0.033"
+        app:layout_constraintStart_toEndOf="@id/btn_manageReview_back"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/btn_manageReview_back"
+        app:layout_constraintBottom_toBottomOf="@id/btn_manageReview_back"
+        app:layout_constraintStart_toEndOf="@id/manageReview_mg3"
+        android:text="내가 작성한 리뷰"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="20sp"/>
+
+    <View
+        android:id="@+id/manageReview_mg4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0523"
+        app:layout_constraintTop_toBottomOf="@id/btn_manageReview_back"
+        app:layout_constraintStart_toStartOf="@id/btn_manageReview_back"/>
+
+    <TextView
+        android:id="@+id/tv_manageReview_written_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="작성한 리뷰가"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg4"
+        app:layout_constraintStart_toStartOf="@id/btn_manageReview_back"/>
+
+    <View
+        android:id="@+id/manageReview_mg5"
+        app:layout_constraintWidth_percent="0.0101"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        app:layout_constraintStart_toEndOf="@id/tv_manageReview_written_review"
+        app:layout_constraintTop_toTopOf="@id/tv_manageReview_written_review"/>
+
+    <TextView
+        android:id="@+id/tv_manageReview_review_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tv_manageReview_written_review"
+        app:layout_constraintStart_toEndOf="@id/manageReview_mg5"
+        android:text="12"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textColor="@color/assu_main"
+        android:textSize="13sp"/>
+
+    <View
+        android:id="@+id/manageReview_mg6"
+        app:layout_constraintWidth_percent="0.0101"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        app:layout_constraintStart_toEndOf="@id/tv_manageReview_review_count"
+        app:layout_constraintTop_toTopOf="@id/tv_manageReview_written_review"/>
+
+    <TextView
+        android:id="@+id/tv_isExist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:text="건 있어요"
+        app:layout_constraintTop_toTopOf="@id/tv_manageReview_written_review"
+        app:layout_constraintStart_toEndOf="@id/manageReview_mg6"/>
+
+
+    <TextView
+        android:id="@+id/tv_preorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최신 순"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintEnd_toStartOf="@id/manageReview_mg8"
+        app:layout_constraintTop_toTopOf="@id/tv_isExist"/>
+
+    <View
+        android:id="@+id/manageReview_mg8"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0172"
+        app:layout_constraintEnd_toStartOf="@id/iv_manageReview_preorder"
+        app:layout_constraintTop_toTopOf="@id/tv_preorder"/>
+
+    <ImageView
+        android:id="@+id/iv_manageReview_preorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_sort_pre"
+        app:layout_constraintTop_toTopOf="@id/tv_preorder"
+        app:layout_constraintEnd_toStartOf="@id/manageReview_mg9"
+        app:layout_constraintBottom_toBottomOf="@id/tv_preorder"/>
+
+    <View
+        android:id="@+id/manageReview_mg9"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0809"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_preorder"/>
+
+    <View
+        android:id="@+id/manageReview_mg10"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0559"
+        app:layout_constraintTop_toBottomOf="@id/tv_manageReview_written_review"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+    <FrameLayout
+        android:id="@+id/fl_manageReview_reviewExist"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg10">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_manageReview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_manageReview_reviewNull"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/manageReview_mg10">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/manageReview_mg13"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHeight_percent="0.2484"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_manageReview_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아직 작성된 리뷰가 없어요"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/manageReview_mg13"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <View
+                android:id="@+id/manageReview_mg14"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.0075"
+                app:layout_constraintTop_toBottomOf="@id/tv_manageReview_none"
+                app:layout_constraintStart_toStartOf="@id/tv_manageReview_none"/>
+
+            <TextView
+                android:id="@+id/tv_manageReview_explain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제휴 리뷰를 작성하면 혜택을 받을 수 있어요"
+                android:textSize="14sp"
+                android:textColor="@color/assu_font_sub"
+                android:fontFamily="@font/pretendard_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/manageReview_mg14"/>
+
+            <View
+                android:id="@+id/manageReview_mg15"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.034"
+                app:layout_constraintTop_toBottomOf="@id/tv_manageReview_explain"
+                app:layout_constraintStart_toStartOf="@id/tv_manageReview_explain"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_review_write"
+                app:layout_constraintTop_toBottomOf="@id/manageReview_mg15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
