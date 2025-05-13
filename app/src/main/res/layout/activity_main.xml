@@ -12,28 +12,40 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:navGraph = "@navigation/nav_graph"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
         app:defaultNavHost = "true"/>
 
+    <View
+        android:id="@+id/view_main_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="#D8DADB"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+        app:layout_constraintTop_toBottomOf="@id/nav_host_fragment"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        app:itemActiveIndicatorStyle="@style/BottomNavBackgorundStyle"
+        app:itemIconTint="@color/bottom_nav_color_selector"
+        app:itemPaddingTop="20dp"
+        android:paddingBottom="3dp"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
+        app:itemTextColor="@color/bottom_nav_color_selector"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu"
-        app:itemIconTint="@color/bottom_nav_color_selector"
-        app:itemTextColor="@color/bottom_nav_color_selector"
-        app:itemTextAppearanceActive="@style/BottomNavLabelStyle"
-        app:itemTextAppearanceInactive="@style/BottomNavLabelStyle"
-        app:labelVisibilityMode="labeled"
-        app:itemActiveIndicatorStyle="@style/BottomNavBackgorundStyle"
-        app:itemRippleColor="@android:color/transparent"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"/>
+        app:layout_constraintTop_toBottomOf="@id/nav_host_fragment"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
