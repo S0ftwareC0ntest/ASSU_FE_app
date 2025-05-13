@@ -40,17 +40,18 @@
             android:id="@+id/iv_location_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@color/assu_main"/>
+            android:src="@drawable/img_location_beer"/>
     </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/view_location_item_mg3"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_location_item_bg"
         app:layout_constraintDimensionRatio="11:122"
         app:layout_constraintStart_toEndOf="@id/cv_location_item"
         app:layout_constraintTop_toTopOf="@id/iv_location_item_bg"
-        app:layout_constraintBottom_toBottomOf="@id/iv_location_item_bg"/>
+        app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
         android:id="@+id/ll_location_item_content"
