@@ -42,6 +42,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".presentation.location.LocationSearchActivity" />
+        <activity android:name=".presentation.review.ReviewStoreActivity" />
         <activity
             android:name=".presentation.location.CertifyActivity"
             android:exported="false">

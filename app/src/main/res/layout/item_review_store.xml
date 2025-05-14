@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/tv_review_store_item_organization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="총학생회"
+        android:textColor="@color/assu_main"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:background="@drawable/bg_review_store_round"/>
+
+    <TextView
+        android:id="@+id/tv_review_store_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4인 이상 식사시, 음료 제공"
+        android:textColor="@color/assu_font_sub"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_review_store_item_organization"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="6dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
