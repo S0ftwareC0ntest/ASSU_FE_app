@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ASSU_FE_app"
         tools:targetApi="31">
+        <activity android:name=".presentation.location.LocationSearchActivity" />
         <activity
             android:name=".ServiceSuggestActivity"
             android:exported="false" />
@@ -19,7 +20,7 @@
             android:name=".MyReviewActivity"
             android:exported="true" />
         <activity
-            android:name="com.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
