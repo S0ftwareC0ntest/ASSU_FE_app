@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentLoactionBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.presentation.review.ReviewStoreActivity
 
 class LocationFragment :
 BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
@@ -25,7 +26,7 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
     }
 
     private fun navigateToSearch() {
-        val intent = Intent(requireContext(), LocationSearchActivity::class.java)
+        val intent = Intent(requireContext(), ReviewStoreActivity::class.java)
         startActivity(intent)
     }
 }
