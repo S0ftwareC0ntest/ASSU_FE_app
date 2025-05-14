@@ -27,7 +27,8 @@
                 android:text="나의 제휴 내역"
                 android:fontFamily="@font/pretendard_semibold"
                 android:textSize="20sp"
-                android:textColor="@color/assu_font_main"/>
+                android:textColor="@color/assu_font_main"
+                android:layout_marginStart="3dp"/>
         </LinearLayout>
         
         <View
