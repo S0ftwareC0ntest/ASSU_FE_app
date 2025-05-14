@@ -9,5 +9,4 @@ class LocationItemFragment :
     override fun initObserver() {}
 
     override fun initView() {}
-
 }

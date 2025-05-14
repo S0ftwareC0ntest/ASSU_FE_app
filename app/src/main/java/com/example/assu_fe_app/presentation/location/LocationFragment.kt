@@ -1,5 +1,6 @@
 package com.example.assu_fe_app.presentation.location
 
+import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentLoactionBinding
@@ -9,7 +10,6 @@ class LocationFragment :
 BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
 
     override fun initView() {
-        // 클릭 시 검색 프래그먼트로 이동
         binding.viewLocationSearchBar.setOnClickListener {
             navigateToSearch()
         }
@@ -25,6 +25,7 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
     }
 
     private fun navigateToSearch() {
-        findNavController().navigate(R.id.action_locationFragment_to_locationSearchFragment)
+        val intent = Intent(requireContext(), LocationSearchActivity::class.java)
+        startActivity(intent)
     }
 }

@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/locationSearchFragment"
-        android:name="com.example.assu_fe_app.presentation.location.LocationSearchFragment"
+        android:name="com.example.assu_fe_app.presentation.location.LocationSearchActivity"
         android:label="LocationSearchFragment">
         <action
             android:id="@+id/action_locationSearchFragment_to_locationFragment"
