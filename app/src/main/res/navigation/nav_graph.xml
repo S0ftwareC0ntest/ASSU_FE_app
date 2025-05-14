@@ -11,8 +11,21 @@
 
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.example.assu_fe_app.LoactionFragment"
-        android:label="Location"/>
+        android:name="com.example.assu_fe_app.presentation.location.LocationFragment"
+        android:label="Location">
+        <action
+            android:id="@+id/action_locationFragment_to_locationSearchFragment"
+            app:destination="@id/locationSearchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/locationSearchFragment"
+        android:name="com.example.assu_fe_app.presentation.location.LocationSearchActivity"
+        android:label="LocationSearchFragment">
+        <action
+            android:id="@+id/action_locationSearchFragment_to_locationFragment"
+            app:destination="@id/locationFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/dashboardFragment"
