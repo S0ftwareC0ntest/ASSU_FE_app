@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.assu_fe_app.HomeFragment"
-        android:label="Home"/>
+        android:label="Home">
+        <action
+            android:id="@+id/action_homeFragment_to_myPartnershipFragment"
+            app:destination="@id/myPartnershipDetailsFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/locationFragment"
@@ -20,7 +24,7 @@
 
     <fragment
         android:id="@+id/locationSearchFragment"
-        android:name="com.example.assu_fe_app.presentation.location.LocationSearchActivity"
+        android:name="com.example.assu_fe_app.presentation.location.LocationSearchSuccessFragment"
         android:label="LocationSearchFragment">
         <action
             android:id="@+id/action_locationSearchFragment_to_locationFragment"
@@ -36,6 +40,17 @@
         android:id="@+id/mypageFragment"
         android:name="com.example.assu_fe_app.MypageFragment"
         android:label="Mypage"/>
+
+    <fragment
+        android:id="@+id/myPartnershipDetailsFragment"
+        android:name="com.example.assu_fe_app.MyPartnershipDetailsFragment"
+        android:label="MyPartnershipDetailsFragment">
+
+        <action
+            android:id="@+id/action_myPartnershipFragment_to_homeFragment"
+            app:destination="@id/homeFragment"/>
+
+    </fragment>
 
 
 </navigation>
