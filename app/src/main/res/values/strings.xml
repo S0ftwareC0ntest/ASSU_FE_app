@@ -6,4 +6,10 @@
     <string name="myPage">계정관리</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="suggest_target">
+        <item>총학생회</item>
+        <item>단과대 학생회</item>
+        <item>과 학생회</item>
+    </string-array>
 </resources>
+

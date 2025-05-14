@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="@id/btn_manageReview_back"
         app:layout_constraintStart_toEndOf="@id/manageReview_mg3"
         android:text="내가 작성한 리뷰"
-        android:fontFamily="@font/pretendard_bold"
+        android:fontFamily="@font/pretendard_semibold"
         android:textSize="20sp"/>
 
     <View
