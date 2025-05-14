@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -159,40 +160,7 @@
             app:layout_constraintTop_toBottomOf="@id/iv_review_img1"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/bg_review_box"-->
-<!--        app:layout_constraintStart_toEndOf="@id/review_mg1_1"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/review_mg1_2"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-
-<!--        <View-->
-<!--            android:id="@+id/review_mg8"-->
-<!--            android:layout_width="22dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            app:layout_constraintHeight_percent="0.0126"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/iv_review_img1"-->
-<!--            app:layout_constraintStart_toStartOf="@id/iv_review_img1"/>-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_review_date"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="작성일 | 2024-10-31 18:36"-->
-<!--            android:textColor="@color/assu_font_sub"-->
-<!--            android:fontFamily="@font/pretendard_regular"-->
-<!--            android:textSize="13sp"-->
-<!--            app:layout_constraintStart_toStartOf="@id/iv_review_img1"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/review_mg8"/>-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
