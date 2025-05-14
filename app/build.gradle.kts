@@ -53,4 +53,7 @@ dependencies {
     // 바텀 네비게이션
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // grid layout
+    implementation(libs.androidx.gridlayout)
 }

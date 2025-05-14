@@ -1,5 +1,6 @@
 package com
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -21,10 +22,10 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            val extraPaddingTop = 3 // 추가로 키우고 싶은 높이 (dp → px 변환 필요)
+            v.setPadding(systemBars.left, systemBars.top + extraPaddingTop.dpToPx(v.context), systemBars.right, 0)
             insets
         }
-
 
         initBottomNavigation()
     }
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+    }
+
+    fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 
 }
