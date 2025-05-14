@@ -20,7 +20,7 @@ data class LocationSearchResultItem(
     val content: String
 )
 
-class LocationSearchSuccessFragmentFragment :
+class LocationSearchSuccessFragment :
     BaseFragment<FragmentLocationSearchSuccessBinding>(R.layout.fragment_location_search_success) {
 
     private lateinit var adapter: LocationSearchSuccessAdapter
