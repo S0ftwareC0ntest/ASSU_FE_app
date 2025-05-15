@@ -2,10 +2,12 @@ package com.example.assu_fe_app.presentation.location
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityPhotoReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
@@ -27,6 +29,21 @@ class PhotoReviewActivity : BaseActivity<ActivityPhotoReviewBinding>(R.layout.ac
         val backButton = binding.ivMyPhotoReviewBackArrow
         backButton.setOnClickListener{
             finish() // StarReviewActivity로 돌아감
+        }
+
+        val finishWritingDeactivatedButton = binding.layoutFinishReviewDeactivatedButton
+        val finishWritingActivatedButton = binding.layoutFinishReviewActivatedButton
+        var review = binding.etWritePhotoReview
+
+        review.addTextChangedListener {
+            val text = it.toString()
+            if(text.isNotBlank()) {
+                finishWritingDeactivatedButton.visibility = View.GONE
+                finishWritingActivatedButton.visibility = View.VISIBLE
+            } else {
+                finishWritingDeactivatedButton.visibility = View.VISIBLE
+                finishWritingActivatedButton.visibility = View.GONE
+            }
         }
     }
 
