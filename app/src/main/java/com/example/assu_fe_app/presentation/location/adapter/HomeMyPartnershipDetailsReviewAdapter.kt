@@ -5,6 +5,10 @@ import com.example.assu_fe_app.presentation.location.HomeMyPartnershipDetailsRev
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ItemMyPartnershipReviewListBinding
 
 
@@ -23,6 +27,10 @@ class HomeMyPartnershipDetailsReviewAdapter (
                 // 마지막 아이템이면 선 숨기기
                 binding.viewLocationSearchResultItemLine.visibility =
                     if (isLastItem) View.GONE else View.VISIBLE
+
+                binding.tvWriteReview.setOnClickListener { view ->
+                    Navigation.findNavController(view).navigate(R.id.action_myPartnershipFragment_to_starReviewActivity)
+                }
             }
         }
 

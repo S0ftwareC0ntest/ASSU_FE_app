@@ -50,7 +50,17 @@
             android:id="@+id/action_myPartnershipFragment_to_homeFragment"
             app:destination="@id/homeFragment"/>
 
+        <action
+            android:id="@+id/action_myPartnershipFragment_to_starReviewActivity"
+            app:destination="@id/starReviewActivity"/>
+
     </fragment>
 
+
+    <activity
+        android:id="@+id/starReviewActivity"
+        android:name="com.example.assu_fe_app.presentation.location.StarReviewActivity"
+        android:label="StarReviewActivity">
+    </activity>
 
 </navigation>

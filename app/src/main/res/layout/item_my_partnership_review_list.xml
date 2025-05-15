@@ -43,10 +43,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_write_review"/>
+        app:layout_constraintEnd_toStartOf="@+id/tv_write_review"/>
 
     <TextView
-        android:id="@+id/btn_write_review"
+        android:id="@+id/tv_write_review"
         android:layout_width="78dp"
         android:layout_height="31dp"
         android:layout_marginEnd="24dp"

@@ -52,6 +52,12 @@ class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.acti
                 activatedButton.visibility=View.VISIBLE
             }
         }
+
+        // 뒤로 가기 버튼 (activity -> fragment 전환. 그저 백스텝이어서 finish로 activity 끝냄)
+        val backButton = binding.ivStarReviewBackArrow
+        backButton.setOnClickListener {
+            finish() // 액티비티 종료 → 이전 화면(프래그먼트 혹은 액티비티)로 돌아감
+        }
     }
 
     override fun initObserver() {
@@ -60,5 +66,6 @@ class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.acti
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
     }
+
 
 }

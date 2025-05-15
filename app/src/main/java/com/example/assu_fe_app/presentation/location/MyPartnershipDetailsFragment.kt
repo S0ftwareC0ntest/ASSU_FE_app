@@ -1,5 +1,6 @@
 package com.example.assu_fe_app.presentation.location
 
+import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
@@ -10,7 +11,7 @@ import com.example.assu_fe_app.presentation.location.adapter.HomeMyPartnershipDe
 data class HomeMyPartnershipDetailsReviewItem(
     val placeName: String,
     val description: String,
-    val dateTime: String
+    val dateTime: String,
 )
 
 class MyPartnershipDetailsFragment :
