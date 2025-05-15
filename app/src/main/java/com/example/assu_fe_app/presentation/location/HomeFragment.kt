@@ -1,12 +1,7 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.location
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentHomeBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 

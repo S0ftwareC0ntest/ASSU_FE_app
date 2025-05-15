@@ -1,4 +1,4 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.location
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assu_fe_app.R
 
 class CertifyActivity : AppCompatActivity() {
 

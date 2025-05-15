@@ -5,7 +5,7 @@
     android:id="@+id/certify"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CertifyActivity">
+    tools:context=".presentation.location.CertifyActivity">
 
     <ImageView
         android:id="@+id/iv_certify_back_arrow"
