@@ -1,6 +1,7 @@
 package com.example.assu_fe_app.presentation.location
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentManager
+import com.example.assu_fe_app.FinishReviewActivity
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityPhotoReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
@@ -45,11 +48,16 @@ class PhotoReviewActivity : BaseActivity<ActivityPhotoReviewBinding>(R.layout.ac
                 finishWritingActivatedButton.visibility = View.GONE
             }
         }
+
+        finishWritingActivatedButton.setOnClickListener {
+            val intent = Intent(this, FinishReviewActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun initObserver() {
     }
-
 
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()

@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ASSU_FE_app"
         tools:targetApi="31">
         <activity
+            android:name=".FinishReviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.location.PhotoReviewActivity"
             android:exported="false" />
         <activity

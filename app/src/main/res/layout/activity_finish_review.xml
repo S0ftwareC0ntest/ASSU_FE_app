@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="9dp"
             android:src="@drawable/ic_cross"/>
-        
+
         <View
             android:id="@+id/view_finish_review_mg1"
             android:layout_width="match_parent"
@@ -90,15 +90,6 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
