@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="인쌩맥주에서 음료 한 병을 제공받았어요!"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/assu_font_sub"
         app:layout_constraintStart_toStartOf="parent"
