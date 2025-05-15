@@ -402,7 +402,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:background="@drawable/bg_ranking_box"
+            android:background="@drawable/bg_empty_line_box"
             android:padding="16dp"
             app:layout_constraintWidth_percent="0.8779"
             android:layout_marginTop="5dp"

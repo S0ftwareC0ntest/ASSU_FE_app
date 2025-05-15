@@ -1,6 +1,7 @@
 package com.example.assu_fe_app.presentation.location
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -58,6 +59,12 @@ class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.acti
         backButton.setOnClickListener {
             finish() // 액티비티 종료 → 이전 화면(프래그먼트 혹은 액티비티)로 돌아감
         }
+
+        val writeReviewButton = binding.layoutWriteReviewActivatedButton
+        writeReviewButton.setOnClickListener {
+            val intent = Intent(this, PhotoReviewActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initObserver() {
@@ -66,6 +73,4 @@ class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.acti
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
     }
-
-
 }
