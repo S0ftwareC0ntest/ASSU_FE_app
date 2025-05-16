@@ -7,6 +7,12 @@
         android:layout_height="match_parent"
         tools:context=".FinishReviewFragment">
 
+        <FrameLayout
+            android:id="@+id/finish_review_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
         <ImageView
             android:id="@+id/iv_cross"
             android:layout_width="24dp"

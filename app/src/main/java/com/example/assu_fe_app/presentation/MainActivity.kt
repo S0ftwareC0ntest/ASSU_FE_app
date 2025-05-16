@@ -1,6 +1,7 @@
 package com.example.assu_fe_app.presentation
 
 import android.content.Context
+import android.content.Intent
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -25,10 +26,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
 
         initBottomNavigation()
+
+        handleNavIntent(intent)
     }
 
     override fun initObserver() {
         // 옵저버 필요한 경우 작성
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNavIntent(intent)
+    }
+
+    private fun handleNavIntent(intent: Intent) {
+        val destId = intent.getIntExtra("nav_dest_id", -1)
+        if (destId != -1) {
+            // BottomNavigationView 에서 해당 메뉴 아이템을 선택하면
+            // NavigationUI 가 알아서 navController.navigate(destId) 해 줍니다.
+            binding.bottomNavigationView.selectedItemId = destId
+        }
     }
 
     private fun initBottomNavigation() {

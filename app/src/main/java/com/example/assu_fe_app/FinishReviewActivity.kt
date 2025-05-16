@@ -1,13 +1,18 @@
 package com.example.assu_fe_app
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentManager
 import com.example.assu_fe_app.databinding.ActivityFinishReviewBinding
+import com.example.assu_fe_app.presentation.MainActivity
 import com.example.assu_fe_app.presentation.base.BaseActivity
+import com.example.assu_fe_app.presentation.location.HomeFragment
+import com.example.assu_fe_app.presentation.location.LocationSearchActivity
 
 class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.activity_finish_review) {
     override fun initView() {
@@ -22,6 +27,13 @@ class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.
             )
             insets
         }
+
+        val crossButton = binding.ivCross
+        crossButton.setOnClickListener {
+            navigateToHome()
+        }
+
+
     }
 
     override fun initObserver() {
@@ -30,5 +42,17 @@ class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
     }
+
+    private fun navigateToHome() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            // 기존 Task 스택 위로 올라가서 중복 생성 방지
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            // BottomNavigationView에 전달할 목적지 ID
+            putExtra("R.id.homeFragment", R.id.homeFragment)
+        }
+        startActivity(intent)
+        finish() // FinishReviewActivity 종료
+    }
+
 
 }
