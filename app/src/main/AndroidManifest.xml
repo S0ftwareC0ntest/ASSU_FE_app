@@ -12,7 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ASSU_FE_app"
         tools:targetApi="31">
+        <activity
+            android:name=".FinishReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.location.PhotoReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.location.StarReviewActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity android:name=".presentation.location.LocationSearchActivity" />
+        <activity
+            android:name=".presentation.location.CertifyActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
