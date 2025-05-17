@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.dashboard
+package com.example.assu_fe_app.presentation.dashboard.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context

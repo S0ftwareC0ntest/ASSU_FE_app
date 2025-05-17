@@ -2,17 +2,13 @@ package com.example.assu_fe_app.presentation.dashboard
 
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.ServiceRecord
-import com.example.assu_fe_app.ServiceRecordAdapter
+import com.example.assu_fe_app.data.dto.servicerecord.ServiceRecord
+import com.example.assu_fe_app.presentation.dashboard.adapter.ServiceRecordAdapter
 import com.example.assu_fe_app.databinding.ActivityServiceRecordBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import java.time.LocalDateTime

@@ -1,4 +1,4 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.data.dto.servicerecord
 
 import java.time.LocalDateTime
 

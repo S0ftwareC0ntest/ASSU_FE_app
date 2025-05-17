@@ -2,15 +2,13 @@ package com.example.assu_fe_app.presentation.dashboard
 
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.ServiceRecord
-import com.example.assu_fe_app.ServiceRecordAdapter
-import com.example.assu_fe_app.presentation.dashboard.ServiceSuggestActivity
+import com.example.assu_fe_app.data.dto.servicerecord.ServiceRecord
+import com.example.assu_fe_app.presentation.dashboard.adapter.ServiceRecordAdapter
 import com.example.assu_fe_app.databinding.FragmentDashboardBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import java.time.LocalDateTime

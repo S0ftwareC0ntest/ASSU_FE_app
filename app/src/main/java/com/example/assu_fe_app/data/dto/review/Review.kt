@@ -1,7 +1,6 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.data.dto.review
 
 import java.time.LocalDateTime
-import java.util.Date
 
 data class Review(
     var marketName : String,

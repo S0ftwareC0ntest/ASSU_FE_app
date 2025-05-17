@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityServiceSuggestBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
+import com.example.assu_fe_app.presentation.dashboard.adapter.SuggestTargetAdapter
 
 class ServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.layout.activity_service_suggest){
 
