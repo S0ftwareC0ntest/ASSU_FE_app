@@ -1,5 +1,6 @@
 package com.example.assu_fe_app.presentation.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,19 +14,32 @@ class SuggestCompleteActivity : BaseActivity<ActivitySuggestCompleteBinding>(R.l
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_suggest_complete)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
     }
 
     override fun initView() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val extraPaddingTop = 3
+            v.setPadding(
+                systemBars.left,
+                systemBars.top + extraPaddingTop.dpToPx(v.context),
+                systemBars.right,
+                systemBars.bottom
+            )
+            insets
+        }
 
+
+        binding.btnCompleteCancel.setOnClickListener {
+            finish()
+        }
     }
 
     override fun initObserver() {
 
+    }
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 }

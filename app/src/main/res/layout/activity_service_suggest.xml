@@ -86,6 +86,19 @@
             app:layout_constraintWidth_percent="0.6985"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_service_select_target"
+            android:text="건의대상 선택"
+            android:fontFamily="@font/pretendard_medium"
+            android:textColor="@color/assu_font_sub"
+            android:layout_marginStart="15dp"
+            android:textSize="17sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/spinner_target"
+            app:layout_constraintBottom_toBottomOf="@id/spinner_target"
+            app:layout_constraintStart_toStartOf="@id/spinner_target"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

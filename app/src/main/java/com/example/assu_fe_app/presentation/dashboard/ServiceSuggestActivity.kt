@@ -2,9 +2,8 @@ package com.example.assu_fe_app.presentation.dashboard
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.widget.AdapterView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
@@ -25,6 +24,25 @@ class ServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.lay
             )
             insets
         }
+        val targetList = resources.getStringArray(R.array.suggest_target).toList()
+        val adapter = SuggestTargetAdapter(this, targetList)
+        binding.spinnerTarget.adapter = adapter
+
+        binding.spinnerTarget.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                binding.tvServiceSelectTarget.text = selectedItem  // 여기에 선택된 값 출력
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                binding.tvServiceSelectTarget.text="건의대상 선택"
+            }
+        }
 
         // 뒤로가기 버튼
         binding.btnSuggestBack.setOnClickListener {
@@ -32,7 +50,8 @@ class ServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.lay
         }
 
         binding.btnSuggestComplete.setOnClickListener {
-
+            val intent = Intent(this, SuggestCompleteActivity::class.java)
+            startActivity(intent)
         }
     }
 
