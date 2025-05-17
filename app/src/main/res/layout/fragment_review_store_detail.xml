@@ -167,8 +167,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/item_review"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="21.5dp"
             android:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>

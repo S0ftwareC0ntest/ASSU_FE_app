@@ -7,7 +7,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.mypage.review.MyReviewActivity">
+    tools:context=".presentation.review.MyReviewActivity">
 
     <View
         android:id="@+id/manageReview_mg1"

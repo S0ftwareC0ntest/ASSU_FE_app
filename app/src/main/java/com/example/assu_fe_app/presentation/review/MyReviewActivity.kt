@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.mypage.review
+package com.example.assu_fe_app.presentation.review
 
 import android.content.Context
 import android.os.Build
@@ -8,9 +8,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
-import com.example.assu_fe_app.presentation.mypage.review.ReviewAdapter
 import com.example.assu_fe_app.databinding.ActivityMyReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
+import com.example.assu_fe_app.presentation.review.adapter.ReviewAdapter
 import java.time.LocalDateTime
 
 class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
@@ -51,7 +51,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAdapter(){
         //adapter초기화
-        reviewAdapter = ReviewAdapter()
+        reviewAdapter = ReviewAdapter(showDeleteButton = true)
 
         binding.rvManageReview.apply {
             layoutManager = LinearLayoutManager(this@MyReviewActivity)

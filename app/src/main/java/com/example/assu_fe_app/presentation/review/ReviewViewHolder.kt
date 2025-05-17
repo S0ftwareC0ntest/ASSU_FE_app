@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.mypage.review
+package com.example.assu_fe_app.presentation.review
 
 import android.os.Build
 import android.view.View
@@ -10,9 +10,13 @@ import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
 import java.time.format.DateTimeFormatter
 
-class ReviewViewHolder(private val binding: ItemReviewBinding) : RecyclerView.ViewHolder(binding.root){
+class ReviewViewHolder(
+    private val binding: ItemReviewBinding,
+    private val showDeleteButton: Boolean
+) : RecyclerView.ViewHolder(binding.root) {
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun bind(review: Review){
+    fun bind(review: Review) {
         binding.tvMarket.text = review.marketName
         binding.tvReviewContent.text = review.content
 
@@ -26,20 +30,15 @@ class ReviewViewHolder(private val binding: ItemReviewBinding) : RecyclerView.Vi
             binding.ivReviewImg2,
             binding.ivReviewImg3
         )
-
-        // 초기에는 보이지 않게끔
-        imageViews.forEach { it.visibility= View.GONE }
-
-
-        // 이후 gradle에 Glide 라이브러리 추가 후 구현
-        review.reviewImage.take(3).forEachIndexed{ index, imageUrls ->
+        imageViews.forEach { it.visibility = View.GONE }
+        review.reviewImage.take(3).forEachIndexed { index, _ ->
             imageViews[index].visibility = View.VISIBLE
-
         }
 
+        binding.tvReviewDelete.visibility = if (showDeleteButton) View.VISIBLE else View.GONE
     }
 
-    private fun setRating(rating : Int){
+    private fun setRating(rating: Int) {
         val starViews = listOf(
             binding.reviewStar1,
             binding.reviewStar2,
@@ -48,9 +47,8 @@ class ReviewViewHolder(private val binding: ItemReviewBinding) : RecyclerView.Vi
             binding.reviewStar5
         )
 
-        for (i in starViews.indices){
-            val colorRes = if(i <rating ) R.color.assu_main
-                            else R.color.assu_font_sub
+        for (i in starViews.indices) {
+            val colorRes = if (i < rating) R.color.assu_main else R.color.assu_font_sub
             starViews[i].setColorFilter(
                 ContextCompat.getColor(itemView.context, colorRes)
             )

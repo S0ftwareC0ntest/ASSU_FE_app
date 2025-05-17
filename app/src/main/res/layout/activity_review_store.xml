@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_review_store"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/assu_background">
@@ -255,6 +256,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
             android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -271,9 +273,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:listitem="@layout/item_review"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginTop="2dp"
                     android:visibility="visible"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>

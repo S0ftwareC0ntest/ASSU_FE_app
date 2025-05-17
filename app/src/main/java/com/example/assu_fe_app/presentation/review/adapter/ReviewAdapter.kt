@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.mypage.review
+package com.example.assu_fe_app.presentation.review.adapter
 
 import android.os.Build
 import android.view.LayoutInflater
@@ -7,32 +7,29 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
+import com.example.assu_fe_app.presentation.review.ReviewViewHolder
 
-class ReviewAdapter : RecyclerView.Adapter<ReviewViewHolder>() {
+class ReviewAdapter(
+    private val showDeleteButton: Boolean = false
+) : RecyclerView.Adapter<ReviewViewHolder>() {
 
     private val reviewList = mutableListOf<Review>()
 
     fun setData(newList: List<Review>) {
         reviewList.clear()
         reviewList.addAll(newList)
-
         notifyDataSetChanged()
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val binding = ItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ReviewViewHolder(binding)
+        return ReviewViewHolder(binding, showDeleteButton)
     }
 
     override fun getItemCount() = reviewList.size
 
-
-    // 생성된 뷰홀더에 아이템을 바인드
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int){
+    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         holder.bind(reviewList[position])
     }
-
 }
