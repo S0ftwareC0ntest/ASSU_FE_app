@@ -1,6 +1,7 @@
 package com.example.assu_fe_app.presentation.location
 
 import android.content.Intent
+import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentLoactionBinding
@@ -20,13 +21,22 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
         binding.tvLocationHint.setOnClickListener {
             navigateToSearch()
         }
+
+        binding.viewLocationMap.setOnClickListener{
+            binding.fvLocationItem.visibility = View.VISIBLE
+        }
+
+        binding.fvLocationItem.setOnClickListener {
+            val intent = Intent(requireContext(), ReviewStoreActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initObserver() {
     }
 
     private fun navigateToSearch() {
-        val intent = Intent(requireContext(), ReviewStoreActivity::class.java)
+        val intent = Intent(requireContext(), LocationSearchActivity::class.java)
         startActivity(intent)
     }
 }

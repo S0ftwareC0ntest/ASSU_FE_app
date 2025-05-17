@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.R
+import com.example.assu_fe_app.data.dto.location.LocationSearchItem
 import com.example.assu_fe_app.databinding.ItemLocationSearchRankBinding
-import com.example.assu_fe_app.presentation.location.LocationSearchItem
 
 class LocationSearchRankAdapter(
     private val items: List<LocationSearchItem>

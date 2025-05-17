@@ -24,6 +24,10 @@ class ReviewStoreDetailFragment :
             layoutManager = LinearLayoutManager(requireContext())
             adapter = reviewAdapter
         }
+
+        binding.ivReviewStoreBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
     override fun initObserver() {}

@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
+import com.example.assu_fe_app.data.dto.review.ReviewStoreItem
 import com.example.assu_fe_app.databinding.ActivityReviewStoreBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.review.adapter.ReviewAdapter
@@ -18,12 +19,6 @@ class ReviewStoreActivity :
     BaseActivity<ActivityReviewStoreBinding>(R.layout.activity_review_store) {
 
     private lateinit var reviewAdapter: ReviewAdapter
-
-    data class ReviewStoreItem(
-        val organization: String,
-        val content: String
-    )
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initView() {
         // 시스템 바 여백 적용
@@ -62,6 +57,10 @@ class ReviewStoreActivity :
                 .addToBackStack(null)
                 .commit()
         }
+
+        binding.ivReviewStoreBack.setOnClickListener {
+            finish()
+        }
     }
 
     override fun initObserver() {}
@@ -90,4 +89,5 @@ class ReviewStoreActivity :
             )
         )
     }
+
 }

@@ -1,21 +1,15 @@
 package com.example.assu_fe_app.presentation.location
 
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
+import com.example.assu_fe_app.data.dto.location.LocationSearchItem
 import com.example.assu_fe_app.databinding.FragmentLocationSearchRankBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.location.adapter.LocationSearchRankAdapter
-
-data class LocationSearchItem(
-    val name: String,
-    val rank: Int
-)
 
 class LocationSearchRankFragment :
     BaseFragment<FragmentLocationSearchRankBinding>(R.layout.fragment_location_search_rank) {

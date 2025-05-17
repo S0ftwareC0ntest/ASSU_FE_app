@@ -1,24 +1,13 @@
 package com.example.assu_fe_app.presentation.location
 
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentLocationSearchRankBinding
+import com.example.assu_fe_app.data.dto.location.LocationSearchResultItem
 import com.example.assu_fe_app.databinding.FragmentLocationSearchSuccessBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
-import com.example.assu_fe_app.presentation.location.adapter.LocationSearchRankAdapter
 import com.example.assu_fe_app.presentation.location.adapter.LocationSearchSuccessAdapter
-
-data class LocationSearchResultItem(
-    val shopName: String,
-    val organization: String,
-    val content: String
-)
 
 class LocationSearchSuccessFragment :
     BaseFragment<FragmentLocationSearchSuccessBinding>(R.layout.fragment_location_search_success) {
