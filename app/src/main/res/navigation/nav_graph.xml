@@ -29,12 +29,12 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.assu_fe_app.DashboardFragment"
+        android:name="com.example.assu_fe_app.presentation.dashboard.DashboardFragment"
         android:label="Dashboard" />
 
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.assu_fe_app.MypageFragment"
+        android:name="com.example.assu_fe_app.presentation.mypage.MypageFragment"
         android:label="Mypage"/>
 
 

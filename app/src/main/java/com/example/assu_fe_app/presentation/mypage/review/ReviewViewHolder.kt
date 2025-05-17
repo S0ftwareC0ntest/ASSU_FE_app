@@ -1,10 +1,12 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.mypage.review
 
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assu_fe_app.R
+import com.example.assu_fe_app.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
 import java.time.format.DateTimeFormatter
 

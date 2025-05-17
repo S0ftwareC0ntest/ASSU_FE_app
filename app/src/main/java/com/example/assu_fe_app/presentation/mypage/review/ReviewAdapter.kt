@@ -1,10 +1,11 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.mypage.review
 
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assu_fe_app.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
 
 class ReviewAdapter : RecyclerView.Adapter<ReviewViewHolder>() {
@@ -20,7 +21,7 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewViewHolder>() {
 
 
 
-    override fun onCreateViewHolder(parent:ViewGroup, viewType: Int): ReviewViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
         val binding = ItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ReviewViewHolder(binding)
     }

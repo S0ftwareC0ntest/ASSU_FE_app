@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".DashboardFragment">
+    tools:context=".presentation.dashboard.DashboardFragment">
 
     <View
         android:id="@+id/dashboard_mg1"
@@ -276,7 +276,7 @@
         android:id="@+id/dashboard_mg6"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.0226"
+        app:layout_constraintHeight_percent="0.0257"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

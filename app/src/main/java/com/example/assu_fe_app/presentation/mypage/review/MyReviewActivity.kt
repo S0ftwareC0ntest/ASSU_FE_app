@@ -1,40 +1,51 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.mypage.review
 
+import android.content.Context
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.assu_fe_app.databinding.ActivityMainBinding
+import com.example.assu_fe_app.R
+import com.example.assu_fe_app.Review
+import com.example.assu_fe_app.presentation.mypage.review.ReviewAdapter
 import com.example.assu_fe_app.databinding.ActivityMyReviewBinding
+import com.example.assu_fe_app.presentation.base.BaseActivity
 import java.time.LocalDateTime
 
-class MyReviewActivity : AppCompatActivity() {
+class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
 
-    private lateinit var binding: ActivityMyReviewBinding
     private lateinit var reviewAdapter : ReviewAdapter
     val manager = supportFragmentManager
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-        binding = ActivityMyReviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        initAdapter()
-        initClick()
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+    override fun initView() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            val extraPaddingTop = 3
+            v.setPadding(
+                systemBars.left,
+                systemBars.top + extraPaddingTop.dpToPx(v.context),
+                systemBars.right,
+                0
+            )
             insets
         }
+
+        binding.btnManageReviewBack.setOnClickListener {
+            finish()
+        }
+
+        initAdapter()
+    }
+
+    override fun initObserver() {
+
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -54,11 +65,7 @@ class MyReviewActivity : AppCompatActivity() {
 
     }
 
-    private fun initClick(){
-        binding.btnManageReviewBack.setOnClickListener {
-            finish()
-        }
-    }
+
 
     // 임의의 DummyData를 생성하는 함수
     @RequiresApi(Build.VERSION_CODES.O)

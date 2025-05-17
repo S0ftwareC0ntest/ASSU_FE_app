@@ -1,38 +1,30 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.dashboard
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.MainActivity
+import com.example.assu_fe_app.R
+import com.example.assu_fe_app.ServiceRecord
+import com.example.assu_fe_app.ServiceRecordAdapter
+import com.example.assu_fe_app.presentation.dashboard.ServiceSuggestActivity
 import com.example.assu_fe_app.databinding.FragmentDashboardBinding
+import com.example.assu_fe_app.presentation.base.BaseFragment
 import java.time.LocalDateTime
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragment_dashboard) {
 
-    lateinit var binding: FragmentDashboardBinding
+
     lateinit var serviceRecordAdapter: ServiceRecordAdapter
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding= FragmentDashboardBinding.inflate(layoutInflater)
+    override fun initObserver() {}
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun initView(){
         initClick()
         initAdapter()
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
