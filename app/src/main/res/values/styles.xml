@@ -1,0 +1,11 @@
+<!-- values/styles.xml -->
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- 기존 속성들… -->
+
+        <!-- 모든 윈도우(=Activity) 배경색 -->
+<!--        <item name="android:windowBackground">@color/assu_background</item>-->
+        <!-- (Optional) View의 기본 배경색 속성 -->
+        <item name="android:colorBackground">@color/assu_background</item>
+    </style>
+</resources>

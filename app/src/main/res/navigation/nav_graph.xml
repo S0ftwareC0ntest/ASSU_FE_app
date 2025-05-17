@@ -6,8 +6,12 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.assu_fe_app.HomeFragment"
-        android:label="Home"/>
+        android:name="com.example.assu_fe_app.presentation.location.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_homeFragment_to_myPartnershipFragment"
+            app:destination="@id/myPartnershipDetailsFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/locationFragment"
@@ -20,7 +24,7 @@
 
     <fragment
         android:id="@+id/locationSearchFragment"
-        android:name="com.example.assu_fe_app.presentation.location.LocationSearchActivity"
+        android:name="com.example.assu_fe_app.presentation.location.LocationSearchSuccessFragment"
         android:label="LocationSearchFragment">
         <action
             android:id="@+id/action_locationSearchFragment_to_locationFragment"
@@ -29,13 +33,34 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.assu_fe_app.presentation.dashboard.DashboardFragment"
+        android:name="com.example.assu_fe_app.presentation.location.DashboardFragment"
         android:label="Dashboard" />
 
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.assu_fe_app.presentation.mypage.MypageFragment"
+        android:name="com.example.assu_fe_app.presentation.location.MypageFragment"
         android:label="Mypage"/>
 
+    <fragment
+        android:id="@+id/myPartnershipDetailsFragment"
+        android:name="com.example.assu_fe_app.presentation.location.MyPartnershipDetailsFragment"
+        android:label="MyPartnershipDetailsFragment">
+
+        <action
+            android:id="@+id/action_myPartnershipFragment_to_homeFragment"
+            app:destination="@id/homeFragment"/>
+
+        <action
+            android:id="@+id/action_myPartnershipFragment_to_starReviewActivity"
+            app:destination="@id/starReviewActivity"/>
+
+    </fragment>
+
+
+    <activity
+        android:id="@+id/starReviewActivity"
+        android:name="com.example.assu_fe_app.presentation.location.StarReviewActivity"
+        android:label="StarReviewActivity">
+    </activity>
 
 </navigation>

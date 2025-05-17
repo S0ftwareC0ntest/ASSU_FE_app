@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/certify"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.location.CertifyActivity">
+
+    <ImageView
+        android:id="@+id/iv_certify_back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"/>
+
+    <View
+        android:id="@+id/view_certify_mg1"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_certify_back_arrow"
+        android:layout_height="45dp"/>
+
+    <TextView
+        android:id="@+id/tv_certify_place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인쌩맥주 숭실대점"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="25sp"
+        android:textColor="@color/assu_font_main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg1"/>
+
+    <View
+        android:id="@+id/view_certify_mg2"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_certify_place_name"
+        android:layout_height="35dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_certify_partnership_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8778625954"
+        app:layout_constraintHeight_percent="0.09285714286"
+        android:background="@drawable/ic_home_basic_box"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/tv_partnership_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제휴 제공"
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="13sp"
+                android:textColor="@color/assu_main" />
+
+            <TextView
+                android:id="@+id/tv_partnership_provider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="숭실대학교 총학생회"
+                android:fontFamily="@font/pretendard_medium"
+                android:textSize="17sp"
+                android:textColor="@color/assu_font_main"
+                android:layout_marginTop="3dp"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/view_certify_mg3"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_certify_partnership_info"
+        android:layout_height="15dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_certify_partnership_condition"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8778625954"
+        app:layout_constraintHeight_percent="0.09285714286"
+        android:background="@drawable/ic_home_basic_box"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/tv_partnership_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제휴 내용"
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="13sp"
+                android:textColor="@color/assu_main" />
+
+            <TextView
+                android:id="@+id/tv_partnership_condition_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4인 이상 식사 시, 음료 제공"
+                android:fontFamily="@font/pretendard_medium"
+                android:textSize="17sp"
+                android:textColor="@color/assu_font_main"
+                android:layout_marginTop="3dp"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/view_certify_mg4"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_certify_partnership_condition"
+        android:layout_height="30dp"/>
+
+    <ImageView
+        android:id="@+id/iv_certify_line"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:src="@drawable/ic_certify_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg4"
+        android:visibility="visible"/>
+
+    <View
+        android:id="@+id/view_certify_mg5"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_certify_line"
+        android:layout_height="30dp"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_certify_people_count"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8778625954"
+        app:layout_constraintHeight_percent="0.09285714286"
+        android:background="@drawable/ic_home_basic_box"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_certify_people_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="제휴 인증 인원"
+                android:textColor="@color/assu_main"
+                android:textSize="13sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_certify_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/item_certify_person"
+                android:contentDescription="몇명이나 인증했는지 표시"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view_certify_mg6"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_certify_people_count"
+        android:layout_height="8dp"/>
+
+
+    <TextView
+        android:id="@+id/tv_certify_waiting_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다른 사용자의 인증을 기다리고 있어요!"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/assu_font_sub"
+        app:layout_constraintTop_toBottomOf="@id/view_certify_mg6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible"/>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_certify_deactivated_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_certify_deactivated_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_basic_unselected" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="인증완료"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/pretendard_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_certify_activated_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_certify_activated_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_basic_selected" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="인증완료"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/pretendard_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
