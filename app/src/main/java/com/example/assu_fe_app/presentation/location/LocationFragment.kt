@@ -36,7 +36,7 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
     }
 
     private fun navigateToSearch() {
-        val intent = Intent(requireContext(), ReviewStoreActivity::class.java)
+        val intent = Intent(requireContext(), LocationSearchActivity::class.java)
         startActivity(intent)
     }
 }
