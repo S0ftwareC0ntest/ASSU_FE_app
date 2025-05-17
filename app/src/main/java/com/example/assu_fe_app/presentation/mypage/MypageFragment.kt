@@ -3,7 +3,7 @@ package com.example.assu_fe_app.presentation.mypage
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.example.assu_fe_app.presentation.mypage.review.MyReviewActivity
+import com.example.assu_fe_app.presentation.review.MyReviewActivity
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment

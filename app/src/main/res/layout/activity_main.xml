@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.123"
-            android:background="@android:color/transparent"
+            android:background="@color/assu_background"
             android:backgroundTint="@color/assu_background"
             app:itemActiveIndicatorStyle="@style/BottomNavBackgorundStyle"
             app:itemIconTint="@color/bottom_nav_color_selector"
