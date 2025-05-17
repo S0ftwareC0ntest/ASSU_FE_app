@@ -4,10 +4,10 @@
 
     <solid android:color="@color/assu_box" />
 
-    <corners android:radius="3dp" />
+    <corners android:radius="8dp" />
 
     <size
         android:width="345dp"
-        android:height="27dp" />
+        android:height="173dp" />
 
 </shape>
