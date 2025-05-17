@@ -124,7 +124,6 @@
             android:id="@+id/view_location_mg3"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="393:566"
             app:layout_constraintHeight_percent="0.8085"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
