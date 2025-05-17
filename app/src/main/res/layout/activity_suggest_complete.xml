@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/assu_background"
     tools:context=".presentation.dashboard.SuggestCompleteActivity">
 
 
@@ -60,11 +60,11 @@
 
     <View
         android:id="@+id/complete_mg4"
-        android:layout_width="10dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.0342"
-        app:layout_constraintTop_toBottomOf="@id/tv_complete"
-        app:layout_constraintStart_toStartOf="@id/tv_complete"/>
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        app:layout_constraintHeight_percent="0.0202"
+        app:layout_constraintStart_toStartOf="@id/tv_complete"
+        app:layout_constraintTop_toBottomOf="@id/tv_complete" />
 
     <TextView
         android:id="@+id/tv_opinion"
@@ -83,7 +83,7 @@
         android:id="@+id/complete_mg5"
         android:layout_width="10dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.0263"
+        app:layout_constraintHeight_percent="0.01"
         app:layout_constraintStart_toStartOf="@id/tv_complete"
         app:layout_constraintTop_toBottomOf="@id/tv_opinion"/>
 

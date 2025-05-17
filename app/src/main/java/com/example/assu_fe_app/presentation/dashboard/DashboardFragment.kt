@@ -35,12 +35,16 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
 
         }
 
-
         // 다음 달로 넘어가는 화살표
         // 만약 현재 달과 다르다면 넘어가는 버튼을 활성화할 것
         // 현재 달이라면 비활성화 화살표를 띄울 것.
         binding.ivDashNextArrow.setOnClickListener {
 
+        }
+
+        binding.tvDashSeeAll.setOnClickListener {
+            val intent = Intent(requireContext(), ServiceRecordActivity::class.java)
+            startActivity(intent)
         }
         updateUI()
 
