@@ -5,9 +5,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivitySignUpBinding
-import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class SignUpActivity : BaseFragment<ActivitySignUpBinding>(R.layout.activity_sign_up) {
+class SignUpActivity : BaseActivity<ActivitySignUpBinding>(R.layout.activity_sign_up) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
