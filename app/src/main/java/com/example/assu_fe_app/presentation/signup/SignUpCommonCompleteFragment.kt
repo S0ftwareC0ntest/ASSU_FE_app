@@ -9,5 +9,9 @@ class SignUpCommonCompleteFragment : BaseFragment<FragmentSignUpCommonCompleteBi
     }
 
     override fun initView() {
+        val userName = "이호근"  // 이 부분을 실제 로그인된 사용자 이름으로 동적으로 대체 가능
+
+        val welcomeText = getString(R.string.signup_welcome_format, userName)
+        binding.tvSignupDoneUsername.text = welcomeText
     }
 }
