@@ -6,10 +6,11 @@
     <string name="myPage">계정관리</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup_welcome_format">%1$s님\n환영합니다!</string>
+    <string name="school_account_text">%1$s 학생이시군요!\n학번과 비밀번호를\n입력해주세요!</string>
     <string-array name="suggest_target">
         <item>총학생회</item>
         <item>단과대 학생회</item>
         <item>과 학생회</item>
     </string-array>
 </resources>
-

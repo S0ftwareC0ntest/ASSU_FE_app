@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.admin.signup.SignUpAdminInfoFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 상단 회색 배경 -->
+        <ImageView
+            android:id="@+id/iv_signup_progress_bg"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_signup_progress_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 파란 진행 바 -->
+        <ImageView
+            android:id="@+id/iv_signup_progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_signup_progress_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.60"
+            android:scaleType="fitXY"/>
+
+        <!-- 관리단체 정보 텍스트 -->
+        <TextView
+            android:id="@+id/tv_admin_account_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="46dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="관리단체의 정보를\n입력해주세요!"
+            android:layout_marginStart="24dp"
+            android:textColor="@color/assu_font_main"
+            android:textSize="25sp"
+            app:layout_constraintTop_toBottomOf="@id/iv_signup_progress_bar"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <!-- 관리단체명 라벨 -->
+        <TextView
+            android:id="@+id/tv_admin_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="63dp"
+            android:text="관리단체명"
+            android:textSize="13sp"
+            android:textColor="@color/assu_font_sub"
+            android:fontFamily="@font/pretendard_regular"
+            app:layout_constraintTop_toBottomOf="@id/tv_admin_account_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- 관리단체명 입력 필드 받기 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_admin_name"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_signup_input_bar"
+            app:layout_constraintTop_toBottomOf="@id/tv_admin_name_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/et_admin_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:hint="단체명을 입력해주세요"
+                android:inputType="text"
+                android:background="@android:color/transparent"
+                android:textSize="14sp"
+                android:textColor="@color/assu_font_main"
+                android:textColorHint="@color/assu_font_sub"
+                android:fontFamily="@font/pretendard_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 사무실 주소 라벨 -->
+        <TextView
+            android:id="@+id/tv_admin_address_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            android:layout_marginTop="10dp"
+            android:text="사무실주소"
+            android:textSize="13sp"
+            android:textColor="@color/assu_font_sub"
+            android:fontFamily="@font/pretendard_regular"
+            app:layout_constraintTop_toBottomOf="@id/cl_admin_name"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- 주소 받기 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_admin_address"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_signup_input_bar"
+            app:layout_constraintTop_toBottomOf="@id/tv_admin_address_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/et_admin_address"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:fontFamily="@font/pretendard_regular"
+                android:hint=""
+                android:inputType="text"
+                android:textColor="@color/assu_font_main"
+                android:textColorHint="@color/assu_font_sub"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/btn_admin_address_search"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 상세주소 필드 받기 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_admin_address_detail"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_signup_input_bar"
+            app:layout_constraintTop_toBottomOf="@id/cl_admin_address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/et_admin_address_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:hint="상세주소를 입력해주세요"
+                android:inputType="text"
+                android:background="@android:color/transparent"
+                android:textSize="14sp"
+                android:textColor="@color/assu_font_main"
+                android:textColorHint="@color/assu_font_sub"
+                android:fontFamily="@font/pretendard_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 인증 완료 버튼 (하단 고정) -->
+        <ImageButton
+            android:id="@+id/btn_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_basic_unselected"
+            android:fontFamily="@font/pretendard_semibold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="57dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text="입력완료"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/pretendard_bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sign_up_nav_graph"
+    app:startDestination="@id/signUpCommonVerifyFragment">
+
+    <!-- 1단계: 인증 -->
+    <fragment
+        android:id="@+id/signUpCommonVerifyFragment"
+        android:name="com.example.assu_fe_app.presentation.common.signup.SignUpCommonVerifyFragment"
+        android:label="회원가입 인증">
+        <action
+            android:id="@+id/action_verify_to_account"
+            app:destination="@id/signUpCommonAccountFragment" />
+    </fragment>
+
+    <!-- 2단계: 계정 입력 -->
+    <fragment
+        android:id="@+id/signUpCommonAccountFragment"
+        android:name="com.example.assu_fe_app.presentation.common.signup.SignUpCommonAccountFragment"
+        android:label="계정 입력">
+        <action
+            android:id="@+id/action_account_to_type"
+            app:destination="@id/signUpCommonTypeFragment" />
+    </fragment>
+
+    <!-- 3단계: 사용자 유형 선택 -->
+    <fragment
+        android:id="@+id/signUpCommonTypeFragment"
+        android:name="com.example.assu_fe_app.presentation.common.signup.SignUpCommonTypeFragment"
+        android:label="회원 유형 선택">
+        <!-- 분기 처리 -->
+        <action
+            android:id="@+id/action_type_to_user_school"
+            app:destination="@id/signUpUserSchoolFragment" />
+        <action
+            android:id="@+id/action_type_to_admin_info"
+            app:destination="@id/signUpAdminInfoFragment" />
+        <action
+            android:id="@+id/action_type_to_partner_info"
+            app:destination="@id/signUpPartnerInfoFragment" />
+    </fragment>
+
+    <!-- 사용자 흐름 -->
+    <fragment
+        android:id="@+id/signUpUserSchoolFragment"
+        android:name="com.example.assu_fe_app.presentation.user.signup.SignUpUserSchoolFragment"
+        android:label="학교 선택">
+        <action
+            android:id="@+id/action_user_school_to_student"
+            app:destination="@id/signUpUserStudentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpUserStudentFragment"
+        android:name="com.example.assu_fe_app.presentation.user.signup.SignUpUserStudentFragment"
+        android:label="학생 인증">
+        <action
+            android:id="@+id/action_user_student_to_complete"
+            app:destination="@id/signUpCommonCompleteFragment" />
+    </fragment>
+
+    <!-- 관리자 흐름 -->
+    <fragment
+        android:id="@+id/signUpAdminInfoFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.signup.SignUpAdminInfoFragment"
+        android:label="관리자 정보 입력">
+        <action
+            android:id="@+id/action_admin_info_to_seal"
+            app:destination="@id/signUpAdminSealFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpAdminSealFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.signup.SignUpAdminSealFragment"
+        android:label="관리자 인감 등록">
+        <action
+            android:id="@+id/action_admin_seal_to_complete"
+            app:destination="@id/signUpCommonCompleteFragment" />
+    </fragment>
+
+    <!-- 제휴업체 흐름 -->
+    <fragment
+        android:id="@+id/signUpPartnerInfoFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.signup.SignUpPartnerInfoFragment"
+        android:label="제휴업체 정보">
+        <action
+            android:id="@+id/action_partner_info_to_license"
+            app:destination="@id/signUpPartnerLicenseFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpPartnerLicenseFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.signup.SignUpPartnerLicenseFragment"
+        android:label="제휴업체 사업자 등록증">
+        <action
+            android:id="@+id/action_partner_license_to_complete"
+            app:destination="@id/signUpCommonCompleteFragment" />
+    </fragment>
+
+    <!-- 공통 완료 화면 -->
+    <fragment
+        android:id="@+id/signUpCommonCompleteFragment"
+        android:name="com.example.assu_fe_app.presentation.common.signup.SignUpCommonCompleteFragment"
+        android:label="회원가입 완료" />
+</navigation>

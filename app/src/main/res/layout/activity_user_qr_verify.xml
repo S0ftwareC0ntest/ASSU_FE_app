@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 카메라 미리보기 -->
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- 투명 구멍이 있는 반투명 오버레이 -->
+        <com.example.assu_fe_app.presentation.user.home.TransparentHoleView
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- ConstraintLayout UI들 (qr_guide_box, 바텀시트 등) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/assu_font_sub">
+            <!-- 임시 구분용 색 -->
+
+            <!-- 상단 바 -->
+            <LinearLayout
+                android:id="@+id/ll_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_back_arrow_white"
+                    android:contentDescription="뒤로가기" />
+
+                <TextView
+                    android:layout_marginStart="5dp"
+                    android:text="제휴 사용자 인증"
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- QR 인식 가이드 박스 -->
+            <ImageView
+                android:id="@+id/qr_guide_box"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="136dp"
+                android:src="@drawable/iv_qr_border_blue"
+                android:contentDescription="QR 가이드"
+                app:layout_constraintTop_toBottomOf="@id/ll_top_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- 안내 텍스트 -->
+            <TextView
+                android:id="@+id/tv_qr_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:text="키오스크의 QR 코드를 스캔해주세요"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/qr_guide_box"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- 바텀 시트 -->
+            <LinearLayout
+                android:id="@+id/bottomSheetLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_qr_bottom_sheet_black"
+                android:padding="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_qr_bottom_sheet_handle" />
+
+                <LinearLayout
+                    android:id="@+id/layout_university_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_university"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="숭실대학교 학생"
+                        android:textColor="@android:color/white"
+                        android:textSize="22sp"
+                        android:fontFamily="@font/pretendard_semibold"/>
+
+                    <TextView
+                        android:id="@+id/tv_department"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:text="IT대학"
+                        android:textColor="@color/assu_main"
+                        android:textSize="11sp"
+                        android:background="@drawable/bg_qr_department_badge"
+                        android:fontFamily="@font/pretendard_medium" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_question_code_is_not_coming"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="24dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_inform_qr"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_info_circle" />
+
+                    <TextView
+                        android:id="@+id/tv_inform_qr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="제휴 인증조건이 있는 경우 모든 사용자기 인증해야합니다"
+                        android:textSize="13sp"
+                        android:textColor="@color/assu_font_sub"
+                        android:fontFamily="@font/pretendard_medium" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp">
+
+                    <ImageView
+                        android:id="@+id/btn_confirm"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_basic_selected"
+                        android:alpha="0.3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_confirm"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.3"
+                        android:text="확인"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@android:color/white"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>
