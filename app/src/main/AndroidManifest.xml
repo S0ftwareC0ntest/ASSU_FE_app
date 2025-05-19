@@ -34,7 +34,17 @@
 <!--             <category android:name="android.intent.category.LAUNCHER" />-->
 <!--             </intent-filter>-->
         </activity>
-
+            android:name=".presentation.dashboard.ServiceRecordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.dashboard.SuggestCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.dashboard.ServiceSuggestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.mypage.review.MyReviewActivity"
+            android:exported="true" />
         <activity
             android:name=".FinishReviewActivity"
             android:exported="false" />

@@ -1,17 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.location.DashboardFragment">
 
-        <!-- TODO: Update blank fragment layout -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/assu_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.dashboard.DashboardFragment">
+
+    <View
+        android:id="@+id/dashboard_mg1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0252"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/dashboard_mg2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.061"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg1"/>
+
+    <View
+        android:id="@+id/dashboard_mg2_2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.061"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg1"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_dash_month_convert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/dashboard_mg2"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg1">
+
+        <ImageView
+            android:id="@+id/iv_dash_back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dash_small_before"
+            android:layout_marginStart="9dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_dash_month"
+            app:layout_constraintTop_toTopOf="@id/tv_dash_month"/>
         <TextView
+            android:id="@+id/tv_dash_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:textSize="17sp"
+            android:layout_marginStart="13dp"
+            android:text="3월"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_dash_back_arrow"/>
+
+        <ImageView
+            android:id="@+id/iv_dash_next_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_dash_small_next_disable"
+            android:layout_marginStart="13dp"
+            app:layout_constraintStart_toEndOf="@id/tv_dash_month"
+            app:layout_constraintTop_toTopOf="@id/iv_dash_back_arrow"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/dashboard_mg3"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0277"
+        app:layout_constraintStart_toEndOf="@id/dashboard_mg2"
+        app:layout_constraintTop_toBottomOf="@id/cl_dash_month_convert"/>
+
+    <LinearLayout
+        android:id="@+id/ll_discount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/dashboard_mg2"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg3">
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="25sp"
+            android:includeFontPadding="false"
+            android:layout_marginEnd="4dp"
+            android:text="20000"
+            android:textColor="@color/assu_main"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="원 할인!"
+            android:textColor="@color/assu_main"
+            android:textSize="25sp"
+            android:fontFamily="@font/pretendard_semibold"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dashboard_mg4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.008"
+        app:layout_constraintTop_toBottomOf="@id/ll_discount_text"
+        app:layout_constraintStart_toStartOf="@id/ll_discount_text"/>
+
+    <LinearLayout
+        android:id="@+id/ll_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/ll_discount_text"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg4">
+        <TextView
+            android:id="@+id/tv_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="25sp"
+            android:layout_marginEnd="4dp"
+            android:text="서비스"
+            android:textColor="@color/assu_font_main"/>
+
+        <TextView
+            android:id="@+id/tv_service_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="25sp"
+            android:layout_marginEnd="4dp"
+            android:text="10"
+            android:textColor="@color/assu_main"/>
+
+        <TextView
+            android:id="@+id/tv_received"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="25sp"
+            android:layout_marginEnd="4dp"
+            android:text="건을 받았어요!"
+            android:textColor="@color/assu_font_main"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dashboard_mg11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0315"
+        app:layout_constraintTop_toBottomOf="@id/ll_service"
+        app:layout_constraintStart_toStartOf="@id/ll_service"/>
+
+    <TextView
+        android:id="@+id/tv_dash_seeAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:textSize="13sp"
+        android:textColor="@color/assu_font_sub"
+        android:text="전체 보기"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/dashboard_mg2_2"
+        app:layout_constraintTop_toTopOf="@id/dashboard_mg11"
+        app:layout_constraintBottom_toBottomOf="@id/dashboard_mg11"/>
+
+    <FrameLayout
+        android:id="@+id/fl_benefit"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_suggest"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg11"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_service_record"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/dashboard" />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/fl_none_benefit"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_suggest"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_mg11"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/dashboard_mg5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.3061"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tv_none_benefit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="아직 받은 혜택이 없어요"
+                android:textColor="@color/assu_font_main"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dashboard_mg5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="받을 수 있는 제휴 혜택을 확인해보세요"
+                android:textColor="@color/assu_font_sub"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_none_benefit" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+<!--    여기서부턴 제휴 건의 버튼 부터 위로 올라오도록 컴포넌트 배치 -->
+
+    <View
+        android:id="@+id/dashboard_mg7"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0865"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <View
+        android:id="@+id/dashboard_mg8"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0865"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/btn_suggest_service"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="제휴 건의하기"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:background="@drawable/btn_basic_selected"
+        app:layout_constraintDimensionRatio="325:50"
+        app:layout_constraintHeight_percent="0.0714"
+        app:layout_constraintStart_toEndOf="@id/dashboard_mg7"
+        app:layout_constraintEnd_toStartOf="@id/dashboard_mg8"
+        app:layout_constraintBottom_toTopOf="@id/dashboard_mg6"/>
+    <View
+        android:id="@+id/dashboard_mg6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0257"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/dashboard_mg9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0257"
+        app:layout_constraintBottom_toTopOf="@id/btn_suggest_service"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_sub_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:text="  • 받고싶은 제휴 가게가 있다면 어디든!\n  • 제휴 건의 대상을 선택해주세요!"
+        android:fontFamily="@font/pretendard_regular"
+        android:textSize="13sp"
+        android:textColor="@color/assu_font_sub"
+        app:layout_constraintBottom_toTopOf="@id/dashboard_mg9"
+        app:layout_constraintStart_toStartOf="@id/btn_suggest_service"/>
+
+    <TextView
+        android:id="@+id/tv_suggest_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="25dp"
+        android:includeFontPadding="false"
+        android:text="제휴 건의함"
+        android:textSize="25sp"
+        android:textColor="@color/assu_font_main"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintStart_toStartOf="@id/btn_suggest_service"
+        app:layout_constraintBottom_toTopOf="@id/tv_sub_explain"/>
+
+    <View
+        android:id="@+id/dashboard_mg10"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0357"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_suggest_title"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_suggest"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/assu_sub3"
+        app:layout_constraintHeight_percent="0.0928"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dashboard_mg10">
+
+        <View
+            android:id="@+id/dashboard_mg1_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.22"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/tv_blue_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginStart="24dp"
+            android:text="받고 싶은 제휴 혜택이 없나요?"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="13sp"
+            android:textColor="@color/assu_main"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dashboard_mg1_1"/>
+        <View
+            android:id="@+id/dashboard_mg1_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.22"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_gray_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginStart="24dp"
+            android:text="제휴 건의함에서 받고싶은 제휴를 건의할 수 있어요!"
+            android:fontFamily="@font/pretendard_medium"
+            android:textSize="13sp"
+            android:textColor="@color/assu_font_main"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/dashboard_mg1_2"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>
+
+
+

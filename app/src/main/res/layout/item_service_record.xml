@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/assu_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/item_dash_mg1"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.061"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <View
+        android:id="@+id/item_dash_mg2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.061"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/item_dash_mg1"
+        app:layout_constraintEnd_toStartOf="@id/item_dash_mg2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/tv_market"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인쌩맥주 숭실대점"
+            android:textSize="17sp"
+            android:fontFamily="@font/pretendard_medium"
+            android:includeFontPadding="false"
+            android:textColor="@color/assu_font_main"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_service_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2025-04-05 23:21"
+            android:textSize="13sp"
+            android:textColor="@color/assu_font_sub"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_market"
+            app:layout_constraintBottom_toBottomOf="@id/tv_market"/>
+
+        <TextView
+            android:id="@+id/tv_service_explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인쌩맥주에서 음료 한병을 제공받았어요!"
+            android:textSize="13sp"
+            android:textColor="@color/assu_font_sub"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/tv_market"
+            app:layout_constraintTop_toBottomOf="@id/tv_market"/>
+
+        <ImageView
+            android:id="@+id/btn_service_write_review"
+            android:layout_width="78dp"
+            android:layout_height="31dp"
+            android:src="@drawable/btn_review_write"
+            app:layout_constraintTop_toTopOf="@id/tv_service_explain"
+            app:layout_constraintBottom_toBottomOf="@id/tv_service_explain"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
