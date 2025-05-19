@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    tools:context=".presentation.location.LocationFragment"
+    tools:context=".presentation.common.location.LocationFragment"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -141,7 +141,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fv_location_item"
-            android:name="com.example.assu_fe_app.presentation.location.LocationItemFragment"
+            android:name="com.example.assu_fe_app.presentation.common.location.LocationItemUserFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/view_location_mg4"

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.location.LocationSearchActivity">
+    tools:context=".presentation.common.location.LocationSearchActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -125,7 +125,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:name="com.example.assu_fe_app.presentation.location.LocationSearchRankFragment"
+            android:name="com.example.assu_fe_app.presentation.common.location.LocationSearchRankFragment"
             android:visibility="visible"/>
 
         <androidx.fragment.app.FragmentContainerView
@@ -136,7 +136,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:name="com.example.assu_fe_app.presentation.location.LocationSearchSuccessFragment"
+            android:name="com.example.assu_fe_app.presentation.common.location.LocationSearchSuccessFragment"
             android:visibility="invisible"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout

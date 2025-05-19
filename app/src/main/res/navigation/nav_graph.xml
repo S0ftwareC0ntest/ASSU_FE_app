@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.assu_fe_app.presentation.location.HomeFragment"
+        android:name="com.example.assu_fe_app.presentation.user.home.HomeFragment"
         android:label="Home">
         <action
             android:id="@+id/action_homeFragment_to_myPartnershipFragment"
@@ -15,22 +15,22 @@
 
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.example.assu_fe_app.presentation.location.LocationFragment"
+        android:name="com.example.assu_fe_app.presentation.common.location.LocationFragment"
         android:label="Location"/>
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.assu_fe_app.presentation.dashboard.DashboardFragment"
+        android:name="com.example.assu_fe_app.presentation.user.dashboard.DashboardFragment"
         android:label="Dashboard" />
 
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.assu_fe_app.presentation.mypage.MypageFragment"
+        android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
         android:label="Mypage"/>
 
     <fragment
         android:id="@+id/myPartnershipDetailsFragment"
-        android:name="com.example.assu_fe_app.presentation.location.MyPartnershipDetailsFragment"
+        android:name="com.example.assu_fe_app.presentation.user.home.MyPartnershipDetailsFragment"
         android:label="MyPartnershipDetailsFragment">
 
         <action
@@ -46,7 +46,7 @@
 
     <activity
         android:id="@+id/starReviewActivity"
-        android:name="com.example.assu_fe_app.presentation.location.StarReviewActivity"
+        android:name="com.example.assu_fe_app.presentation.user.review.writing.StarReviewActivity"
         android:label="StarReviewActivity">
     </activity>
 

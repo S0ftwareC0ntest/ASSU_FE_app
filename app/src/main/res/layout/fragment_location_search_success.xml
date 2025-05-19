@@ -7,7 +7,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
-        tools:context=".presentation.location.LocationSearchRankFragment">
+        tools:context=".presentation.common.location.LocationSearchRankFragment">
 
         <TextView
             android:id="@+id/tv_location_search_success_title"
