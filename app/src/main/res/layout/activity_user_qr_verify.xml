@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_qr">
 
-        <!-- 카메라 미리보기 -->
+        <!-- 카메라 미리보기-->
 <!--        <androidx.camera.view.PreviewView-->
 <!--            android:id="@+id/previewView"-->
 <!--            android:layout_width="0dp"-->
@@ -50,10 +50,10 @@
             android:id="@+id/qr_guide_box"
             android:layout_width="240dp"
             android:layout_height="240dp"
+            android:layout_marginTop="136dp"
             android:src="@drawable/iv_qr_border_blue"
             android:contentDescription="QR 가이드"
             app:layout_constraintTop_toBottomOf="@id/ll_top_bar"
-            app:layout_constraintTop_margin="80dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -62,19 +62,20 @@
             android:id="@+id/tv_qr_instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
             android:text="키오스크의 QR 코드를 스캔해주세요"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/qr_guide_box"
-            app:layout_constraintTop_margin="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- 바텀 시트 -->
         <LinearLayout
             android:id="@+id/bottomSheetLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="29dp"
             android:orientation="vertical"
             android:background="@drawable/bg_qr_bottom_sheet_black"
             android:padding="24dp"

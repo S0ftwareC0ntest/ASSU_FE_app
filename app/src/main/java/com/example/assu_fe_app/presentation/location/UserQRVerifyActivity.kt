@@ -1,7 +1,6 @@
 package com.example.assu_fe_app.presentation.location
 
 import android.content.Context
-import android.os.Bundle
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
