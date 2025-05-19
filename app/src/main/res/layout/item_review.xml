@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/review_mg1_1"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0610"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <View
+        android:id="@+id/review_mg1_2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintWidth_percent="0.0610"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_review_box"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/review_mg1_1"
+        app:layout_constraintEnd_toStartOf="@id/review_mg1_2">
+
+        <TextView
+            android:id="@+id/tv_market"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:textSize="17sp"
+            android:text="인쌩맥주 숭실대점"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+            <LinearLayout
+                android:id="@+id/ll_review_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tv_market"
+                app:layout_constraintStart_toStartOf="@id/tv_market">
+
+                <ImageView
+                    android:id="@+id/review_star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_review_star_able"
+                    android:tint="@color/assu_main"
+                    tools:ignore="UseAppTint"/>
+                <ImageView
+                    android:id="@+id/review_star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_review_star_able"
+                    android:tint="@color/assu_main"
+                    tools:ignore="UseAppTint"/>
+                <ImageView
+                    android:id="@+id/review_star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_review_star_able"
+                    android:tint="@color/assu_main"
+                    tools:ignore="UseAppTint"/>
+                <ImageView
+                    android:id="@+id/review_star4"
+                    android:tint="@color/assu_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_review_star_able"
+                    tools:ignore="UseAppTint" />
+                <ImageView
+                    android:id="@+id/review_star5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_review_star_able"
+                    android:tint="@color/assu_main"
+                    tools:ignore="UseAppTint" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_review_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="무지하게 잘 먹었습니다!! 제휴 이벤트 최고~!"
+                android:textSize="13sp"
+                android:fontFamily="@font/pretendard_regular"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_review_rate"
+                app:layout_constraintStart_toStartOf="@id/ll_review_rate"/>
+            <TextView
+                android:id="@+id/tv_review_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="삭제하기"
+                android:textSize="13sp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/assu_font_sub"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_market"
+                app:layout_constraintBottom_toBottomOf="@id/tv_market"/>
+
+
+            <ImageView
+                android:id="@+id/iv_review_img1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_review_image_box"
+                app:layout_constraintWidth_percent="0.2753"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@id/tv_market"
+                app:layout_constraintTop_toBottomOf="@id/tv_review_content"/>
+
+            <ImageView
+                android:id="@+id/iv_review_img2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_review_image_box"
+                app:layout_constraintWidth_percent="0.2753"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toEndOf="@id/iv_review_img1"
+                app:layout_constraintEnd_toStartOf="@id/iv_review_img3"
+                app:layout_constraintTop_toTopOf="@id/iv_review_img1"/>
+
+            <ImageView
+                android:id="@+id/iv_review_img3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_review_image_box"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/tv_review_delete"
+                app:layout_constraintTop_toTopOf="@id/iv_review_img1"
+                app:layout_constraintWidth_percent="0.2753" />
+
+        <TextView
+            android:id="@+id/tv_review_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="작성일 | 2024-10-31 18:36"
+            android:textColor="@color/assu_font_sub"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/iv_review_img1"
+            app:layout_constraintTop_toBottomOf="@id/iv_review_img1"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
