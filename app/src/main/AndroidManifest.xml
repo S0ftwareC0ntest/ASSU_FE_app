@@ -13,25 +13,25 @@
         android:theme="@style/Theme.ASSU_FE_app"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.dashboard.ServiceRecordActivity"
+            android:name=".presentation.user.dashboard.ServiceRecordActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.dashboard.SuggestCompleteActivity"
+            android:name=".presentation.user.dashboard.SuggestCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.dashboard.ServiceSuggestActivity"
+            android:name=".presentation.user.dashboard.ServiceSuggestActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.mypage.review.MyReviewActivity"
+            android:name=".presentation.user.review.mypage.MyReviewActivity"
             android:exported="true" />
         <activity
-            android:name=".FinishReviewActivity"
+            android:name=".presentation.user.review.writing.FinishReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.location.PhotoReviewActivity"
+            android:name=".presentation.user.review.writing.PhotoReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.location.StarReviewActivity"
+            android:name=".presentation.user.review.writing.StarReviewActivity"
             android:exported="false">
 
             <!-- <intent-filter> -->
@@ -41,9 +41,10 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".presentation.location.LocationSearchActivity" />
+        <activity android:name=".presentation.common.location.LocationSearchActivity" />
+        <activity android:name=".presentation.user.review.store.ReviewStoreActivity" />
         <activity
-            android:name=".presentation.location.CertifyActivity"
+            android:name=".presentation.user.home.CertifyActivity"
             android:exported="false">
 
             <!-- <intent-filter> -->

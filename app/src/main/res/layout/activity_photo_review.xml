@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.location.PhotoReviewActivity">
+        tools:context=".presentation.user.review.writing.PhotoReviewActivity">
 
         <FrameLayout
             android:id="@+id/photo_review_fragment_container"
