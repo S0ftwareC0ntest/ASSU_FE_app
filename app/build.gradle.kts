@@ -58,4 +58,10 @@ dependencies {
 
     // grid layout
     implementation(libs.androidx.gridlayout)
+
+    // camera
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
 }
