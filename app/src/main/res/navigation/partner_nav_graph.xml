@@ -12,7 +12,7 @@
 
         <!-- 홈 → 관리자 목록(Activity) -->
         <action
-            android:id="@+id/action_partnerHome_to_partnerViewAdminList"
+            android:id="@+id/action_partner_home_to_partner_view_admin_list"
             app:destination="@id/partnerHomeViewAdminListActivity" />
     </fragment>
 
