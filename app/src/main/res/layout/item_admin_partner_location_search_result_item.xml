@@ -2,7 +2,7 @@
 <layout>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="365dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -48,7 +48,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_location_search_result_item_bg"
-        app:layout_constraintDimensionRatio="13:122"
+        app:layout_constraintDimensionRatio="20:122"
         app:layout_constraintStart_toEndOf="@id/cv_location_search_result_item_"
         app:layout_constraintTop_toTopOf="@id/iv_location_search_result_item_bg" />
 
@@ -67,9 +67,9 @@
             android:layout_height="wrap_content"
             android:text="역전할머니 숭실대점"
             android:textSize="17sp"
-            android:fontFamily="@font/pretendard_regular"
+            android:fontFamily="@font/pretendard_medium"
             android:textColor="@color/assu_font_main"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="4dp"/>
 
         <LinearLayout
             android:id="@+id/ll_location_search_result_item"
@@ -81,26 +81,58 @@
             android:id="@+id/tv_location_search_result_item_organization"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IT대 학생회"
+            android:text="제휴중"
             android:textSize="11sp"
             android:fontFamily="@font/pretendard_regular"
-            android:textColor="@color/assu_font_sub"
+            android:textColor="@color/assu_font_white"
             android:textAlignment="center"
-            android:paddingTop="5dp"
-            android:background="@drawable/bg_location_search_result_item_round"/>
-
+            android:gravity="center"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_location_capsule_blue"/>
 
         <TextView
-            android:id="@+id/tv_location_item_content"
+            android:id="@+id/tv_admin_partner_location_address_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4인 이상 식사시, 음료 제공"
+            android:text="2025.02.24 ~ 2025.06.15"
             android:textSize="13sp"
-            android:layout_marginStart="6dp"
-            android:layout_gravity="center_vertical"
+            android:textAlignment="center"
+            android:gravity="center"
             android:fontFamily="@font/pretendard_regular"
             android:textColor="@color/assu_font_sub"/>
         </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_admin_partner_location_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_admin_partner_location_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_location_contact_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_admin_partner_location_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제휴 계약서 보기"
+                android:textColor="@color/assu_font_main"
+                android:textSize="13sp"
+                android:fontFamily="@font/pretendard_regular"
+                app:layout_constraintTop_toTopOf="@id/iv_admin_partner_location_contact"
+                app:layout_constraintBottom_toBottomOf="@id/iv_admin_partner_location_contact"
+                app:layout_constraintStart_toStartOf="@id/iv_admin_partner_location_contact"
+                app:layout_constraintEnd_toEndOf="@id/iv_admin_partner_location_contact"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 
     <View

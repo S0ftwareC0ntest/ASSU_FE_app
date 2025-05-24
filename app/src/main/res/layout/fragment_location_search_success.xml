@@ -29,12 +29,11 @@
             android:layout_height="wrap_content"
             app:layout_constrainedHeight="true"
             app:layout_constraintTop_toBottomOf="@id/tv_location_search_success_title"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="visible"
             android:layout_marginTop="10dp"
             android:layout_marginStart="13dp"
             android:layout_marginEnd="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_location_search_result_item"/>
+            tools:listitem="@layout/item_admin_partner_location_search_result_item"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

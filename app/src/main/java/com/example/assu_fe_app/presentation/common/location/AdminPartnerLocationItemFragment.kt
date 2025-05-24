@@ -4,7 +4,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ItemUserLocationBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 
-class UserLocationItemFragment :
+class AdminPartnerLocationItemFragment :
     BaseFragment<ItemUserLocationBinding>(R.layout.item_user_location) {
     override fun initObserver() {}
 

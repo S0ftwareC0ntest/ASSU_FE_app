@@ -57,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="@id/iv_admin_partner_location_bg"
             app:layout_constraintBottom_toBottomOf="@id/iv_admin_partner_location_bg"
             app:layout_constraintStart_toEndOf="@id/view_admin_partner_location_mg3"
@@ -85,7 +86,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/tv_admin_partner_location_content"
+                    app:layout_constraintEnd_toStartOf="@id/tv_admin_partner_location_address_date"
                     android:layout_marginEnd="6dp"
                     android:visibility="gone" />
 
@@ -96,14 +97,14 @@
                     android:text="제휴중"
                     android:textSize="11sp"
                     android:textColor="@color/assu_font_sub"
-                    app:layout_constraintTop_toTopOf="@id/tv_admin_partner_location_content"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_admin_partner_location_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_admin_partner_location_address_date"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_admin_partner_location_address_date"
                     app:layout_constraintStart_toStartOf="@id/iv_admin_partner_location_capsule"
                     app:layout_constraintEnd_toEndOf="@id/iv_admin_partner_location_capsule"
                     android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/tv_admin_partner_location_content"
+                    android:id="@+id/tv_admin_partner_location_address_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="서울 동작구 사당로 36-1 서정캐슬"
@@ -129,10 +130,8 @@
                     android:src="@drawable/btn_location_contact"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_admin_partner_location_contact"
