@@ -19,20 +19,20 @@ class AdminPartnerLocationAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: LocationAdminPartnerSearchResultItem, isLastItem: Boolean) {
-            binding.tvLocationSearchResultItemShopName.text = item.shopName
+            binding.tvItemAdminPartnerLocationSearchResultItemShopName.text = item.shopName
 
-            if (!item.isPartnered) {
-                binding.tvLocationSearchResultItemOrganization.visibility = View.VISIBLE
-                binding.tvAdminPartnerLocationContact.setText("제휴 계약서 보기")
-                binding.tvAdminPartnerLocationAddressDate.text = item.term
+            if (item.isPartnered) {
+                binding.tvItemAdminPartnerLocationSearchResultItemPartnered.visibility = View.VISIBLE
+                binding.tvItemAdminPartnerLocationSearchResultItemTerm.text = item.term
+                binding.tvItemAdminPartnerLocationSearchResultItemContact.text = "제휴 계약서 보기"
             } else {
-                binding.tvLocationSearchResultItemOrganization.visibility = View.GONE
-                binding.tvAdminPartnerLocationContact.setText("문의하기")
-                binding.tvAdminPartnerLocationAddressDate.text = item.address
+                binding.tvItemAdminPartnerLocationSearchResultItemPartnered.visibility = View.GONE
+                binding.tvItemAdminPartnerLocationSearchResultItemTerm.text = item.address
+                binding.tvItemAdminPartnerLocationSearchResultItemContact.text = "문의하기"
             }
 
             // 마지막 아이템이면 구분선 숨기기
-            binding.viewLocationSearchResultItemLine.visibility =
+            binding.viewItemAdminPartnerLocationSearchResultItemDivider.visibility =
                 if (isLastItem) View.GONE else View.VISIBLE
 
             binding.root.setOnClickListener {

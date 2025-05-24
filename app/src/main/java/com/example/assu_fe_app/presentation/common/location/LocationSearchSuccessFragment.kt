@@ -41,8 +41,8 @@ class LocationSearchSuccessFragment :
 
     override fun initView() {
         val dummyList = listOf(
-            LocationAdminPartnerSearchResultItem("역전할머니맥주 숭실대점", "서울 동작구 사당로 36-1 서정캐슬", true, ""),
-            LocationAdminPartnerSearchResultItem("역전할머니맥주 숭실대점", "서울 동작구 사당로 36-1 서정캐슬", false, "2025.02.24 ~ 2025.06.15")
+            LocationAdminPartnerSearchResultItem("역전할머니맥주 숭실대점", "서울 동작구 사당로 36-1 서정캐슬", true, "2025.02.24 ~ 2025.06.15"),
+            LocationAdminPartnerSearchResultItem("역전할머니맥주 숭실대점", "서울 동작구 사당로 36-1 서정캐슬", false, "")
         )
         adapter = AdminPartnerLocationAdapter(dummyList)
         binding.rvLocationSearchSuccess.layoutManager = LinearLayoutManager(requireContext())
