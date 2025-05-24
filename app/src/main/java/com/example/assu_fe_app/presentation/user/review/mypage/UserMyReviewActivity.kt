@@ -13,7 +13,7 @@ import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
 import java.time.LocalDateTime
 
-class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
+class UserMyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
 
     private lateinit var reviewAdapter : ReviewAdapter
     val manager = supportFragmentManager
@@ -54,7 +54,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
         reviewAdapter = ReviewAdapter(showDeleteButton = true)
 
         binding.rvManageReview.apply {
-            layoutManager = LinearLayoutManager(this@MyReviewActivity)
+            layoutManager = LinearLayoutManager(this@UserMyReviewActivity)
             adapter = reviewAdapter
         }
 
@@ -73,6 +73,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
         return listOf(
             Review(
                 marketName = "스시천국",
+                studentCategory = "경영대학 재학생",
                 rate = 5,
                 content = "진짜 맛있었어요! 또 가고 싶어요!",
                 date = LocalDateTime.now().minusDays(1),
@@ -80,6 +81,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
             ),
             Review(
                 marketName = "돈까스집",
+                studentCategory = "경영대학 재학생",
                 rate = 4,
                 content = "튀김이 바삭해서 좋았어요. 양도 많아요.",
                 date = LocalDateTime.now().minusDays(3),
