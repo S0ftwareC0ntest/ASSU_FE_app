@@ -3,11 +3,11 @@ package com.example.assu_fe_app.presentation.user.home
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentHomeBinding
+import com.example.assu_fe_app.databinding.FragmentUserHomeBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 
-class HomeFragment :
-    BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
+class UserHomeFragment :
+    BaseFragment<FragmentUserHomeBinding>(R.layout.fragment_user_home){
     override fun initObserver() {
 
     }
