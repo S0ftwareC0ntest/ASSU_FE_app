@@ -2,6 +2,7 @@ package com.example.assu_fe_app.presentation.common.signup
 
 import android.content.Context
 import android.os.CountDownTimer
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -13,6 +14,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentSignUpCommonVerifyBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import android.widget.Toast
+import android.text.Editable
 
 class SignUpCommonVerifyFragment :
     BaseFragment<FragmentSignUpCommonVerifyBinding>(R.layout.fragment_sign_up_common_verify) {
@@ -23,6 +25,11 @@ class SignUpCommonVerifyFragment :
     // 임시 허용
     private val correctPhoneNumber = "01012345678"
     private val correctVerificationCode = "1234"
+
+    private var lastTimerText: String = "05:00"
+
+    private var timerStartTime: Long = 0L
+    private var timerEndTime: Long = 0L
 
     override fun initObserver() {}
 
@@ -37,6 +44,44 @@ class SignUpCommonVerifyFragment :
                 Toast.makeText(requireContext(), "올바르지 않은 전화번호입니다", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.etUserVerifyCode.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.clUserVerifyCode.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_signup_input_bar_selected)
+            } else {
+                binding.clUserVerifyCode.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_signup_input_bar)
+            }
+        }
+
+        binding.etUserVerifyCode.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val errorDrawableState = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.bg_signup_input_bar_error
+                )?.constantState
+
+                val currentBackgroundState = binding.clUserVerifyCode.background.constantState
+
+                if (currentBackgroundState == errorDrawableState) {
+                    binding.clUserVerifyCode.background =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.bg_signup_input_bar_selected)
+
+                    binding.ivUserVerifyCodeCheckIcon.visibility = View.GONE
+
+                    // 오류 문구 대신 타이머 텍스트 복원
+                    binding.tvUserVerifyCode.text = lastTimerText
+                    binding.tvUserVerifyCode.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.assu_main)
+                    )
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         // 엔터 입력 시 인증 처리
         binding.etUserVerifyCode.setOnEditorActionListener { _, actionId, event ->
@@ -81,11 +126,31 @@ class SignUpCommonVerifyFragment :
 
     private fun startTimer() {
         countDownTimer?.cancel()
+
+        val startTime = System.currentTimeMillis()
+        timerStartTime = startTime
+        timerEndTime = startTime + totalTimeMillis
+
         countDownTimer = object : CountDownTimer(totalTimeMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val minutes = (millisUntilFinished / 1000) / 60
-                val seconds = (millisUntilFinished / 1000) % 60
-                binding.tvUserVerifyCode.text = String.format("%02d:%02d", minutes, seconds)
+                val now = System.currentTimeMillis()
+                val remainingMillis = timerEndTime - now
+
+                if (remainingMillis > 0) {
+                    val minutes = (remainingMillis / 1000) / 60
+                    val seconds = (remainingMillis / 1000) % 60
+                    val timeText = String.format("%02d:%02d", minutes, seconds)
+                    lastTimerText = timeText
+                    binding.tvUserVerifyCode.text = timeText
+
+                    // 인증 오류 상태였던 경우 → 첫 타이머 갱신 시 오류 아이콘 제거
+                    if (!isVerified) {
+                        binding.ivUserVerifyCodeCheckIcon.visibility = View.GONE
+                    }
+
+                } else {
+                    onFinish()
+                }
             }
 
             override fun onFinish() {
@@ -97,13 +162,12 @@ class SignUpCommonVerifyFragment :
 
     private fun checkVerificationCode() {
         val enteredCode = binding.etUserVerifyCode.text.toString().trim()
-        val correctCode = "1234"
 
         // 키보드 내리기
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.etUserVerifyCode.windowToken, 0)
 
-        if (enteredCode == correctCode) {
+        if (enteredCode == correctVerificationCode) {
             successVerificationUI()
         } else {
             errorVerificationUI()
@@ -119,14 +183,16 @@ class SignUpCommonVerifyFragment :
         binding.tvUserVerifyCode.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_main))
         binding.ivUserVerifyCodeCheckIcon.setImageResource(R.drawable.ic_signup_verified)
         binding.ivUserVerifyCodeCheckIcon.visibility = View.VISIBLE
-        binding.clUserVerifyCode.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_signup_input_bar_selected)
+
+        // 입력 필드 비활성화
+        binding.etUserVerifyCode.isEnabled = false
+        binding.etUserVerifyCode.clearFocus()
 
         // 버튼 활성화
         setButtonEnabled(true)
     }
 
     private fun errorVerificationUI() {
-        countDownTimer?.cancel()
 
         binding.tvUserVerifyCode.text = "인증오류"
         binding.tvUserVerifyCode.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_error))
