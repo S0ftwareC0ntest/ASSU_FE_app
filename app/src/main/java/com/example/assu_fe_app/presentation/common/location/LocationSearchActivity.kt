@@ -16,7 +16,6 @@ import com.example.assu_fe_app.presentation.base.BaseActivity
 
 class LocationSearchActivity :
     BaseActivity<ActivityLocationSearchBinding>(R.layout.activity_location_search) {
-
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
