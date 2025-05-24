@@ -64,4 +64,7 @@ dependencies {
     implementation(libs.camerax.camera2)
     implementation(libs.camerax.lifecycle)
     implementation(libs.camerax.view)
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 }

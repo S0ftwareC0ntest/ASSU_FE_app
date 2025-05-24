@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 
 data class Review(
     var marketName : String,
+    var studentCategory : String,
     var rate : Int,
     var content : String,
     var reviewImage : List<String>,
