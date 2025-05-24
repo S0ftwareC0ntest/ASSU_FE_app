@@ -5,13 +5,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpUserStudentBinding
+import com.example.assu_fe_app.databinding.FragmentUserSignUpStudentBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 
-class SignUpUserStudentFragment :
-    BaseFragment<FragmentSignUpUserStudentBinding>(R.layout.fragment_sign_up_user_student) {
+class UserSignUpStudentFragment :
+    BaseFragment<FragmentUserSignUpStudentBinding>(R.layout.fragment_user_sign_up_student) {
 
     override fun initObserver() {}
 

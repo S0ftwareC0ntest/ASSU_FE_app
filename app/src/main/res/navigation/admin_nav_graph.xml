@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/adminHomeFragment">
+
+    <!-- 관리자 홈 화면 -->
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.home.AdminHomeFragment"
+        android:label="Admin Home">
+
+        <!-- 홈 → 제휴업체 목록(Activity) -->
+        <action
+            android:id="@+id/action_adminHome_to_adminViewPartnerList"
+            app:destination="@id/adminHomeViewPartnerListActivity" />
+    </fragment>
+
+    <!-- 액티비티: 제휴업체 목록 -->
+    <activity
+        android:id="@+id/adminHomeViewPartnerListActivity"
+        android:name="com.example.assu_fe_app.presentation.admin.home.AdminHomeViewPartnerListActivity"
+        android:label="Partner List" />
+
+    <!-- 주변 매장(지도) 공용 처리 -->
+    <fragment
+        android:id="@+id/adminLocationFragment"
+        android:name="com.example.assu_fe_app.presentation.common.location.LocationFragment"
+        android:label="Location" />
+
+    <!-- 관리자 대시보드 -->
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.dashboard.AdminDashboardFragment"
+        android:label="Admin Dashboard">
+
+        <!-- 대시보드 → 제휴 건의함(Activity) -->
+        <action
+            android:id="@+id/action_adminDashboard_to_suggestions"
+            app:destination="@id/adminDashboardSuggestionsActivity" />
+    </fragment>
+
+    <!-- 액티비티: 제휴 건의함 -->
+    <activity
+        android:id="@+id/adminDashboardSuggestionsActivity"
+        android:name="com.example.assu_fe_app.presentation.admin.dashboard.AdminDashboardSuggestionsActivity"
+        android:label="Suggestions" />
+
+    <!-- 일단 채팅은 주석 처리 -->
+    <!--    <fragment-->
+    <!--        android:id="@+id/adminChattingFragment"-->
+    <!--        android:name="com.example.assu_fe_app.presentation.admin.chatting.AdminChattingFragment"-->
+    <!--        android:label="Chatting" />-->
+
+    <!-- 마이페이지 공용 처리 -->
+    <fragment
+        android:id="@+id/AdminMyPageFragment"
+        android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
+        android:label="My Page" />
+    </navigation>

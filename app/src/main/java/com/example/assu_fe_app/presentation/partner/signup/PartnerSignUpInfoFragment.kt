@@ -2,13 +2,13 @@ package com.example.assu_fe_app.presentation.partner.signup
 
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpPartnerInfoBinding
+import com.example.assu_fe_app.databinding.FragmentPartnerSignUpInfoBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 
-class SignUpPartnerInfoFragment :
-    BaseFragment<FragmentSignUpPartnerInfoBinding>(R.layout.fragment_sign_up_partner_info) {
+class PartnerSignUpInfoFragment :
+    BaseFragment<FragmentPartnerSignUpInfoBinding>(R.layout.fragment_partner_sign_up_info) {
 
     private var isAddressSearchClicked = false
 

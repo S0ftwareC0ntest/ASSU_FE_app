@@ -1,14 +1,14 @@
 package com.example.assu_fe_app.presentation.user.signup
 
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpUserSchoolBinding
+import com.example.assu_fe_app.databinding.FragmentUserSignUpSchoolBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import android.widget.ArrayAdapter
 import android.view.View
 import android.widget.AdapterView
 import androidx.navigation.fragment.findNavController
 
-class SignUpUserSchoolFragment : BaseFragment<FragmentSignUpUserSchoolBinding>(R.layout.fragment_sign_up_user_school) {
+class UserSignUpSchoolFragment : BaseFragment<FragmentUserSignUpSchoolBinding>(R.layout.fragment_user_sign_up_school) {
     override fun initObserver() {
     }
 

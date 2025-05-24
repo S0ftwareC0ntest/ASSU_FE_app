@@ -2,12 +2,12 @@ package com.example.assu_fe_app.presentation.partner.signup
 
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpPartnerLicenseBinding
+import com.example.assu_fe_app.databinding.FragmentPartnerSignUpLicenseBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.core.content.ContextCompat
 
-class SignUpPartnerLicenseFragment :
-    BaseFragment<FragmentSignUpPartnerLicenseBinding>(R.layout.fragment_sign_up_partner_license) {
+class PartnerSignUpLicenseFragment :
+    BaseFragment<FragmentPartnerSignUpLicenseBinding>(R.layout.fragment_partner_sign_up_license) {
 
     override fun initObserver() {}
 
