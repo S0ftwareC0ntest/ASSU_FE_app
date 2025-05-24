@@ -12,7 +12,7 @@
 
         <!-- 홈 → 제휴업체 목록(Activity) -->
         <action
-            android:id="@+id/action_adminHome_to_adminViewPartnerList"
+            android:id="@+id/action_admin_home_to_admin_view_partner_list"
             app:destination="@id/adminHomeViewPartnerListActivity" />
     </fragment>
 
@@ -36,7 +36,7 @@
 
         <!-- 대시보드 → 제휴 건의함(Activity) -->
         <action
-            android:id="@+id/action_adminDashboard_to_suggestions"
+            android:id="@+id/action_admin_dashboard_to_suggestions"
             app:destination="@id/adminDashboardSuggestionsActivity" />
     </fragment>
 
@@ -54,7 +54,7 @@
 
     <!-- 마이페이지 공용 처리 -->
     <fragment
-        android:id="@+id/AdminMyPageFragment"
+        android:id="@+id/adminMyPageFragment"
         android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
         android:label="My Page" />
     </navigation>
