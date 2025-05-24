@@ -2,13 +2,13 @@ package com.example.assu_fe_app.presentation.admin.signup
 
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpAdminInfoBinding
+import com.example.assu_fe_app.databinding.FragmentAdminSignUpInfoBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 
-class SignUpAdminInfoFragment :
-    BaseFragment<FragmentSignUpAdminInfoBinding>(R.layout.fragment_sign_up_admin_info) {
+class AdminSignUpInfoFragment :
+    BaseFragment<FragmentAdminSignUpInfoBinding>(R.layout.fragment_admin_sign_up_info) {
 
     private var isAddressSearchClicked = false
 

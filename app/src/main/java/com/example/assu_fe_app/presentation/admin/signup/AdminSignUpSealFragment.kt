@@ -2,11 +2,11 @@ package com.example.assu_fe_app.presentation.admin.signup
 
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpAdminSealBinding
+import com.example.assu_fe_app.databinding.FragmentAdminSignUpSealBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.core.content.ContextCompat
-class SignUpAdminSealFragment :
-    BaseFragment<FragmentSignUpAdminSealBinding>(R.layout.fragment_sign_up_admin_seal) {
+class AdminSignUpSealFragment :
+    BaseFragment<FragmentAdminSignUpSealBinding>(R.layout.fragment_admin_sign_up_seal) {
 
     override fun initObserver() {}
 

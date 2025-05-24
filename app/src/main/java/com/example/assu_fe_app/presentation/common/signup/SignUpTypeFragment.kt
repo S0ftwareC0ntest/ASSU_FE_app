@@ -1,11 +1,11 @@
 package com.example.assu_fe_app.presentation.common.signup
 
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpCommonTypeBinding
+import com.example.assu_fe_app.databinding.FragmentSignUpTypeBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import androidx.navigation.fragment.findNavController
 
-class SignUpCommonTypeFragment : BaseFragment<FragmentSignUpCommonTypeBinding>(R.layout.fragment_sign_up_common_type){
+class SignUpTypeFragment : BaseFragment<FragmentSignUpTypeBinding>(R.layout.fragment_sign_up_type){
 
     // 선택된 타입을 저장: "admin", "partner", "user"
     private var selectedType: String? = null

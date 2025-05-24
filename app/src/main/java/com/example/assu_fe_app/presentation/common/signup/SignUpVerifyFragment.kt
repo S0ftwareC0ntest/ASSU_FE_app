@@ -11,13 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpCommonVerifyBinding
+import com.example.assu_fe_app.databinding.FragmentSignUpVerifyBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import android.widget.Toast
 import android.text.Editable
 
-class SignUpCommonVerifyFragment :
-    BaseFragment<FragmentSignUpCommonVerifyBinding>(R.layout.fragment_sign_up_common_verify) {
+class SignUpVerifyFragment :
+    BaseFragment<FragmentSignUpVerifyBinding>(R.layout.fragment_sign_up_verify) {
 
     private var countDownTimer: CountDownTimer? = null
     private val totalTimeMillis = 5 * 60 * 1000L // 5분

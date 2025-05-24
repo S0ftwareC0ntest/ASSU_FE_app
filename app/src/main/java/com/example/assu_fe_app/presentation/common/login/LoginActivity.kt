@@ -8,7 +8,7 @@ import com.example.assu_fe_app.databinding.ActivityLoginBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import android.content.Intent
 import com.example.assu_fe_app.presentation.common.signup.SignUpActivity
-import com.example.assu_fe_app.presentation.MainActivity
+import com.example.assu_fe_app.presentation.user.UserMainActivity
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
     override fun initView() {
@@ -19,14 +19,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 systemBars.left,
                 systemBars.top + extraPaddingTop.dpToPx(v.context),
                 systemBars.right,
-                0
+                systemBars.bottom
             )
             insets
         }
 
         // 로그인 클릭 시
         binding.btnLogin.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, UserMainActivity::class.java)
             startActivity(intent)
         }
 

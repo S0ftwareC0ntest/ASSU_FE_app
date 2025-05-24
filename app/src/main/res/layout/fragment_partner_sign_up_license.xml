@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.user.signup.SignUpUserSchoolFragment">
+    tools:context=".presentation.partner.signup.PartnerSignUpLicenseFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,75 +34,65 @@
             android:src="@drawable/ic_signup_progress_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.60"
+            app:layout_constraintWidth_percent="0.80"
             android:scaleType="fitXY"/>
 
-        <!-- 학교 선택 텍스트 -->
+        <!-- 업체의 사업자 등록 텍스트 -->
         <TextView
-            android:id="@+id/tv_user_school_title"
+            android:id="@+id/tv_partner_license_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="46dp"
             android:fontFamily="@font/pretendard_bold"
-            android:text="재학중이신 학교를\n선택해주세요!"
+            android:text="마지막이에요!\n사업자 등록증을 등록해주세요"
             android:layout_marginStart="24dp"
             android:textColor="@color/assu_font_main"
             android:textSize="25sp"
             app:layout_constraintTop_toBottomOf="@id/iv_signup_progress_bar"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- 학교 선택 라벨 -->
-        <TextView
-            android:id="@+id/tv_user_shoool_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            android:layout_marginTop="63dp"
-            android:text="학교선택"
-            android:textSize="13sp"
-            android:textColor="@color/assu_font_sub"
-            android:fontFamily="@font/pretendard_regular"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_school_title"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <!-- 학교 선택 필드 받기 -->
+        <!-- 인감 사진 받기 -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_school_spinner"
+            android:id="@+id/cl_partner_license"
             android:layout_width="0dp"
             android:layout_height="44dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="63dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/bg_signup_input_bar"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_shoool_label"
+            app:layout_constraintTop_toBottomOf="@id/tv_partner_license_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <Spinner
-                android:id="@+id/spinner_school"
+            <EditText
+                android:id="@+id/et_partner_license"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
+                android:hint="갤러리에서 사진업로드"
+                android:focusable="false"
+                android:cursorVisible="false"
+                android:inputType="text"
                 android:background="@android:color/transparent"
-                android:spinnerMode="dropdown"
-                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textColor="@color/assu_font_main"
+                android:textColorHint="@color/assu_font_sub"
+                android:fontFamily="@font/pretendard_regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:id="@+id/iv_spinner_arrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:id="@+id/iv_upload"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginEnd="15dp"
-                android:src="@drawable/ic_down"
+                android:src="@drawable/ic_signup_upload"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <!-- 인증 완료 버튼 (하단 고정) -->
         <ImageButton

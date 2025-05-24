@@ -2,11 +2,11 @@ package com.example.assu_fe_app.presentation.common.signup
 
 import android.content.Intent
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentSignUpCommonCompleteBinding
+import com.example.assu_fe_app.databinding.FragmentSignUpCompleteBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
-import com.example.assu_fe_app.presentation.MainActivity
+import com.example.assu_fe_app.presentation.user.UserMainActivity
 
-class SignUpCommonCompleteFragment : BaseFragment<FragmentSignUpCommonCompleteBinding>(R.layout.fragment_sign_up_common_complete){
+class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>(R.layout.fragment_sign_up_complete){
     override fun initObserver() {
     }
 
@@ -18,7 +18,7 @@ class SignUpCommonCompleteFragment : BaseFragment<FragmentSignUpCommonCompleteBi
 
         // 회원가입 완료 후 Main Activity로 이동
         binding.btnCompleted.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
+            val intent = Intent(requireContext(), UserMainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             requireActivity().finish()

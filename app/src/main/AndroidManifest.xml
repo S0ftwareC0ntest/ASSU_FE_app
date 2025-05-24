@@ -67,7 +67,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.user.UserMainActivity"
             android:exported="false">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
