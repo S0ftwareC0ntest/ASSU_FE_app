@@ -53,11 +53,24 @@ class SignUpCommonTypeFragment : BaseFragment<FragmentSignUpCommonTypeBinding>(R
         binding.btnPartnerType.setBackgroundResource(R.drawable.bg_signup_input_bar)
         binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar)
 
-        // 선택된 버튼만 강조
+        binding.flAdminType.alpha = 0.6f
+        binding.flPartnerType.alpha = 0.6f
+        binding.flUserType.alpha = 0.6f
+
+        // 선택된 버튼만 강조 및 투명도 설정
         when (type) {
-            "admin" -> binding.btnAdminType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
-            "partner" -> binding.btnPartnerType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
-            "user" -> binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
+            "admin" -> {
+                binding.btnAdminType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
+                binding.flAdminType.alpha = 1.0f
+            }
+            "partner" -> {
+                binding.btnPartnerType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
+                binding.flPartnerType.alpha = 1.0f
+            }
+            "user" -> {
+                binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
+                binding.flUserType.alpha = 1.0f
+            }
         }
 
         // 완료 버튼 활성화
