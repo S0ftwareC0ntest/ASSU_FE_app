@@ -36,7 +36,7 @@
         app:layout_constraintWidth_percent="0.01816" />
 
     <ImageView
-        android:id="@+id/iv_customer_review_back"
+        android:id="@+id/btn_customer_review_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_location_search_left_arrow"

@@ -1,60 +1,62 @@
 package com.example.assu_fe_app.presentation.partner
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
+import com.example.assu_fe_app.data.dto.review.Review
+import com.example.assu_fe_app.databinding.FragmentCustomerReviewBinding
+import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.presentation.partner.review.adapter.CustomerReviewAdapter
+import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
+import java.time.LocalDateTime
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CustomerReviewFragment : BaseFragment<FragmentCustomerReviewBinding>(R.layout.fragment_customer_review) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CustomerReviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CustomerReviewFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var reviewAdapter: CustomerReviewAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun initView() {
+        reviewAdapter = CustomerReviewAdapter()
+        reviewAdapter.setData(createDummyData())
+
+        binding.rvCustomerReview.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = reviewAdapter
+        }
+
+        binding.btnCustomerReviewBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer_review, container, false)
+    override fun initObserver() {}
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createDummyData(): List<Review> {
+        return listOf(
+            Review(
+                marketName = "피자마루",
+                studentCategory = "it대학 재학생",
+                rate = 4,
+                content = "치즈가 정말 풍부하고 맛있었어요!",
+                date = LocalDateTime.now().minusDays(2),
+                reviewImage = listOf()
+            ),
+            Review(
+                marketName = "치킨나라",
+                studentCategory = "it대학 제학생",
+                rate = 3,
+                content = "무난한 맛이었지만 양은 넉넉했어요.",
+                date = LocalDateTime.now().minusDays(4),
+                reviewImage = listOf()
+            )
+        )
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CustomerReviewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CustomerReviewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

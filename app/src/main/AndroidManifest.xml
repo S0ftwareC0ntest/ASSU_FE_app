@@ -43,7 +43,7 @@
             android:name=".presentation.user.dashboard.ServiceSuggestActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.user.review.mypage.MyReviewActivity"
+            android:name=".presentation.user.review.mypage.UserMyReviewActivity"
             android:exported="true" />
         <activity
             android:name=".presentation.user.review.writing.FinishReviewActivity"

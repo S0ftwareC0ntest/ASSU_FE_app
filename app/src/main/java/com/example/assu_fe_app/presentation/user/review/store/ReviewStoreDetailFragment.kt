@@ -37,6 +37,7 @@ class ReviewStoreDetailFragment :
         return listOf(
             Review(
                 marketName = "피자마루",
+                studentCategory = "it대학 재학생",
                 rate = 4,
                 content = "치즈가 정말 풍부하고 맛있었어요!",
                 date = LocalDateTime.now().minusDays(2),
@@ -44,6 +45,7 @@ class ReviewStoreDetailFragment :
             ),
             Review(
                 marketName = "치킨나라",
+                studentCategory = "it대학 제학생",
                 rate = 3,
                 content = "무난한 맛이었지만 양은 넉넉했어요.",
                 date = LocalDateTime.now().minusDays(4),
