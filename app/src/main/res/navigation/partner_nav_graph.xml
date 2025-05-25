@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/partner_nav_graph"
+    app:startDestination="@id/partnerHomeFragment">
+
+    <!-- 제휴업체 홈 화면 -->
+    <fragment
+        android:id="@+id/partnerHomeFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.home.PartnerHomeFragment"
+        android:label="Partner Home">
+
+        <!-- 홈 → 관리자 목록(Activity) -->
+        <action
+            android:id="@+id/action_partner_home_to_partner_view_admin_list"
+            app:destination="@id/partnerHomeViewAdminListActivity" />
+    </fragment>
+
+    <!-- 액티비티: 관리자 목록 -->
+    <activity
+        android:id="@+id/partnerHomeViewAdminListActivity"
+        android:name="com.example.assu_fe_app.presentation.partner.home.PartnerHomeViewAdminListActivity"
+        android:label="Admin List" />
+
+    <!-- 주변 관리자(지도) 공용 처리 -->
+    <fragment
+        android:id="@+id/partnerLocationFragment"
+        android:name="com.example.assu_fe_app.presentation.common.location.LocationFragment"
+        android:label="Location" />
+
+    <!-- 제휴업체 대시보드 -->
+    <fragment
+        android:id="@+id/partnerDashboardFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.dashboard.PartnerDashboardFragment"
+        android:label="Partner Dashboard" />
+
+    <!-- 일단 채팅은 주석 처리 -->
+    <!--
+    <fragment
+        android:id="@+id/partnerChattingFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.chatting.PartnerChattingFragment"
+        android:label="Chatting" />
+    -->
+
+    <!-- 마이페이지 공용 처리 -->
+    <fragment
+        android:id="@+id/partnerMyPageFragment"
+        android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
+        android:label="My Page" />
+</navigation>

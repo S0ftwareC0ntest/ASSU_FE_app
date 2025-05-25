@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id = "@+id/partnerHomeFragment"
+        android:icon="@drawable/ic_bottom_nav_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/partnerLocationFragment"
+        android:icon="@drawable/ic_bottom_nav_location"
+        android:title="@string/partner_location"/>
+    <item
+        android:id="@+id/partnerDashboardFragment"
+        android:icon="@drawable/ic_bottom_nav_dashboard"
+        android:title="@string/dashboard"/>
+    <item
+        android:id="@+id/partnerChattingFragment"
+        android:icon="@drawable/ic_bottom_nav_chatting"
+        android:title="@string/chatting"/>
+    <item
+        android:id="@+id/partnerMyPageFragment"
+        android:icon="@drawable/ic_bottom_nav_mypage"
+        android:title="@string/myPage"/>
+
+</menu>

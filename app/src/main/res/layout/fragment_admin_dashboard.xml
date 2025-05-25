@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/assu_background"
+        android:padding="24dp">
+
+        <!-- 상단 타이틀 -->
+        <TextView
+            android:id="@+id/tv_dashboard_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="숭실대학교 총학생회"
+            android:textColor="@color/assu_font_main"
+            android:textSize="22sp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_marginTop="41dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_dashboard_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제휴 사용자가 얼마나 많을까요?"
+            android:textColor="@color/assu_font_main"
+            android:textSize="22sp"
+            android:fontFamily="@font/pretendard_semibold"
+            app:layout_constraintTop_toBottomOf="@id/tv_dashboard_title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp" />
+
+        <!-- 통계 카드 묶음 -->
+        <LinearLayout
+            android:id="@+id/layout_dashboard_stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@id/tv_dashboard_question"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- 앱 인증자 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_dashboard_stat_box"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="6dp"
+                android:layout_marginEnd="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="앱 인증자"
+                    android:textSize="16sp"
+                    android:textColor="@color/assu_font_main"
+                    android:fontFamily="@font/pretendard_medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ 5,010"
+                    android:textSize="11sp"
+                    android:textColor="@color/assu_main"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <!-- 신규가입자 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_dashboard_stat_box"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="6dp"
+                android:layout_marginHorizontal="3dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="신규가입자"
+                    android:textSize="16sp"
+                    android:textColor="@color/assu_font_main"
+                    android:fontFamily="@font/pretendard_medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ 74"
+                    android:textSize="11sp"
+                    android:textColor="@color/assu_main"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <!-- 제휴 사용자 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_dashboard_stat_box"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="6dp"
+                android:layout_marginStart="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="제휴 사용자"
+                    android:textSize="16sp"
+                    android:textColor="@color/assu_font_main"
+                    android:fontFamily="@font/pretendard_medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ 4,128"
+                    android:textSize="11sp"
+                    android:textColor="@color/assu_main"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 그래프 제목 -->
+        <TextView
+            android:id="@+id/tv_dashboard_menu_graph_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제휴 이용현황"
+            android:textColor="@color/assu_font_main"
+            android:textSize="16sp"
+            android:layout_marginStart="7dp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_dashboard_stats"
+            app:layout_constraintStart_toStartOf="parent"
+             />
+
+        <!-- 그래프 여백 -->
+        <View
+            android:id="@+id/view_graph_placeholder"
+            android:layout_width="310dp"
+            android:layout_height="158dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_dashboard_menu_graph_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 분석 + 예측 문구 영역 -->
+        <LinearLayout
+            android:id="@+id/ll_dashboard_prediction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="25dp"
+            android:background="@color/assu_box"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/view_graph_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- 분석 문구 -->
+            <TextView
+                android:id="@+id/tv_dashboard_analysis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="“역전할머니맥주 숭실대점” 의\n제휴 누적이용률이 가장 높아요!"
+                android:textColor="@color/assu_font_main"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:fontFamily="@font/pretendard_medium" />
+
+            <!-- 예측 문구 -->
+            <TextView
+                android:id="@+id/tv_dashboard_prediction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:fontFamily="@font/pretendard_regular"
+                android:textColor="@color/assu_font_sub"
+                android:text="이번달에는 192건 이상일 것으로 예상돼요"
+                android:textAlignment="center"
+                android:autoLink="none"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="2dp"
+                android:importantForAccessibility="no" />
+        </LinearLayout>
+
+        <!-- 건의함 확인 버튼 -->
+        <TextView
+            android:id="@+id/btn_view_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_basic_selected"
+            android:clickable="true"
+            android:fontFamily="@font/pretendard_semibold"
+            android:gravity="center"
+            android:text="제휴건의함 확인하기"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_dashboard_prediction" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

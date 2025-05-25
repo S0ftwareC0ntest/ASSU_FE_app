@@ -29,51 +29,31 @@
             android:name=".presentation.common.signup.SignUpActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.user.dashboard.ServiceRecordActivity"
-            android:exported="false" />
-        <activity android:name=".presentation.user.home.UserQRVerifyActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".presentation.user.dashboard.SuggestCompleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.user.dashboard.ServiceSuggestActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.user.review.mypage.MyReviewActivity"
-            android:exported="true" />
-        <activity
-            android:name=".presentation.user.review.writing.FinishReviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.user.review.writing.PhotoReviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.user.review.writing.StarReviewActivity"
+            android:name=".presentation.user.UserMainActivity"
             android:exported="false">
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
+        <activity android:name=".presentation.user.dashboard.ServiceRecordActivity" />
+        <activity android:name=".presentation.user.home.UserQRVerifyActivity" />
+        <activity android:name=".presentation.user.dashboard.SuggestCompleteActivity" />
+        <activity android:name=".presentation.user.dashboard.ServiceSuggestActivity" />
+        <activity android:name=".presentation.user.review.mypage.MyReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.FinishReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.PhotoReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.StarReviewActivity" />
         <activity android:name=".presentation.common.location.LocationSearchActivity" />
         <activity android:name=".presentation.user.review.store.ReviewStoreActivity" />
+        <activity android:name=".presentation.user.home.CertifyActivity" />
         <activity
-            android:name=".presentation.user.home.CertifyActivity"
+            android:name=".presentation.admin.AdminMainActivity"
             android:exported="false">
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
+        <activity android:name=".presentation.admin.home.AdminHomeViewPartnerListActivity" />
+        <activity android:name=".presentation.admin.dashboard.AdminDashboardSuggestionsActivity" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.partner.PartnerMainActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
+        <activity android:name=".presentation.partner.home.PartnerHomeViewAdminListActivity" />
     </application>
 
 </manifest>

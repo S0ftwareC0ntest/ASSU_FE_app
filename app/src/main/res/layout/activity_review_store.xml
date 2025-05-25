@@ -15,7 +15,7 @@
         android:background="@color/assu_background">
 
         <View
-            android:id="@+id/view_review_store_bar_bg"
+            android:id="@+id/view_partner_list_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/assu_background"
@@ -36,7 +36,7 @@
             android:id="@+id/view_review_store_mg2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/view_review_store_bar_bg"
+            app:layout_constraintBottom_toBottomOf="@id/view_partner_list_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.01816" />
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_location_search_left_arrow"
             app:layout_constraintStart_toEndOf="@id/view_review_store_mg2"
-            app:layout_constraintTop_toTopOf="@id/view_review_store_bar_bg"
-            app:layout_constraintBottom_toBottomOf="@id/view_review_store_bar_bg"/>
+            app:layout_constraintTop_toTopOf="@id/view_partner_list_title"
+            app:layout_constraintBottom_toBottomOf="@id/view_partner_list_title"/>
 
         <TextView
             android:id="@+id/tv_review_store_name"
@@ -67,7 +67,7 @@
             android:id="@+id/view_review_store_mg3"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/view_review_store_bar_bg"
+            app:layout_constraintBottom_toBottomOf="@id/view_partner_list_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.03816" />
@@ -76,7 +76,7 @@
             android:id="@+id/view_review_store_mg4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/view_review_store_bar_bg"
+            app:layout_constraintBottom_toBottomOf="@id/view_partner_list_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.0157"
             app:layout_constraintStart_toStartOf="parent" />
@@ -85,7 +85,7 @@
             android:id="@+id/ll_reivew_sotre_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/view_review_store_bar_bg"
+            app:layout_constraintTop_toBottomOf="@id/view_partner_list_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:orientation="vertical">

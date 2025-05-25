@@ -1,0 +1,59 @@
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_suggestion_list_item"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/tv_department"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="소프트웨어학부 20214545"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColor="@color/assu_font_main" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_home_list_label"
+                android:text="재학중"
+                android:textColor="@color/white"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="무지하게 잘 먹었습니다! 제휴 이벤트 좋았어요! 그런데 4인 이상이라는 조건이 없으면, 더 좋을거 같아요!!"
+            android:textSize="13sp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작성일 | 2025-03-15 18:36"
+            android:textSize="13sp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/assu_font_sub" />
+    </LinearLayout>
+</layout>

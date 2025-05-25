@@ -6,7 +6,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityFinishReviewBinding
-import com.example.assu_fe_app.presentation.MainActivity
+import com.example.assu_fe_app.presentation.user.UserMainActivity
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
 class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.activity_finish_review) {
@@ -39,7 +39,7 @@ class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.
     }
 
     private fun navigateToHome() {
-        val intent = Intent(this, MainActivity::class.java).apply {
+        val intent = Intent(this, UserMainActivity::class.java).apply {
             // 기존 Task 스택 위로 올라가서 중복 생성 방지
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             // BottomNavigationView에 전달할 목적지 ID
