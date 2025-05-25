@@ -89,7 +89,6 @@
             android:paddingTop="5dp"
             android:background="@drawable/bg_location_search_result_item_round"/>
 
-
         <TextView
             android:id="@+id/tv_location_item_content"
             android:layout_width="wrap_content"
@@ -97,8 +96,6 @@
             android:text="4인 이상 식사시, 음료 제공"
             android:textSize="13sp"
             android:layout_marginStart="6dp"
-            android:gravity="center_vertical"
-            android:textAlignment="center"
             android:fontFamily="@font/pretendard_regular"
             android:textColor="@color/assu_font_sub"/>
         </LinearLayout>
