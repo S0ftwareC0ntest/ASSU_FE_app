@@ -178,7 +178,7 @@
                     android:id="@+id/iv_my_photo_review_warning_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_info_circle"/>
+                    android:src="@drawable/ic_info_circle_empty"/>
 
                 <TextView
                     android:id="@+id/tv_my_photo_review_warning_info"
