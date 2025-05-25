@@ -9,7 +9,7 @@ import com.example.assu_fe_app.databinding.ActivityFinishReviewBinding
 import com.example.assu_fe_app.presentation.user.UserMainActivity
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class FinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.activity_finish_review) {
+class UserFinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.activity_finish_review) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

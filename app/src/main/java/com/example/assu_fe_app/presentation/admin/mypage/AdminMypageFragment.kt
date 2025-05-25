@@ -17,3 +17,4 @@ class AdminMypageFragment : BaseFragment<FragmentAdminMypageBinding>(R.layout.fr
 
 
 }
+

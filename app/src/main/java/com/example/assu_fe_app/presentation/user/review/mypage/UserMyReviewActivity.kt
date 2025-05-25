@@ -10,12 +10,12 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ActivityMyReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
-import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
+import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
 import java.time.LocalDateTime
 
 class UserMyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
 
-    private lateinit var reviewAdapter : ReviewAdapter
+    private lateinit var userReviewAdapter : UserReviewAdapter
     val manager = supportFragmentManager
 
 
@@ -51,17 +51,17 @@ class UserMyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.acti
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAdapter(){
         //adapter초기화
-        reviewAdapter = ReviewAdapter(showDeleteButton = true)
+        userReviewAdapter = UserReviewAdapter(showDeleteButton = true)
 
         binding.rvManageReview.apply {
             layoutManager = LinearLayoutManager(this@UserMyReviewActivity)
-            adapter = reviewAdapter
+            adapter = userReviewAdapter
         }
 
         // 여기에 review List가 null 일때 ui 업데이트 관련 사항도 해줘야 함.
 
-        reviewAdapter.setData(createDummyData())
-        binding.tvManageReviewReviewCount.text = reviewAdapter.itemCount.toString()
+        userReviewAdapter.setData(createDummyData())
+        binding.tvManageReviewReviewCount.text = userReviewAdapter.itemCount.toString()
 
     }
 

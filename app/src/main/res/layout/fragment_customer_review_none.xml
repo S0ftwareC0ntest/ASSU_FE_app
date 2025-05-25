@@ -7,7 +7,7 @@
     android:background="@color/assu_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.partner.CustomerReviewNoneFragment">
+    tools:context=".presentation.partner.dashboard.review.PartnerReviewNoneFragment">
 
     <View
         android:id="@+id/customer_review_none_bar_bg"
@@ -177,7 +177,7 @@
                 android:id="@+id/iv_customer_review_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_info_circle"
+                android:src="@drawable/ic_info_cricle"
                 android:layout_marginStart="7dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

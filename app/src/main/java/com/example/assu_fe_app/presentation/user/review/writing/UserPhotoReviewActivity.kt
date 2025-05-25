@@ -10,7 +10,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityPhotoReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class PhotoReviewActivity : BaseActivity<ActivityPhotoReviewBinding>(R.layout.activity_photo_review) {
+class UserPhotoReviewActivity : BaseActivity<ActivityPhotoReviewBinding>(R.layout.activity_photo_review) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -45,7 +45,7 @@ class PhotoReviewActivity : BaseActivity<ActivityPhotoReviewBinding>(R.layout.ac
         }
 
         finishWritingActivatedButton.setOnClickListener {
-            val intent = Intent(this, FinishReviewActivity::class.java)
+            val intent = Intent(this, UserFinishReviewActivity::class.java)
             startActivity(intent)
         }
 

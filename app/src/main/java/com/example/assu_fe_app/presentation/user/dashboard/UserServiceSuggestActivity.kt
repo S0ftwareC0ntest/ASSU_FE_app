@@ -11,7 +11,7 @@ import com.example.assu_fe_app.databinding.ActivityServiceSuggestBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.user.dashboard.adapter.SuggestTargetAdapter
 
-class ServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.layout.activity_service_suggest){
+class UserServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.layout.activity_service_suggest){
 
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -50,9 +50,11 @@ class ServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.lay
             finish()
         }
 
+        // 그냥 애초에 이 액티비티를 닫아서 UserSugesstCompleteActivity의 backStack을 UserMainActivity로 만듦.
         binding.btnSuggestComplete.setOnClickListener {
-            val intent = Intent(this, SuggestCompleteActivity::class.java)
+            val intent = Intent(this, UserSuggestCompleteActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

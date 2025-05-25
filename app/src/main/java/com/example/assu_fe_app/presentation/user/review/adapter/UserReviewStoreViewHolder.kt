@@ -10,14 +10,13 @@ import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
 import java.time.format.DateTimeFormatter
 
-class ReviewViewHolder(
-    private val binding: ItemReviewBinding,
-    private val showDeleteButton: Boolean
+class UserReviewStoreViewHolder(
+    private val binding: ItemReviewBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun bind(review: Review) {
-        binding.tvMarket.text = review.marketName
+        binding.tvMarket.text = review.studentCategory // 원래 가게 이름이 표시되던 곳을 studentCategory로 변경되게끔함.
         binding.tvReviewContent.text = review.content
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
@@ -35,7 +34,6 @@ class ReviewViewHolder(
             imageViews[index].visibility = View.VISIBLE
         }
 
-        binding.tvReviewDelete.visibility = if (showDeleteButton) View.VISIBLE else View.GONE
     }
 
     private fun setRating(rating: Int) {

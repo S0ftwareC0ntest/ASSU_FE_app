@@ -11,14 +11,14 @@ import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.data.dto.review.ReviewStoreItem
 import com.example.assu_fe_app.databinding.ActivityReviewStoreBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
-import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
-import com.example.assu_fe_app.presentation.user.review.adapter.ReviewStoreAdapter
+import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
+import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewStoreAdapter
 import java.time.LocalDateTime
 
-class ReviewStoreActivity :
+class UserReviewStoreActivity :
     BaseActivity<ActivityReviewStoreBinding>(R.layout.activity_review_store) {
 
-    private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var userReviewAdapter: UserReviewAdapter
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initView() {
         // 시스템 바 여백 적용
@@ -40,20 +40,20 @@ class ReviewStoreActivity :
             ReviewStoreItem("IT대 학생회", "10% 할인"),
             ReviewStoreItem("IT대 학생회", "10% 할인")
         )
-        val adapter = ReviewStoreAdapter(reviewStoreList)
+        val adapter = UserReviewStoreAdapter(reviewStoreList)
         binding.rcReviewStore.layoutManager = LinearLayoutManager(this)
         binding.rcReviewStore.adapter = adapter
 
         // 리뷰 어댑터 초기화 및 바인딩
-        reviewAdapter = ReviewAdapter(showDeleteButton = false)
-        reviewAdapter.setData(createDummyData())
+        userReviewAdapter = UserReviewAdapter(showDeleteButton = false)
+        userReviewAdapter.setData(createDummyData())
         binding.fcvReviewStoreRank.layoutManager = LinearLayoutManager(this)
-        binding.fcvReviewStoreRank.adapter = reviewAdapter
+        binding.fcvReviewStoreRank.adapter = userReviewAdapter
 
         // 전체보기 클릭 시 상세 Fragment로 전환
         binding.tvReviewStoreReviewAll.setOnClickListener {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.review_store_fragment_container, ReviewStoreDetailFragment())
+                .replace(R.id.review_store_fragment_container, UserReviewStoreDetailFragment())
                 .addToBackStack(null)
                 .commit()
         }

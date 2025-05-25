@@ -5,7 +5,7 @@ import android.view.View
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentLoactionBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
-import com.example.assu_fe_app.presentation.user.review.store.ReviewStoreActivity
+import com.example.assu_fe_app.presentation.user.review.store.UserReviewStoreActivity
 
 class LocationFragment :
 BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
@@ -26,7 +26,7 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
         }
 
         binding.fvLocationItem.setOnClickListener {
-            val intent = Intent(requireContext(), ReviewStoreActivity::class.java)
+            val intent = Intent(requireContext(), UserReviewStoreActivity::class.java)
             startActivity(intent)
         }
     }

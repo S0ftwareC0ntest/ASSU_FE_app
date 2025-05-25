@@ -9,7 +9,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityStarReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.activity_star_review) {
+class UserStarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.activity_star_review) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -58,7 +58,7 @@ class StarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.acti
 
         val writeReviewButton = binding.layoutWriteReviewActivatedButton
         writeReviewButton.setOnClickListener {
-            val intent = Intent(this, PhotoReviewActivity::class.java)
+            val intent = Intent(this, UserPhotoReviewActivity::class.java)
             startActivity(intent)
         }
     }

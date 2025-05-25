@@ -9,7 +9,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivitySuggestCompleteBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class SuggestCompleteActivity : BaseActivity<ActivitySuggestCompleteBinding>(R.layout.activity_suggest_complete){
+class UserSuggestCompleteActivity : BaseActivity<ActivitySuggestCompleteBinding>(R.layout.activity_suggest_complete){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

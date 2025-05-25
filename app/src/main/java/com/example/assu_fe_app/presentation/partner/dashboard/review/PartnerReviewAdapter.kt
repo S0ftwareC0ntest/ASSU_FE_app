@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.user.review.adapter
+package com.example.assu_fe_app.presentation.partner.dashboard.review
 
 import android.os.Build
 import android.view.LayoutInflater
@@ -7,10 +7,9 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
+import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewStoreViewHolder
 
-class ReviewAdapter(
-    private val showDeleteButton: Boolean = false
-) : RecyclerView.Adapter<ReviewViewHolder>() {
+class PartnerReviewAdapter() : RecyclerView.Adapter<UserReviewStoreViewHolder>() {
 
     private val reviewList = mutableListOf<Review>()
 
@@ -20,15 +19,15 @@ class ReviewAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserReviewStoreViewHolder {
         val binding = ItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ReviewViewHolder(binding, showDeleteButton)
+        return UserReviewStoreViewHolder(binding)
     }
 
     override fun getItemCount() = reviewList.size
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserReviewStoreViewHolder, position: Int) {
         holder.bind(reviewList[position])
     }
 }

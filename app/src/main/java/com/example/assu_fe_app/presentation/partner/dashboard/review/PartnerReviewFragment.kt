@@ -1,36 +1,35 @@
-package com.example.assu_fe_app.presentation.user.review.store
+package com.example.assu_fe_app.presentation.partner.dashboard.review
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
-import com.example.assu_fe_app.databinding.FragmentReviewStoreDetailBinding
+import com.example.assu_fe_app.databinding.FragmentCustomerReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
-import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
 import java.time.LocalDateTime
 
-class ReviewStoreDetailFragment :
-    BaseFragment<FragmentReviewStoreDetailBinding>(R.layout.fragment_review_store_detail) {
+class PartnerReviewFragment : BaseFragment<FragmentCustomerReviewBinding>(R.layout.fragment_customer_review) {
 
-    private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var reviewAdapter: PartnerReviewAdapter
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initView() {
-        reviewAdapter = ReviewAdapter(showDeleteButton = false)
+        reviewAdapter = PartnerReviewAdapter()
         reviewAdapter.setData(createDummyData())
 
-        binding.fcvReviewStoreRank.apply {
+        binding.rvCustomerReview.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = reviewAdapter
         }
 
-        binding.ivReviewStoreBack.setOnClickListener {
+        binding.btnCustomerReviewBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
     override fun initObserver() {}
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createDummyData(): List<Review> {
@@ -53,4 +52,5 @@ class ReviewStoreDetailFragment :
             )
         )
     }
+
 }

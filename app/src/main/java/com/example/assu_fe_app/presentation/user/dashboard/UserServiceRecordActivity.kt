@@ -13,7 +13,7 @@ import com.example.assu_fe_app.databinding.ActivityServiceRecordBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import java.time.LocalDateTime
 
-class ServiceRecordActivity : BaseActivity<ActivityServiceRecordBinding>(R.layout.activity_service_record) {
+class UserServiceRecordActivity : BaseActivity<ActivityServiceRecordBinding>(R.layout.activity_service_record) {
 
     lateinit var serviceRecordAdapter: ServiceRecordAdapter
 
@@ -51,7 +51,7 @@ class ServiceRecordActivity : BaseActivity<ActivityServiceRecordBinding>(R.layou
         serviceRecordAdapter = ServiceRecordAdapter()
         binding.rvServiceRecord.apply {
             adapter = serviceRecordAdapter
-            layoutManager = LinearLayoutManager(this@ServiceRecordActivity)
+            layoutManager = LinearLayoutManager(this@UserServiceRecordActivity)
         }
         serviceRecordAdapter.setData(createDummyData())
 
