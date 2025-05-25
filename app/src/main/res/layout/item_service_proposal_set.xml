@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/iv_fragment_service_proposal_drop_down_ic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="8dp"
             android:background="@drawable/ic_down"
             app:layout_constraintTop_toTopOf="@id/iv_fragment_service_proposal_drop_down_bg"
             app:layout_constraintEnd_toEndOf="@id/iv_fragment_service_proposal_drop_down_bg"
