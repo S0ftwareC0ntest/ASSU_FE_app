@@ -5,11 +5,11 @@ import android.content.Intent
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.ActivityFinishReviewBinding
+import com.example.assu_fe_app.databinding.ActivityUserFinishReviewBinding
 import com.example.assu_fe_app.presentation.user.UserMainActivity
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class UserFinishReviewActivity : BaseActivity<ActivityFinishReviewBinding>(R.layout.activity_finish_review) {
+class UserFinishReviewActivity : BaseActivity<ActivityUserFinishReviewBinding>(R.layout.activity_user_finish_review) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

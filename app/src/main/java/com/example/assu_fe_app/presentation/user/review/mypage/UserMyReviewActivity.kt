@@ -8,12 +8,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
-import com.example.assu_fe_app.databinding.ActivityMyReviewBinding
+import com.example.assu_fe_app.databinding.ActivityUserMyReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
 import java.time.LocalDateTime
 
-class UserMyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
+class UserMyReviewActivity : BaseActivity<ActivityUserMyReviewBinding>(R.layout.activity_user_my_review) {
 
     private lateinit var userReviewAdapter : UserReviewAdapter
     val manager = supportFragmentManager

@@ -5,13 +5,13 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
-import com.example.assu_fe_app.databinding.FragmentReviewStoreDetailBinding
+import com.example.assu_fe_app.databinding.FragmentUserReviewStoreDetailBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
 import java.time.LocalDateTime
 
 class UserReviewStoreDetailFragment :
-    BaseFragment<FragmentReviewStoreDetailBinding>(R.layout.fragment_review_store_detail) {
+    BaseFragment<FragmentUserReviewStoreDetailBinding>(R.layout.fragment_user_review_store_detail) {
 
     private lateinit var userReviewAdapter: UserReviewAdapter
 

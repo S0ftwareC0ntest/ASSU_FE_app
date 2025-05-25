@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.servicerecord.ServiceRecord
 import com.example.assu_fe_app.presentation.user.dashboard.adapter.ServiceRecordAdapter
-import com.example.assu_fe_app.databinding.ActivityServiceRecordBinding
+import com.example.assu_fe_app.databinding.ActivityUserServiceRecordBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import java.time.LocalDateTime
 
-class UserServiceRecordActivity : BaseActivity<ActivityServiceRecordBinding>(R.layout.activity_service_record) {
+class UserServiceRecordActivity : BaseActivity<ActivityUserServiceRecordBinding>(R.layout.activity_user_service_record) {
 
     lateinit var serviceRecordAdapter: ServiceRecordAdapter
 

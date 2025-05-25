@@ -6,10 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.ActivitySuggestCompleteBinding
+import com.example.assu_fe_app.databinding.ActivityUserSuggestCompleteBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class UserSuggestCompleteActivity : BaseActivity<ActivitySuggestCompleteBinding>(R.layout.activity_suggest_complete){
+class UserSuggestCompleteActivity : BaseActivity<ActivityUserSuggestCompleteBinding>(R.layout.activity_user_suggest_complete){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

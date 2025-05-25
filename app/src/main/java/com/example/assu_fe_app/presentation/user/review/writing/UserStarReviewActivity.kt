@@ -6,10 +6,10 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.ActivityStarReviewBinding
+import com.example.assu_fe_app.databinding.ActivityUserStarReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 
-class UserStarReviewActivity : BaseActivity<ActivityStarReviewBinding>(R.layout.activity_star_review) {
+class UserStarReviewActivity : BaseActivity<ActivityUserStarReviewBinding>(R.layout.activity_user_star_review) {
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

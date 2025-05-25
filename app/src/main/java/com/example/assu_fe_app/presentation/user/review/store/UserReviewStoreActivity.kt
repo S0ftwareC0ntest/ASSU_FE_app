@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.data.dto.review.ReviewStoreItem
-import com.example.assu_fe_app.databinding.ActivityReviewStoreBinding
+import com.example.assu_fe_app.databinding.ActivityUserReviewStoreBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
 import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewStoreAdapter
 import java.time.LocalDateTime
 
 class UserReviewStoreActivity :
-    BaseActivity<ActivityReviewStoreBinding>(R.layout.activity_review_store) {
+    BaseActivity<ActivityUserReviewStoreBinding>(R.layout.activity_user_review_store) {
 
     private lateinit var userReviewAdapter: UserReviewAdapter
     @RequiresApi(Build.VERSION_CODES.O)

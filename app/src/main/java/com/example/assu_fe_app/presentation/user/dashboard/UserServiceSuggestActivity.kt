@@ -7,11 +7,11 @@ import android.widget.AdapterView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.ActivityServiceSuggestBinding
+import com.example.assu_fe_app.databinding.ActivityUserServiceSuggestBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import com.example.assu_fe_app.presentation.user.dashboard.adapter.SuggestTargetAdapter
 
-class UserServiceSuggestActivity : BaseActivity<ActivityServiceSuggestBinding>(R.layout.activity_service_suggest){
+class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBinding>(R.layout.activity_user_service_suggest){
 
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
