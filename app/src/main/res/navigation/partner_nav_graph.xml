@@ -33,7 +33,11 @@
     <fragment
         android:id="@+id/partnerDashboardFragment"
         android:name="com.example.assu_fe_app.presentation.partner.dashboard.PartnerDashboardFragment"
-        android:label="Partner Dashboard" />
+        android:label="Partner Dashboard">
+        <action
+            android:id="@+id/action_partner_dashboard_to_partner_review"
+            app:destination="@id/partnerReviewFragment" />
+    </fragment>
 
     <!-- 일단 채팅은 주석 처리 -->
     <!--
