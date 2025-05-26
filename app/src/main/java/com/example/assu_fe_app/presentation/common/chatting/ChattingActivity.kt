@@ -27,6 +27,13 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>(R.layout.activity
             insets
         }
 
+        binding.ivChattingBack.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.chatting_fragment_container,ChattingListFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     override fun initObserver() {
