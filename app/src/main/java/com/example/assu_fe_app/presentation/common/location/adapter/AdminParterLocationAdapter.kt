@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResultItem
 import com.example.assu_fe_app.databinding.ItemAdminPartnerLocationSearchResultItemBinding
-import com.example.assu_fe_app.presentation.user.location.adapter.UserLocationSearchSuccessAdapter.ViewHolder
 import com.example.assu_fe_app.presentation.user.review.store.ReviewStoreActivity
 
 class AdminPartnerLocationAdapter(
@@ -31,7 +30,6 @@ class AdminPartnerLocationAdapter(
                 binding.tvItemAdminPartnerLocationSearchResultItemContact.text = "문의하기"
             }
 
-            // 마지막 아이템이면 구분선 숨기기
             binding.viewItemAdminPartnerLocationSearchResultItemDivider.visibility =
                 if (isLastItem) View.GONE else View.VISIBLE
 
