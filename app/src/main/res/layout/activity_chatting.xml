@@ -107,7 +107,7 @@
                 android:background="@drawable/ic_home_basic_box"
                 android:layout_marginBottom="80dp"
                 android:padding="12dp"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/tv_chatting_restaurant_name"
@@ -214,7 +214,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@drawable/ic_home_basic_box"
                 android:layout_marginBottom="80dp"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/tv_chatting_partner_name"
