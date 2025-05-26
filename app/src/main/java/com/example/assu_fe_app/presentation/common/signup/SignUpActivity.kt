@@ -16,7 +16,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(R.layout.activity_sig
                 systemBars.left,
                 systemBars.top + extraPaddingTop.dpToPx(v.context),
                 systemBars.right,
-                0
+                systemBars.bottom
             )
             insets
         }
