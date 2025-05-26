@@ -5,7 +5,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,8 +17,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ASSU_FE_app"
-        tools:targetApi="31"
-        tools:ignore="ExtraText">
+        tools:ignore="ExtraText"
+        tools:targetApi="31">
+        <activity
+            android:name=".presentation.common.chatting.ChattingActivity"
+            android:exported="false">
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
+
+        </activity>
+        <activity
+            android:name=".presentation.common.chatting.ChattingSentProposalActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.common.login.LoginActivity"
             android:exported="true">
@@ -27,12 +43,13 @@
         </activity>
         <activity
             android:name=".presentation.common.signup.SignUpActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".presentation.user.dashboard.ServiceRecordActivity"
             android:exported="false" />
-        <activity android:name=".presentation.user.home.UserQRVerifyActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".presentation.user.home.UserQRVerifyActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.user.dashboard.SuggestCompleteActivity"
             android:exported="false" />
@@ -51,16 +68,18 @@
         <activity
             android:name=".presentation.user.review.writing.StarReviewActivity"
             android:exported="false">
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+
+<!--             <intent-filter> -->
+<!--             <action android:name="android.intent.action.MAIN" /> -->
+<!--             <category android:name="android.intent.category.LAUNCHER" /> -->
+<!--             </intent-filter> -->
         </activity>
         <activity android:name=".presentation.common.location.LocationSearchActivity" />
         <activity android:name=".presentation.user.review.store.ReviewStoreActivity" />
         <activity
             android:name=".presentation.user.home.CertifyActivity"
             android:exported="false">
+
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
@@ -69,10 +88,11 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 
