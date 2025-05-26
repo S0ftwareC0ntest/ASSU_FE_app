@@ -92,8 +92,8 @@
                     android:textColor="@color/assu_font_main"
                     android:layout_marginStart="31dp"/>
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:src="@drawable/ic_sort_arrow_down"
                     android:layout_marginStart="6dp"/>
             </LinearLayout>

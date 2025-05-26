@@ -1,12 +1,12 @@
 package com.example.assu_fe_app.presentation.user.home.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.example.assu_fe_app.presentation.user.home.HomeMyPartnershipDetailsReviewItem
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import androidx.navigation.Navigation
 import com.example.assu_fe_app.R
+import com.example.assu_fe_app.data.dto.user.home.HomeMyPartnershipDetailsReviewItem
 import com.example.assu_fe_app.databinding.ItemMyPartnershipReviewListBinding
 
 

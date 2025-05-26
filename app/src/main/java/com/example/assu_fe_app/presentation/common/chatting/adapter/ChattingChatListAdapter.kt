@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.assu_fe_app.data.dto.chatting.ChattingListItem
 import com.example.assu_fe_app.databinding.ItemChattingListBinding
-import com.example.assu_fe_app.presentation.common.chatting.ChattingListItem
 
 class ChattingChatListAdapter (
-    private val items: List<ChattingListItem>
+    private val items: List<ChattingListItem>,
+    private val onItemClick: (ChattingListItem) -> Unit
 ) : RecyclerView.Adapter<ChattingChatListAdapter.ViewHolder> (){
 
     inner class ViewHolder(private val binding: ItemChattingListBinding)
@@ -22,6 +23,10 @@ class ChattingChatListAdapter (
                 // 마지막 아이템이면 선 숨기기
                 binding.viewLocationSearchResultItemLine.visibility =
                     if (isLastItem) View.GONE else View.VISIBLE
+
+                binding.root.setOnClickListener {
+                    onItemClick(item)
+                }
             }
         }
 
