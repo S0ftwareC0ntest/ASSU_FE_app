@@ -6,6 +6,9 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -30,18 +33,17 @@
             android:exported="false"/>
         <activity
             android:name=".presentation.user.UserMainActivity"
-            android:exported="false">
-        </activity>
-        <activity android:name=".presentation.user.dashboard.ServiceRecordActivity" />
+            android:exported="false"/>
+        <activity android:name=".presentation.user.dashboard.UserServiceRecordActivity" />
         <activity android:name=".presentation.user.home.UserQRVerifyActivity" />
-        <activity android:name=".presentation.user.dashboard.SuggestCompleteActivity" />
-        <activity android:name=".presentation.user.dashboard.ServiceSuggestActivity" />
-        <activity android:name=".presentation.user.review.mypage.MyReviewActivity" />
-        <activity android:name=".presentation.user.review.writing.FinishReviewActivity" />
-        <activity android:name=".presentation.user.review.writing.PhotoReviewActivity" />
-        <activity android:name=".presentation.user.review.writing.StarReviewActivity" />
+        <activity android:name=".presentation.user.dashboard.UserSuggestCompleteActivity" />
+        <activity android:name=".presentation.user.dashboard.UserServiceSuggestActivity" />
+        <activity android:name=".presentation.user.review.mypage.UserMyReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.UserFinishReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.UserPhotoReviewActivity" />
+        <activity android:name=".presentation.user.review.writing.UserStarReviewActivity" />
         <activity android:name=".presentation.common.location.LocationSearchActivity" />
-        <activity android:name=".presentation.user.review.store.ReviewStoreActivity" />
+        <activity android:name=".presentation.user.review.store.UserReviewStoreActivity" />
         <activity android:name=".presentation.user.home.CertifyActivity" />
         <activity
             android:name=".presentation.admin.AdminMainActivity"

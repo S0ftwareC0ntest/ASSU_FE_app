@@ -8,14 +8,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.review.Review
-import com.example.assu_fe_app.databinding.ActivityMyReviewBinding
+import com.example.assu_fe_app.databinding.ActivityUserMyReviewBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
-import com.example.assu_fe_app.presentation.user.review.adapter.ReviewAdapter
+import com.example.assu_fe_app.presentation.user.review.adapter.UserReviewAdapter
 import java.time.LocalDateTime
 
-class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity_my_review) {
+class UserMyReviewActivity : BaseActivity<ActivityUserMyReviewBinding>(R.layout.activity_user_my_review) {
 
-    private lateinit var reviewAdapter : ReviewAdapter
+    private lateinit var userReviewAdapter : UserReviewAdapter
     val manager = supportFragmentManager
 
 
@@ -51,17 +51,17 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAdapter(){
         //adapter초기화
-        reviewAdapter = ReviewAdapter(showDeleteButton = true)
+        userReviewAdapter = UserReviewAdapter(showDeleteButton = true)
 
         binding.rvManageReview.apply {
-            layoutManager = LinearLayoutManager(this@MyReviewActivity)
-            adapter = reviewAdapter
+            layoutManager = LinearLayoutManager(this@UserMyReviewActivity)
+            adapter = userReviewAdapter
         }
 
         // 여기에 review List가 null 일때 ui 업데이트 관련 사항도 해줘야 함.
 
-        reviewAdapter.setData(createDummyData())
-        binding.tvManageReviewReviewCount.text = reviewAdapter.itemCount.toString()
+        userReviewAdapter.setData(createDummyData())
+        binding.tvManageReviewReviewCount.text = userReviewAdapter.itemCount.toString()
 
     }
 
@@ -73,6 +73,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
         return listOf(
             Review(
                 marketName = "스시천국",
+                studentCategory = "경영대학 재학생",
                 rate = 5,
                 content = "진짜 맛있었어요! 또 가고 싶어요!",
                 date = LocalDateTime.now().minusDays(1),
@@ -80,6 +81,7 @@ class MyReviewActivity : BaseActivity<ActivityMyReviewBinding>(R.layout.activity
             ),
             Review(
                 marketName = "돈까스집",
+                studentCategory = "경영대학 재학생",
                 rate = 4,
                 content = "튀김이 바삭해서 좋았어요. 양도 많아요.",
                 date = LocalDateTime.now().minusDays(3),

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.data.dto.location.LocationSearchResultItem
 import com.example.assu_fe_app.databinding.ItemLocationSearchResultItemBinding
-import com.example.assu_fe_app.presentation.user.review.store.ReviewStoreActivity
+import com.example.assu_fe_app.presentation.user.review.store.UserReviewStoreActivity
 
 class LocationSearchSuccessAdapter(
     private val items: List<LocationSearchResultItem>
@@ -28,7 +28,7 @@ class LocationSearchSuccessAdapter(
             // 아이템 클릭 시 ReviewStoreActivity로 이동
             binding.root.setOnClickListener {
                 val context = it.context
-                val intent = Intent(context, ReviewStoreActivity::class.java)
+                val intent = Intent(context, UserReviewStoreActivity::class.java)
                 // shopName 등 데이터 전달이 필요하다면 아래 추가
                 // intent.putExtra("shopName", item.shopName)
                 context.startActivity(intent)

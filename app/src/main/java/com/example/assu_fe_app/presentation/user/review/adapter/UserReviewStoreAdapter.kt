@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.data.dto.review.ReviewStoreItem
 import com.example.assu_fe_app.databinding.ItemReviewStoreBinding
 
-class ReviewStoreAdapter(
+class UserReviewStoreAdapter(
     private val items: List<ReviewStoreItem>
-) : RecyclerView.Adapter<ReviewStoreAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<UserReviewStoreAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemReviewStoreBinding) :
         RecyclerView.ViewHolder(binding.root) {

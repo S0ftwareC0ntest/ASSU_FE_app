@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/assu_background"
-    tools:context=".presentation.user.dashboard.ServiceSuggestActivity">
+    tools:context=".presentation.user.dashboard.UserServiceSuggestActivity">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"

@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/review_mg1_1"
         app:layout_constraintEnd_toStartOf="@id/review_mg1_2">
-
+        <!-- tv_market 이 가게 이름이 될 수도 있고 "경영대학 재학생" 이런식으로 소속이 적힐 수도 있음-->
         <TextView
             android:id="@+id/tv_market"
             android:layout_width="wrap_content"
