@@ -10,7 +10,7 @@ import com.example.assu_fe_app.data.dto.review.Review
 import com.example.assu_fe_app.databinding.ItemReviewBinding
 import java.time.format.DateTimeFormatter
 
-class ReviewViewHolder(
+class UserReviewViewHolder(
     private val binding: ItemReviewBinding,
     private val showDeleteButton: Boolean
 ) : RecyclerView.ViewHolder(binding.root) {

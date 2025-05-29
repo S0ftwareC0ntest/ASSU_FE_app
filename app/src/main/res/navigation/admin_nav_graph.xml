@@ -55,6 +55,6 @@
     <!-- 마이페이지 공용 처리 -->
     <fragment
         android:id="@+id/adminMyPageFragment"
-        android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.mypage.AdminMypageFragment"
         android:label="My Page" />
     </navigation>

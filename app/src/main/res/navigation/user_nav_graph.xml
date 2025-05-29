@@ -46,7 +46,7 @@
 
     <activity
         android:id="@+id/starReviewActivity"
-        android:name="com.example.assu_fe_app.presentation.user.review.writing.StarReviewActivity"
+        android:name="com.example.assu_fe_app.presentation.user.review.writing.UserStarReviewActivity"
         android:label="StarReviewActivity">
     </activity>
 

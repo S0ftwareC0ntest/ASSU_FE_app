@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/partner_nav_graph"
     app:startDestination="@id/partnerHomeFragment">
 
@@ -32,7 +33,11 @@
     <fragment
         android:id="@+id/partnerDashboardFragment"
         android:name="com.example.assu_fe_app.presentation.partner.dashboard.PartnerDashboardFragment"
-        android:label="Partner Dashboard" />
+        android:label="Partner Dashboard">
+        <action
+            android:id="@+id/action_partner_dashboard_to_partner_review"
+            app:destination="@id/partnerReviewFragment" />
+    </fragment>
 
     <!-- 일단 채팅은 주석 처리 -->
     <fragment
@@ -44,6 +49,20 @@
     <!-- 마이페이지 공용 처리 -->
     <fragment
         android:id="@+id/partnerMyPageFragment"
-        android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.mypage.PartnerMypageFragment"
         android:label="My Page" />
+
+
+    <!--리뷰 모아보는 페이지-->
+    <fragment
+        android:id="@+id/partnerReviewFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.dashboard.review.PartnerReviewFragment"
+        android:label="Review" />
+
+    <!--리뷰리스트가 null이나 갯수가 null로 들어올때 들어가지는 페이지-->
+    <fragment
+        android:id="@+id/partnerReviewNoneFragment"
+        android:name="com.example.assu_fe_app.presentation.partner.dashboard.review.PartnerReviewNoneFragment"
+        android:label="Review None" />
+
 </navigation>
