@@ -47,10 +47,10 @@
         android:label="Suggestions" />
 
     <!-- 일단 채팅은 주석 처리 -->
-    <!--    <fragment-->
-    <!--        android:id="@+id/adminChattingFragment"-->
-    <!--        android:name="com.example.assu_fe_app.presentation.admin.chatting.AdminChattingFragment"-->
-    <!--        android:label="Chatting" />-->
+        <fragment
+            android:id="@+id/adminChattingFragment"
+            android:name="com.example.assu_fe_app.presentation.common.chatting.ChattingListFragment"
+            android:label="Chatting" />
 
     <!-- 마이페이지 공용 처리 -->
     <fragment

@@ -8,6 +8,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityUserFinishReviewBinding
 import com.example.assu_fe_app.presentation.user.UserMainActivity
 import com.example.assu_fe_app.presentation.base.BaseActivity
+import com.example.assu_fe_app.presentation.user.review.mypage.UserMyReviewActivity
 
 class UserFinishReviewActivity : BaseActivity<ActivityUserFinishReviewBinding>(R.layout.activity_user_finish_review) {
     override fun initView() {
@@ -28,6 +29,12 @@ class UserFinishReviewActivity : BaseActivity<ActivityUserFinishReviewBinding>(R
             navigateToHome()
         }
 
+        val seeMyReviewButton = binding.layoutFinishReviewSeeMyReview
+        seeMyReviewButton.setOnClickListener {
+            navigateToMyReview()
+
+        }
+
 
     }
 
@@ -44,6 +51,15 @@ class UserFinishReviewActivity : BaseActivity<ActivityUserFinishReviewBinding>(R
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             // BottomNavigationView에 전달할 목적지 ID
             putExtra("R.id.homeFragment", R.id.homeFragment)
+        }
+        startActivity(intent)
+        finish() // FinishReviewActivity 종료
+    }
+
+    private fun navigateToMyReview() {
+        val intent = Intent(this, UserMyReviewActivity::class.java).apply {
+            // 기존 Task 스택 위로 올라가서 중복 생성 방지
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
         finish() // FinishReviewActivity 종료

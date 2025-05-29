@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".FinishReviewFragment">
+        tools:context=".presentation.common.chatting.ChattingSentProposalActivity">
 
         <FrameLayout
             android:id="@+id/finish_review_fragment_container"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="리뷰 작성 완료"
+                android:text="전송 완료"
                 android:textSize="30sp"
                 android:textColor="@color/assu_font_main"
                 android:fontFamily="@font/pretendard_semibold"/>
@@ -57,7 +57,7 @@
                 android:id="@+id/tv_finish_review_thanks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="소중한 리뷰 감사해요!"
+                android:text="소중한 제안서가 전송완료 됐어요!"
                 android:textColor="@color/assu_font_sub"
                 android:textSize="20sp"
                 android:fontFamily="@font/pretendard_regular"/>
@@ -87,7 +87,7 @@
                     android:id="@+id/btn_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="작성한 리뷰보기"
+                    android:text="제안서 확인하기"
                     android:textSize="13sp"
                     android:fontFamily="@font/pretendard_semibold"
                     android:textColor="@color/assu_font_sub"
