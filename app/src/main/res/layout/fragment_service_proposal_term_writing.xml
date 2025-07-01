@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.common.chatting.proposal.ServiceProposalTermWritingFragment">
+    tools:context=".presentation.common.chatting.proposal.serviceProposalTermWritingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -132,7 +132,7 @@
             android:background="@drawable/bg_service_proposal_box" />
 
         <TextView
-            android:id="@+id/iv_fragment_service_proposal_content2"
+            android:id="@+id/et_fragment_service_proposal_content2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"

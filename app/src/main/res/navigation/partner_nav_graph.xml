@@ -47,4 +47,17 @@
         android:id="@+id/partnerMyPageFragment"
         android:name="com.example.assu_fe_app.presentation.common.mypage.MypageFragment"
         android:label="My Page" />
+
+    <fragment
+        android:id="@+id/serviceProposalWritingFragment"
+        android:name="com.example.assu_fe_app.presentation.common.chatting.proposal.ServiceProposalWritingFragment"
+    >
+        <action
+            android:id="@+id/action_serviceProposalWritingFragment_to_serviceProposalTermWritingFragment"
+            app:destination="@id/serviceProposalTermWritingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/serviceProposalTermWritingFragment"
+        android:name="com.example.assu_fe_app.presentation.common.chatting.proposal.ServiceProposalTermWritingFragment" />
 </navigation>
