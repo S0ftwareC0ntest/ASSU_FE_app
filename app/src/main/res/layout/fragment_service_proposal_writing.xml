@@ -2,15 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.common.chatting.proposal.ServiceProposalWritingFragment"
-    >
+    tools:context=".presentation.common.chatting.proposal.ServiceProposalWritingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/assu_background"
-        android:id="@+id/fragment_service_proposal"
-        >
+        android:id="@+id/fragment_service_proposal">
 
         <View
             android:id="@+id/view_fragment_service_proposal_title"

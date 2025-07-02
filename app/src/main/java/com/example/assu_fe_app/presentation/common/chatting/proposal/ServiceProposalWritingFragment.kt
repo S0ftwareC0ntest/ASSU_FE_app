@@ -36,7 +36,6 @@ class ServiceProposalWritingFragment
             Log.d("addItem", "writingFragment2")
         }
 
-
         binding.btnCompleted.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.chatting_fragment_container, ServiceProposalTermWritingFragment())
@@ -46,6 +45,7 @@ class ServiceProposalWritingFragment
 
         binding.ivFragmentServiceProposalBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
+
         }
 
         setUpFragmentEditTextWatchers()

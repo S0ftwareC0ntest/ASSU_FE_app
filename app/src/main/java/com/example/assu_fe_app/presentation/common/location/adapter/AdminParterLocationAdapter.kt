@@ -36,6 +36,7 @@ class AdminPartnerLocationAdapter(
             binding.root.setOnClickListener {
                 val context = it.context
                 val intent = Intent(context, UserReviewStoreActivity::class.java)
+
                 intent.putExtra("shopName", item.shopName)
                 context.startActivity(intent)
             }
