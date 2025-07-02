@@ -109,6 +109,7 @@ class ServiceProposalAdapter(
         notifyItemInserted(items.size - 1)
     }
 
+
     fun getItems(): List<ProposalItem> = items
 
 }

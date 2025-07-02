@@ -4,9 +4,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentServiceProposalWritingBinding
@@ -17,7 +19,7 @@ class ServiceProposalWritingFragment
     : BaseFragment<FragmentServiceProposalWritingBinding>(R.layout.fragment_service_proposal_writing) {
 
     val adapter = ServiceProposalAdapter {
-        binding.ivFragmentServiceProposalAddBtn.visibility = View.VISIBLE
+        onItemOptionSelected()
         checkAllFieldsFilled()
     }
 
@@ -25,16 +27,25 @@ class ServiceProposalWritingFragment
         binding.clFragmentServiceProposalItemSet.adapter = adapter
         binding.clFragmentServiceProposalItemSet.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter.addItem()
-        Log.d("addItem", "writingFragment1")
+        if (adapter.getItems().isEmpty()) {
+            adapter.addItem()
+        }
 
         binding.ivFragmentServiceProposalAddBtn.setOnClickListener {
             adapter.addItem()
             Log.d("addItem", "writingFragment2")
         }
 
+
         binding.btnCompleted.setOnClickListener {
-            findNavController().navigate(R.id.action_serviceProposalWritingFragment_to_serviceProposalTermWritingFragment)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.chatting_fragment_container, ServiceProposalTermWritingFragment())
+                .addToBackStack(null) // 뒤로가기 가능하게
+                .commit()
+        }
+
+        binding.ivFragmentServiceProposalBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         setUpFragmentEditTextWatchers()
