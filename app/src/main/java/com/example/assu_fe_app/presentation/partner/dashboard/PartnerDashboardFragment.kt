@@ -4,6 +4,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentPartnerDashboardBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
@@ -19,6 +20,10 @@ class PartnerDashboardFragment :
             fullText = "제휴 이용자를 통해\n매출의 14%를 기록하고 있어요",
             highlightText = "14%"
         )
+
+        binding.btnViewContract.setOnClickListener {
+            findNavController().navigate(R.id.action_partner_dashboard_to_partner_review)
+        }
     }
 
     // 분석 문구 중 특정 텍스트에 색상을 입히는 함수

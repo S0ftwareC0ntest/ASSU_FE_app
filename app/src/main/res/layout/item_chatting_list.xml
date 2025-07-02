@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/assu_background"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="11dp">
+
+        <ImageView
+            android:id="@+id/iv_item_chatting_list_restaurant_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_restaurant_ex"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="19dp"/>
+
+        <View
+            android:id="@+id/view_admin_chatting_item_mg1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintWidth_percent="0.06870229008"
+            app:layout_constraintStart_toEndOf="@id/iv_item_chatting_list_restaurant_profile"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/view_admin_chatting_item_mg1"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_chatting_counterpart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="인쌩맥주 숭실대점"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
+                android:textColor="@color/assu_font_main"/>
+            <TextView
+                android:id="@+id/tv_chatting_last_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제휴 가능할까요?"
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="13sp"
+                android:textColor="@color/assu_font_sub"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chatting_unread"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="19dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"/>
+
+        <View
+            android:id="@+id/view_location_search_result_item_line"
+            android:layout_width="353dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

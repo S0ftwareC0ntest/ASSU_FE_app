@@ -6,12 +6,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentMyPartnershipDetailsBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.user.home.adapter.HomeMyPartnershipDetailsReviewAdapter
-
-data class HomeMyPartnershipDetailsReviewItem(
-    val placeName: String,
-    val description: String,
-    val dateTime: String,
-)
+import com.example.assu_fe_app.data.dto.user.home.HomeMyPartnershipDetailsReviewItem
 
 class MyPartnershipDetailsFragment :
     BaseFragment<FragmentMyPartnershipDetailsBinding>(R.layout.fragment_my_partnership_details) {

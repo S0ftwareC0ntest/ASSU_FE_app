@@ -24,7 +24,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     override fun initView(){
         Log.d("fragment initView", "initView")
         binding.btnSuggestService.setOnClickListener {
-            val intent = Intent(requireContext(), ServiceSuggestActivity::class.java)
+            val intent = Intent(requireContext(), UserServiceSuggestActivity::class.java)
             startActivity(intent)
         }
         initAdapter()
@@ -41,7 +41,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         }
 
         binding.tvDashSeeAll.setOnClickListener {
-            val intent = Intent(requireContext(), ServiceRecordActivity::class.java)
+            val intent = Intent(requireContext(), UserServiceRecordActivity::class.java)
             startActivity(intent)
         }
         updateUI()
