@@ -34,6 +34,12 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>(R.layout.activity
             insets
         }
 
+        // 지도에서 어느 버튼을 통해 왔는지 알려주는 메시지를 받는 코드입니다.
+        // 문의하기: 채팅방 생성되고 해당 방으로 들어가지게
+        // 제휴 계약서 보기: 채팅 창으로 이동해서 제휴 계약서 모달 띄우기
+        val entryMessage = intent.getStringExtra("entryMessage")
+        Log.d("ChattingActivity", "도착 메시지: $entryMessage")
+
         binding.ivChattingBack.setOnClickListener {
             navigateToChatting()
         }
