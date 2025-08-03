@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.assu_fe_app.R
@@ -14,12 +15,14 @@ import com.example.assu_fe_app.presentation.common.chatting.ChattingActivity
 import com.example.assu_fe_app.presentation.common.location.adapter.AdminPartnerLocationAdapter
 import com.example.assu_fe_app.presentation.common.location.adapter.LocationSharedViewModel
 import com.example.assu_fe_app.presentation.user.review.store.UserReviewStoreActivity
+import com.kakao.vectormap.MapView
 
 class LocationFragment :
 BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
     private val sharedViewModel: LocationSharedViewModel by activityViewModels()
     private lateinit var adapter: AdminPartnerLocationAdapter
     private var currentItem: LocationAdminPartnerSearchResultItem? = null
+    private lateinit var mapView: MapView
 
     override fun initView() {
         val dummyList = listOf(
@@ -58,6 +61,11 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
             context.startActivity(intent)
         }
 
+        mapView = MapView(requireContext())
+
+        val mapContainer = binding.root.findViewById<ViewGroup>(R.id.view_location_map)
+        mapContainer.addView(mapView)
+
     }
 
     override fun initObserver() {
@@ -73,5 +81,10 @@ BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
     private fun navigateToSearch() {
         val intent = Intent(requireContext(), LocationSearchActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.removeAllViews()
     }
 }
