@@ -2,6 +2,7 @@ package com.example.assu_fe_app.presentation.admin
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -10,6 +11,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.ActivityAdminMainBinding
 import com.example.assu_fe_app.presentation.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import com.google.firebase.messaging.FirebaseMessaging
 
 @AndroidEntryPoint
 class AdminMainActivity : BaseActivity<ActivityAdminMainBinding>(R.layout.activity_admin_main) {
@@ -30,6 +32,11 @@ class AdminMainActivity : BaseActivity<ActivityAdminMainBinding>(R.layout.activi
         initBottomNavigation()
 
         handleNavIntent(intent)
+
+        ensureNotificationChannel()
+        requestPostNotificationsPermission()
+        fetchAndLogFcmToken()
+        fetchAndLogFcmToken()
     }
 
     override fun initObserver() {
@@ -60,5 +67,37 @@ class AdminMainActivity : BaseActivity<ActivityAdminMainBinding>(R.layout.activi
 
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
+    }
+
+    private fun fetchAndLogFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM", "토큰 가져오기 실패", task.exception)
+                return@addOnCompleteListener
+            }
+            Log.d("FCM", "FCM 토큰: ${task.result}")
+        }
+    }
+
+    private fun ensureNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val ch = android.app.NotificationChannel(
+                "fcm_default",
+                "Default Notifications",
+                android.app.NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val nm = getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+            nm.createNotificationChannel(ch)
+        }
+    }
+
+    private fun requestPostNotificationsPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                != android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1001)
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.android)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -57,7 +58,6 @@ android {
 
 dependencies {
 
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -91,6 +91,11 @@ dependencies {
 
     // Kakao
     implementation("com.kakao.maps.open:android:2.12.8")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    implementation("com.google.firebase:firebase-messaging")
+
 
     // 네트워크
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
