@@ -10,5 +10,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         KakaoMapSdk.init(this, BuildConfig.KAKAO_MAP_KEY);
+
     }
 }

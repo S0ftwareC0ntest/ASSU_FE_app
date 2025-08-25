@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -84,4 +85,9 @@ dependencies {
 
     // Kakao
     implementation("com.kakao.maps.open:android:2.12.8")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    implementation("com.google.firebase:firebase-messaging")
+
 }
