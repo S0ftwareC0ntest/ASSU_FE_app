@@ -46,7 +46,7 @@ object ServiceModule {
     @Provides @Singleton @Auth
     fun provideOkHttp(): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor(DevBearerInterceptor()) // 🔴 여기 한 줄
+            .addInterceptor(DevBearerInterceptor()) // 🔴 임시
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY // 개발에서만
             })
@@ -72,6 +72,7 @@ object ServiceModule {
     fun provideChattingService(retrofit: Retrofit): ChattingService =
         retrofit.create(ChattingService::class.java)
 
+    // 🔴 임시
     @Provides
     @Singleton
     fun provideDeviceTokenService(retrofit: Retrofit): DeviceTokenService =
