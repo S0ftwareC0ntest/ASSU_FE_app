@@ -30,6 +30,8 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"") // 에뮬레이터 → PC 로컬
+            buildConfigField("String", "DEV_BEARER", "\"Bearer token\"") // 🔴 개발용 토큰
+
         }
         release {
             buildConfigField("String", "BASE_URL", "\"https://api.example.com/\"") // 운영 주소로 교체

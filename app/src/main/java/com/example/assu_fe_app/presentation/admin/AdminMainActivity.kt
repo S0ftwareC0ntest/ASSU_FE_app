@@ -35,8 +35,6 @@ class AdminMainActivity : BaseActivity<ActivityAdminMainBinding>(R.layout.activi
 
         ensureNotificationChannel()
         requestPostNotificationsPermission()
-        fetchAndLogFcmToken()
-        fetchAndLogFcmToken()
     }
 
     override fun initObserver() {
@@ -67,16 +65,6 @@ class AdminMainActivity : BaseActivity<ActivityAdminMainBinding>(R.layout.activi
 
     private fun Int.dpToPx(context: Context): Int {
         return (this * context.resources.displayMetrics.density).toInt()
-    }
-
-    private fun fetchAndLogFcmToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("FCM", "토큰 가져오기 실패", task.exception)
-                return@addOnCompleteListener
-            }
-            Log.d("FCM", "FCM 토큰: ${task.result}")
-        }
     }
 
     private fun ensureNotificationChannel() {
