@@ -57,6 +57,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -122,5 +123,4 @@ dependencies {
 
     // 테스트 (서버 목)
     testImplementation("com.squareup.okhttp3:mockwebserver:5.1.0")
-
 }
