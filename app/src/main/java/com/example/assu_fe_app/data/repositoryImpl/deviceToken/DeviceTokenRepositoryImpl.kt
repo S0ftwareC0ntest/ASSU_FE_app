@@ -13,6 +13,12 @@ class DeviceTokenRepositoryImpl @Inject constructor(
     override suspend fun register(token: String) =
         apiHandler(
             execute = { api.registerToken(DeviceTokenRequestDto(token)) },
-            mapper = { it } // String 그대로
+            mapper = { it }
+        )
+
+    override suspend fun unregisterToken(tokenId: Long) =
+        apiHandler(
+            execute = { api.unregisterToken(tokenId) },
+            mapper = { it }
         )
 }
