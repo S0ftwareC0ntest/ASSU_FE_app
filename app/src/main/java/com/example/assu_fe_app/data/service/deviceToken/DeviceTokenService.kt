@@ -12,7 +12,7 @@ interface DeviceTokenService {
     @POST("deviceTokens/register")
     suspend fun registerToken(
         @Body body: DeviceTokenRequestDto
-    ): BaseResponse<String>
+    ): BaseResponse<Long>
 
     @DELETE("deviceTokens/unregister/{tokenId}")
     suspend fun unregisterToken(

@@ -20,7 +20,7 @@ class DeviceTokenViewModel @Inject constructor(
     sealed interface UiState {
         data object Idle : UiState
         data object Loading : UiState
-        data class Success(val msg: String) : UiState
+        data class Success(val tokenId: Long) : UiState   // ← String → Long
         data class Fail(val code: Int, val msg: String) : UiState
         data class Error(val msg: String) : UiState
     }
@@ -33,9 +33,9 @@ class DeviceTokenViewModel @Inject constructor(
         viewModelScope.launch {
             when (val r = registerDeviceToken(token)) {
                 is RetrofitResult.Success -> {
-                    // r.data 를 tokenId로 가정
-                    localStore.saveTokenId(r.data)
-                    _uiState.value = UiState.Success(r.data)
+                    val tokenId = r.data
+                    localStore.saveTokenId(tokenId)
+                    _uiState.value = UiState.Success(tokenId)
                 }
                 is RetrofitResult.Fail ->
                     _uiState.value = UiState.Fail(r.statusCode, r.message)
