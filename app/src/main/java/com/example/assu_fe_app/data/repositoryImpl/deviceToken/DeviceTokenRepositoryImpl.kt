@@ -1,6 +1,5 @@
 package com.example.assu_fe_app.data.repositoryImpl.deviceToken
 
-import com.example.assu_fe_app.data.dto.deviceToken.request.DeviceTokenRequestDto
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
 import com.example.assu_fe_app.util.apiHandler
@@ -12,7 +11,7 @@ class DeviceTokenRepositoryImpl @Inject constructor(
 
     override suspend fun register(token: String) =
         apiHandler(
-            execute = { api.registerToken(DeviceTokenRequestDto(token)) },
+            execute = { api.registerToken(token) },
             mapper = { it }
         )
 

@@ -10,9 +10,11 @@ import com.example.assu_fe_app.databinding.FragmentUserMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
 import com.example.assu_fe_app.presentation.user.review.mypage.UserMyReviewActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class UserMypageFragment
     : BaseFragment<FragmentUserMypageBinding>(R.layout.fragment_user_mypage) {
 
