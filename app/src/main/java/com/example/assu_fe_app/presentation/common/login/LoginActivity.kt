@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
     private val deviceTokenViewModel: DeviceTokenViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun initView() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -42,6 +43,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             insets
         }
 
+        // 자동 로그인 체크
+        checkAutoLogin()
+
         setLoginButtonEnabled(false)
         binding.etLoginId.addTextChangedListener { checkLoginInputValidity() }
         binding.etLoginPassword.addTextChangedListener { checkLoginInputValidity() }
@@ -49,47 +53,70 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         binding.btnLogin.setOnClickListener {
             if (!binding.btnLogin.isEnabled) return@setOnClickListener
 
-            val id = binding.etLoginId.text.toString()
-            val pw = binding.etLoginPassword.text.toString()
+            val email = binding.etLoginId.text.toString().trim()
+            val password = binding.etLoginPassword.text.toString().trim()
 
-            when (getUserRole(id, pw)) {
-                UserRole.ADMIN   -> startActivity(Intent(this, AdminMainActivity::class.java))
-                UserRole.PARTNER -> startActivity(Intent(this, PartnerMainActivity::class.java))
-                UserRole.USER    -> startActivity(Intent(this, UserMainActivity::class.java))
-                UserRole.INVALID -> {
-                    Toast.makeText(this, "아이디 또는 비밀번호가 올바르지 않습니다", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
+            if (email.isBlank() || password.isBlank()) {
+                Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            // ✅ 화면 종료 전에 토큰 등록까지 먼저 처리
-            fetchAndRegisterFcmToken()
+            loginViewModel.commonLogin(email, password)
         }
 
         binding.btnSignup.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
+
+        binding.btnLmsLogin.setOnClickListener {
+            startActivity(Intent(this, LmsLoginActivity::class.java))
+        }
     }
 
     override fun initObserver() {
+        // 로그인 상태 관찰
+        loginViewModel.loginState.observe(this) { state ->
+            when (state) {
+                is LoginState.Idle -> Unit
+                is LoginState.Loading -> {
+                    setLoginButtonEnabled(false)
+                    Log.d("LoginActivity", "로그인 중...")
+                }
+                is LoginState.Success -> {
+                    setLoginButtonEnabled(true)
+                    Log.d("LoginActivity", "로그인 성공!")
+                    navigateToMainActivity(state.loginData.userRole)
+                }
+                is LoginState.Error -> {
+                    setLoginButtonEnabled(true)
+                    Toast.makeText(this, "로그인 실패: ${state.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("LoginActivity", "로그인 실패: ${state.message}")
+                }
+                is LoginState.PendingApproval -> {
+                    setLoginButtonEnabled(true)
+                    Toast.makeText(this, "승인 대기 중입니다: ${state.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        // FCM 토큰 등록 상태 관찰
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 deviceTokenViewModel.uiState.collect { state ->
                     when (state) {
                         is DeviceTokenViewModel.UiState.Idle -> Unit
                         is DeviceTokenViewModel.UiState.Loading -> {
-                            // 필요하면 로딩 표시
                             Log.d("FCM", "디바이스 토큰 등록 중…")
                         }
                         is DeviceTokenViewModel.UiState.Success -> {
                             Toast.makeText(this@LoginActivity, "푸시 등록 완료", Toast.LENGTH_SHORT).show()
                             Log.i("FCM", "등록 성공: ${state.msg}")
-                            finish() // 🔚 이제 종료 (다음 화면으로 이미 이동했을 것)
+                            finish()
                         }
                         is DeviceTokenViewModel.UiState.Fail -> {
                             Toast.makeText(this@LoginActivity, "푸시 등록 실패(${state.code})", Toast.LENGTH_SHORT).show()
                             Log.e("FCM", "등록 실패: ${state.code} ${state.msg}")
-                            finish() // 실패해도 로그인은 진행했으니 종료할지, 남을지는 정책대로
+                            finish()
                         }
                         is DeviceTokenViewModel.UiState.Error -> {
                             Toast.makeText(this@LoginActivity, "네트워크 오류: ${state.msg}", Toast.LENGTH_SHORT).show()
@@ -103,11 +130,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
 
-    private fun getUserRole(id: String, pw: String): UserRole = when {
-        id == "admin" && pw == "1234" -> UserRole.ADMIN
-        id == "partner" && pw == "1234" -> UserRole.PARTNER
-        id == "20211234" && pw == "1234" -> UserRole.USER
-        else -> UserRole.INVALID
+    private fun navigateToMainActivity(userRole: String) {
+        val intent = when (userRole.uppercase()) {
+            "ADMIN" -> Intent(this, AdminMainActivity::class.java)
+            "PARTNER" -> Intent(this, PartnerMainActivity::class.java)
+            else -> Intent(this, UserMainActivity::class.java)
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        
+        // FCM 토큰 등록
+        fetchAndRegisterFcmToken()
     }
 
     private fun checkLoginInputValidity() {
@@ -124,7 +157,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         )
     }
 
-    enum class UserRole { ADMIN, PARTNER, USER, INVALID }
+
+    private fun checkAutoLogin() {
+        val loginModel = loginViewModel.checkAutoLogin()
+        if (loginModel != null) {
+            // 자동 로그인 성공 - 바로 메인 화면으로 이동
+            navigateToMainActivity(loginModel.userRole)
+        }
+    }
 
     private fun Int.dpToPx(context: Context): Int =
         (this * context.resources.displayMetrics.density).toInt()
