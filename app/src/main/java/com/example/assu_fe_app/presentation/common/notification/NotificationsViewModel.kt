@@ -8,10 +8,7 @@ import com.example.assu_fe_app.domain.usecase.notification.MarkNotificationReadU
 import com.example.assu_fe_app.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -20,9 +17,20 @@ class NotificationsViewModel @Inject constructor(
     private val markNotificationRead: MarkNotificationReadUseCase
 ) : ViewModel() {
 
+    // ===== 새로 추가: 네비게이션 이벤트 =====
+    sealed interface NavEvent {
+        data class ToChatRoom(val roomId: Long) : NavEvent
+        data class ToPartnerSuggestionDetail(val suggestionId: Long) : NavEvent
+        data class ToPartnerProposalDetail(val proposalId: Long) : NavEvent
+        // 필요 시 더 추가
+    }
+    private val _navEvents = MutableSharedFlow<NavEvent>(extraBufferCapacity = 1)
+    val navEvents: SharedFlow<NavEvent> = _navEvents
+    // =======================================
+
     data class PageState(
         val items: List<NotificationModel> = emptyList(),
-        val page: Int = 1,          // 다음 로드할 페이지 (1-based)
+        val page: Int = 1,
         val size: Int = 20,
         val totalPages: Int = 1,
         val loading: Boolean = false,
@@ -58,11 +66,7 @@ class NotificationsViewModel @Inject constructor(
     ) = viewModelScope.launch {
         val tgt = state(status)
         val cur = tgt.value
-
-        // 로딩 플래그 토글을 silent 옵션으로 제어
-        if (!silent) {
-            tgt.value = cur.copy(loading = true, refreshing = reset, error = null)
-        }
+        if (!silent) tgt.value = cur.copy(loading = true, refreshing = reset, error = null)
 
         when (val res = getNotifications(status, page, size)) {
             is RetrofitResult.Success -> {
@@ -94,12 +98,17 @@ class NotificationsViewModel @Inject constructor(
 
     private fun state(status: String) = if (status == "unread") _unread else _all
 
-    fun onItemClickAndReload(id: Long, activeTab: String) = viewModelScope.launch {
+    /**
+     * 아이템 클릭: 읽음 처리 + (ORDER 제외) 네비게이션 이벤트 emit
+     */
+    fun onItemClickAndReload(item: NotificationModel, activeTab: String) = viewModelScope.launch {
+        val id = item.id
+
         // 스냅샷
         val beforeAll = _all.value
         val beforeUnread = _unread.value
 
-        // 1) 낙관적 적용 (현재 탭은 깜빡임 없음)
+        // 1) 낙관적 적용
         when (activeTab) {
             "all" -> _all.value = beforeAll.copy(
                 items = beforeAll.items.map { if (it.id == id) it.copy(isRead = true) else it }
@@ -110,17 +119,57 @@ class NotificationsViewModel @Inject constructor(
         }
 
         // 2) 서버 반영
-        when (val res = markNotificationRead(id)) {
-            is RetrofitResult.Success -> {
-                // 3) 반대 탭만 조용히 동기화 (spinner/깜빡임 없음)
-                if (activeTab == "all") refresh("unread", silent = true)
-                else refresh("all", silent = true)
+        val markResult = markNotificationRead(id)
+
+        // 3) 반대 탭 조용히 동기화
+        if (markResult is RetrofitResult.Success) {
+            if (activeTab == "all") refresh("unread", silent = true) else refresh("all", silent = true)
+        } else {
+            // 실패 시 롤백
+            _all.value = beforeAll
+            _unread.value = beforeUnread
+            return@launch
+        }
+
+        // 4) 네비게이션 이벤트 (ORDER 제외)
+        when (item.type) {
+            "ORDER" -> {
+                // 주문 알림은 네비게이션 없음 (TTS/알림만)
+            }
+            "CHAT" -> {
+                val roomId = item.refId ?: return@launch
+                _navEvents.tryEmit(NavEvent.ToChatRoom(roomId))
+            }
+            "PARTNER_SUGGESTION" -> {
+                val suggestionId = item.refId ?: return@launch
+                _navEvents.tryEmit(NavEvent.ToPartnerSuggestionDetail(suggestionId))
+            }
+            "PARTNER_PROPOSAL" -> {
+                val proposalId = item.refId ?: return@launch
+                _navEvents.tryEmit(NavEvent.ToPartnerProposalDetail(proposalId))
             }
             else -> {
-                // 실패 시 롤백
-                _all.value = beforeAll
-                _unread.value = beforeUnread
-                // 필요 시 에러 토스트/플로우 emit
+                // 미정 타입: 아직 없음
+            }
+        }
+    }
+
+    fun emitNavEvent(item: NotificationModel) {
+        when (item.type) {
+            "ORDER" -> {
+                // 주문은 네비게이션 없음
+            }
+            "CHAT" -> {
+                val roomId = item.refId ?: return
+                _navEvents.tryEmit(NavEvent.ToChatRoom(roomId))
+            }
+            "PARTNER_SUGGESTION" -> {
+                val suggestionId = item.refId ?: return
+                _navEvents.tryEmit(NavEvent.ToPartnerSuggestionDetail(suggestionId))
+            }
+            "PARTNER_PROPOSAL" -> {
+                val proposalId = item.refId ?: return
+                _navEvents.tryEmit(NavEvent.ToPartnerProposalDetail(proposalId))
             }
         }
     }

@@ -38,18 +38,42 @@ class NotificationUnreadFragment : Fragment(R.layout.fragment_notification_unrea
         viewLifecycleOwner.lifecycleScope.launch {
             vm.unreadState.collectLatest { st ->
                 adapter.submitList(st.items)
-                // 필요 시 로딩/에러 UI 처리
             }
         }
 
-        // 무한 스크롤(원치 않으면 아래 블록 삭제)
+        // 아이템 클릭시 연관 화면으로 이동
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.navEvents.collectLatest { ev ->
+                when (ev) {
+                    is NotificationsViewModel.NavEvent.ToChatRoom -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_chatRoom,
+                        //     bundleOf("roomId" to ev.roomId, "role" to role.name)
+                        // )
+                    }
+                    is NotificationsViewModel.NavEvent.ToPartnerSuggestionDetail -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_partnerSuggestionDetail,
+                        //     bundleOf("suggestionId" to ev.suggestionId, "role" to role.name)
+                        // )
+                    }
+                    is NotificationsViewModel.NavEvent.ToPartnerProposalDetail -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_partnerProposalDetail,
+                        //     bundleOf("proposalId" to ev.proposalId, "role" to role.name)
+                        // )
+                    }
+                }
+            }
+        }
+
         binding.rvNotificationUnread.addOnScrollListener(object : EndlessScrollListener() {
             override fun onLoadMore() = vm.loadMore("unread")
         })
     }
 
     private fun handleClick(item: NotificationModel) {
-        // 필요 시 클릭 동작
+        vm.emitNavEvent(item)
     }
 
     override fun onDestroyView() {

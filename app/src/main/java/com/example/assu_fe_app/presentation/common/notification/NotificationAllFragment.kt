@@ -9,6 +9,8 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentNotificationAllBinding
 import com.example.assu_fe_app.domain.model.notification.NotificationModel
 import androidx.lifecycle.lifecycleScope
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,23 +38,48 @@ class NotificationAllFragment : Fragment(R.layout.fragment_notification_all) {
         // 최초 로드
         vm.refresh(status = "all")
 
-        // 상태 구독 (스와이프 제거 → isRefreshing 같은 처리 없음)
+        // 목록 상태 구독
         viewLifecycleOwner.lifecycleScope.launch {
             vm.allState.collectLatest { st ->
                 android.util.Log.d("NOTI_UI", "collect allState: items=${st.items.size}, loading=${st.loading}")
                 adapter.submitList(st.items)
-                // 필요 시 로딩/에러 UI 처리
             }
         }
 
-        // 무한 스크롤(원치 않으면 아래 블록 삭제)
+        // 아이템 클릭시 읽음 처리 + 연관 화면으로 이동
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.navEvents.collectLatest { ev ->
+                when (ev) {
+                    is NotificationsViewModel.NavEvent.ToChatRoom -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_chatRoom,
+                        //     bundleOf("roomId" to ev.roomId, "role" to role.name)
+                        // )
+                    }
+                    is NotificationsViewModel.NavEvent.ToPartnerSuggestionDetail -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_partnerSuggestionDetail,
+                        //     bundleOf("suggestionId" to ev.suggestionId, "role" to role.name)
+                        // )
+                    }
+                    is NotificationsViewModel.NavEvent.ToPartnerProposalDetail -> {
+                        // findNavController().navigate(
+                        //     R.id.action_notifications_to_partnerProposalDetail,
+                        //     bundleOf("proposalId" to ev.proposalId, "role" to role.name)
+                        // )
+                    }
+                }
+            }
+        }
+
+        // 무한 스크롤
         binding.rvNotificationAll.addOnScrollListener(object : EndlessScrollListener() {
             override fun onLoadMore() = vm.loadMore("all")
         })
     }
 
     private fun handleClick(item: NotificationModel) {
-        vm.onItemClickAndReload(item.id, activeTab = "all")
+        vm.onItemClickAndReload(item, activeTab = "all")
     }
 
     override fun onDestroyView() {
