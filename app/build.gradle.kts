@@ -30,7 +30,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"") // 에뮬레이터 → PC 로컬
-            buildConfigField("String", "DEV_BEARER", "\"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoUmVhbG0iOiJDT01NT04iLCJyb2xlIjoiUEFSVE5FUiIsInVzZXJJZCI6MTUsInVzZXJuYW1lIjoicGFydG5lckBnbWFpbC5jb20iLCJqdGkiOiJmMTI1ZTg2Yy03MGUwLTQ1MTEtYmNmNC01ODc0Y2MzN2EwOWUiLCJpYXQiOjE3NTc1MDQxOTcsImV4cCI6MTc1NzUwNzc5N30.SMWeLNi_UmsON7p-Ivs9NDmex0y4ks8qyrpRok3Iepk\"") // 🔴 임시
+            buildConfigField("String", "DEV_BEARER", "\"Bearer token\"") // 🔴 임시
 
         }
         release {
