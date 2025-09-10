@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.admin.mypage
+package com.example.assu_fe_app.presentation.common.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,13 +6,13 @@ import com.example.assu_fe_app.data.local.DeviceTokenLocalStore
 import com.example.assu_fe_app.domain.usecase.deviceToken.UnregisterDeviceTokenUseCase
 import com.example.assu_fe_app.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class AdminMypageViewModel @Inject constructor(
+class MypageViewModel @Inject constructor(
     private val unregisterDeviceToken: UnregisterDeviceTokenUseCase,
     private val localStore: DeviceTokenLocalStore,
 ) : ViewModel() {

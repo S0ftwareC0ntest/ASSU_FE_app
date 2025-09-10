@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentPartnerMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -17,7 +19,7 @@ import kotlinx.coroutines.launch
 class PartnerMypageFragment
     : BaseFragment<FragmentPartnerMypageBinding>(R.layout.fragment_partner_mypage) {
 
-    private val viewModel: PartnerMypageViewModel by viewModels()
+    private val viewModel: MypageViewModel by viewModels()
 
     override fun initView() { /* no-op */ }
 
@@ -25,7 +27,7 @@ class PartnerMypageFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.logoutState.collectLatest { state ->
                 when (state) {
-                    is PartnerMypageViewModel.LogoutState.Done -> navigateToLoginAndClear()
+                    is MypageViewModel.LogoutState.Done -> navigateToLoginAndClear()
                     else -> Unit
                 }
             }
@@ -44,9 +46,11 @@ class PartnerMypageFragment
                 .show(childFragmentManager, "AlarmDialog")
         }
 
-        // 로그아웃: unregister 완료되면 옵저버가 화면 전환
+        // 로그아웃: 서버에서 unregister 성공 시에만 화면 이동 (observer에서 처리)
         binding.clPartnerAccountComponent2.setOnClickListener {
-            viewModel.logoutAndUnregister()
+            findNavController().navigate(
+                R.id.action_partner_mypage_to_mypage_account
+            )
         }
     }
 

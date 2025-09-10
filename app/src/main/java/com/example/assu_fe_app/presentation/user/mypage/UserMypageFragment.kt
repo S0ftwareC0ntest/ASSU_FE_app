@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentUserMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import com.example.assu_fe_app.presentation.user.review.mypage.UserMyReviewActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -18,7 +20,7 @@ import kotlinx.coroutines.launch
 class UserMypageFragment
     : BaseFragment<FragmentUserMypageBinding>(R.layout.fragment_user_mypage) {
 
-    private val viewModel: UserMypageViewModel by viewModels()
+    private val viewModel: MypageViewModel by viewModels()
 
     override fun initView() { /* no-op */ }
 
@@ -26,7 +28,7 @@ class UserMypageFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.logoutState.collectLatest { state ->
                 when (state) {
-                    is UserMypageViewModel.LogoutState.Done -> navigateToLoginAndClear()
+                    is MypageViewModel.LogoutState.Done -> navigateToLoginAndClear()
                     else -> Unit
                 }
             }
@@ -66,10 +68,11 @@ class UserMypageFragment
                 .show(childFragmentManager, "CustomerServiceDialog")
         }
 
-        // 로그아웃: 저장된 tokenId 기반으로 등록 해제 후 이동
+        // 로그아웃: 서버에서 unregister 성공 시에만 화면 이동 (observer에서 처리)
         binding.clAccountComponent3.setOnClickListener {
-            viewModel.logoutAndUnregister()   // ① 해제 시도 + 로컬 정리
-            // 이동은 observer에서 Done 수신 시 처리
+            findNavController().navigate(
+                R.id.action_user_mypage_to_mypage_account
+            )
         }
     }
 

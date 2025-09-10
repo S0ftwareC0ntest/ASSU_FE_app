@@ -1,23 +1,21 @@
-package com.example.assu_fe_app.presentation.admin.mypage
+package com.example.assu_fe_app.presentation.common.mypage
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.assu_fe_app.R
-import com.example.assu_fe_app.databinding.FragmentAdminMypageBinding
+import com.example.assu_fe_app.databinding.FragmentMypageAccountBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
-import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AdminMypageFragment
-    : BaseFragment<FragmentAdminMypageBinding>(R.layout.fragment_admin_mypage) {
+class MypageAccountFragment
+    : BaseFragment<FragmentMypageAccountBinding>(R.layout.fragment_mypage_account) {
 
     private val viewModel: MypageViewModel by viewModels()
 
@@ -28,6 +26,10 @@ class AdminMypageFragment
             viewModel.logoutState.collectLatest { state ->
                 when (state) {
                     is MypageViewModel.LogoutState.Done -> navigateToLoginAndClear()
+                    is MypageViewModel.LogoutState.Error -> {
+                        // 필요 시 토스트/다이얼로그
+                        navigateToLoginAndClear() // UX 계속 진행
+                    }
                     else -> Unit
                 }
             }
@@ -40,23 +42,17 @@ class AdminMypageFragment
     }
 
     private fun initClick() {
-        // 알림 설정
         binding.clAdmAccountComponent1.setOnClickListener {
-            AdminMypageAlarmDialogFragment()
-                .show(childFragmentManager, "AlarmDialog")
+            viewModel.logoutAndUnregister()
         }
 
-        // 대기중인 제휴계약서
-        binding.clAdmAccountComponent3.setOnClickListener {
-            AdminMypagePendingPartnershipDialogFragment()
-                .show(childFragmentManager, "PendingPartnershipDialog")
+        binding.btnPendingBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        // 로그아웃: 서버에서 unregister 성공 시에만 화면 이동 (observer에서 처리)
         binding.clAdmAccountComponent2.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_admin_mypage_to_mypage_account
-            )
+            SecessionDialogFragment.newInstance()
+                .show(childFragmentManager, "SecessionDialog")
         }
     }
 
