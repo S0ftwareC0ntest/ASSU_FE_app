@@ -27,6 +27,7 @@ class TokenManager @Inject constructor(
         private const val KEY_PROFILE_IMAGE_URL = "profile_image_url"
         private const val KEY_STATUS = "status"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
+        private const val KEY_DEVICE_TOKEN_ID = "device_token_id"
     }
     
     fun saveLoginData(loginModel: LoginModel) {
@@ -92,5 +93,14 @@ class TokenManager @Inject constructor(
     
     fun getUserId(): Long {
         return prefs.getLong(KEY_USER_ID, -1L)
+    }
+    
+    fun saveDeviceTokenId(tokenId: Int) {
+        prefs.edit().putInt(KEY_DEVICE_TOKEN_ID, tokenId).apply()
+    }
+    
+    fun getDeviceTokenId(): Int? {
+        val tokenId = prefs.getInt(KEY_DEVICE_TOKEN_ID, -1)
+        return if (tokenId == -1) null else tokenId
     }
 }
