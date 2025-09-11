@@ -8,7 +8,9 @@ import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.domain.model.auth.LoginModel
 import com.example.assu_fe_app.util.RetrofitResult
 import com.example.assu_fe_app.domain.usecase.auth.CommonLoginUseCase
+import com.example.assu_fe_app.domain.usecase.auth.LogoutUseCase
 import com.example.assu_fe_app.domain.usecase.auth.StudentLoginUseCase
+import com.example.assu_fe_app.domain.usecase.deviceToken.UnregisterDeviceTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +19,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val studentLoginUseCase: StudentLoginUseCase,
     private val commonLoginUseCase: CommonLoginUseCase,
+    private val logoutUseCase: LogoutUseCase,
+    private val unregisterDeviceTokenUseCase: UnregisterDeviceTokenUseCase,
     private val tokenManager: TokenManager
 ) : ViewModel() {
     
@@ -68,8 +72,24 @@ class LoginViewModel @Inject constructor(
     }
     
     fun logout() {
-        tokenManager.clearTokens()
-        _loginState.value = LoginState.Idle
+        viewModelScope.launch {
+            try {
+                // 푸시 토큰 해제 (tokenId가 있는 경우에만)
+                val tokenId = tokenManager.getDeviceTokenId()
+                if (tokenId != null) {
+                    unregisterDeviceTokenUseCase(tokenId)
+                }
+                // 서버에 로그아웃 API 호출
+                logoutUseCase()
+            } catch (e: Exception) {
+                // API 호출 실패해도 클라이언트 토큰은 삭제
+                android.util.Log.e("LoginViewModel", "로그아웃/푸시토큰 해제 API 호출 실패: ${e.message}")
+            } finally {
+                // 클라이언트 토큰 삭제
+                tokenManager.clearTokens()
+                _loginState.value = LoginState.Idle
+            }
+        }
     }
     
     fun checkAutoLogin(): LoginModel? {

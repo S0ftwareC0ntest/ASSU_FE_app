@@ -3,20 +3,26 @@ package com.example.assu_fe_app.presentation.user.mypage
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.example.assu_fe_app.R
+import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.FragmentUserMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.login.LoginViewModel
 import com.example.assu_fe_app.presentation.user.review.mypage.UserMyReviewActivity
-import com.example.assu_fe_app.presentation.user.mypage.UserCustomerServiceDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class UserMypageFragment : BaseFragment<FragmentUserMypageBinding>(R.layout.fragment_user_mypage) {
 
+    @Inject
+    lateinit var tokenManager: TokenManager
+    
+    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun initView(){
-
-    }
-
-    override fun initObserver() {
 
     }
 
@@ -57,6 +63,8 @@ class UserMypageFragment : BaseFragment<FragmentUserMypageBinding>(R.layout.frag
 
         //로그아웃 페이지
         binding.clAccountComponent3.setOnClickListener {
+            // 서버에 로그아웃 API 호출 후 토큰 삭제 및 로그인 화면으로 이동
+            loginViewModel.logout()
             val intent = Intent(requireContext(), LoginActivity::class.java)
             // 기존에 있던 메인액팁티를 메모리에서 삭제함.
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -66,5 +74,6 @@ class UserMypageFragment : BaseFragment<FragmentUserMypageBinding>(R.layout.frag
 
     }
 
+    override fun initObserver() {}
 
 }
