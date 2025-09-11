@@ -1,6 +1,5 @@
 package com.example.assu_fe_app.data.repositoryImpl.deviceToken
 
-import com.example.assu_fe_app.data.dto.deviceToken.request.DeviceTokenRequestDto
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
 import com.example.assu_fe_app.util.RetrofitResult
@@ -13,7 +12,13 @@ class DeviceTokenRepositoryImpl @Inject constructor(
 
     override suspend fun register(token: String): RetrofitResult<String> =
         apiHandler(
-            execute = { api.registerToken(DeviceTokenRequestDto(token)) },
+            execute = { api.registerToken(token) },
             mapper = { it } // String 그대로
+        )
+    
+    override suspend fun unregister(tokenId: Int): RetrofitResult<Unit> =
+        apiHandler(
+            execute = { api.unregisterToken(tokenId) },
+            mapper = { Unit }
         )
 }

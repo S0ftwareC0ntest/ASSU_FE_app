@@ -1,14 +1,20 @@
 package com.example.assu_fe_app.data.service.deviceToken
 
 import com.example.assu_fe_app.data.dto.auth.BaseResponseDto
-import com.example.assu_fe_app.data.dto.deviceToken.request.DeviceTokenRequestDto
-import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface DeviceTokenService {
-    @POST("deviceTokens/register")
+    @POST("device-tokens")
     suspend fun registerToken(
-        @Body body: DeviceTokenRequestDto
-    ): BaseResponseDto<String> // 서버 응답: BaseResponseDto<String>
+        @Query("token") token: String
+    ): BaseResponseDto<String>
+    
+    @DELETE("device-tokens/{tokenId}")
+    suspend fun unregisterToken(
+        @Path("tokenId") tokenId: Int
+    ): BaseResponseDto<Unit>
 }
