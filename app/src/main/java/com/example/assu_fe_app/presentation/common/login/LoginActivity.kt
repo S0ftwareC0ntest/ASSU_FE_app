@@ -111,17 +111,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         is DeviceTokenViewModel.UiState.Success -> {
                             Toast.makeText(this@LoginActivity, "푸시 등록 완료", Toast.LENGTH_SHORT).show()
                             Log.i("FCM", "등록 성공: ${state.msg}")
-                            finish()
                         }
                         is DeviceTokenViewModel.UiState.Fail -> {
                             Toast.makeText(this@LoginActivity, "푸시 등록 실패(${state.code})", Toast.LENGTH_SHORT).show()
                             Log.e("FCM", "등록 실패: ${state.code} ${state.msg}")
-                            finish()
                         }
                         is DeviceTokenViewModel.UiState.Error -> {
                             Toast.makeText(this@LoginActivity, "네트워크 오류: ${state.msg}", Toast.LENGTH_SHORT).show()
                             Log.e("FCM", "등록 오류: ${state.msg}")
-                            finish()
                         }
                     }
                 }

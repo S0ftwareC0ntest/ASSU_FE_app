@@ -19,4 +19,7 @@ interface AuthService {
     suspend fun commonLogin(
         @Body request: CommonLoginRequestDto
     ): BaseResponseDto<CommonLoginResponseDto>
+    
+    @POST("auth/logout")
+    suspend fun logout(): BaseResponseDto<Unit>
 }

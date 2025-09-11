@@ -29,4 +29,11 @@ class AuthRepositoryImpl @Inject constructor(
             mapper = { response -> response.toModel() }
         )
     }
+    
+    override suspend fun logout(): RetrofitResult<Unit> {
+        return apiHandler(
+            execute = { authService.logout() },
+            mapper = { Unit }
+        )
+    }
 }
