@@ -104,11 +104,11 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideNotificationService(retrofit: Retrofit): NotificationService =
+    fun provideNotificationService(@Auth retrofit: Retrofit): NotificationService =
         retrofit.create(NotificationService::class.java)
 
     @Provides
     @Singleton
-    fun provideSuggestionService(retrofit: Retrofit): SuggestionService =
+    fun provideSuggestionService(@Auth retrofit: Retrofit): SuggestionService =
         retrofit.create(SuggestionService::class.java)
 }

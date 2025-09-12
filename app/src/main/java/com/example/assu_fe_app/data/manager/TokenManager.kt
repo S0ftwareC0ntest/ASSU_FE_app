@@ -2,6 +2,7 @@ package com.example.assu_fe_app.data.manager
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.assu_fe_app.domain.model.auth.LoginModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -96,11 +97,11 @@ class TokenManager @Inject constructor(
     }
     
     fun saveDeviceTokenId(tokenId: Long) {
-        prefs.edit().putLong(KEY_DEVICE_TOKEN_ID, tokenId).apply()
+        prefs.edit { putLong(KEY_DEVICE_TOKEN_ID, tokenId) }
     }
     
-    fun getDeviceTokenId(): Int? {
-        val tokenId = prefs.getInt(KEY_DEVICE_TOKEN_ID, -1)
-        return if (tokenId == -1) null else tokenId
+    fun getDeviceTokenId(): Long? {
+        val tokenId = prefs.getLong(KEY_DEVICE_TOKEN_ID, -1L)
+        return if (tokenId == -1L) null else tokenId
     }
 }

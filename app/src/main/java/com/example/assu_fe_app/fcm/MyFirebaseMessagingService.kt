@@ -13,22 +13,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.presentation.admin.AdminMainActivity
-import com.example.assu_fe_app.presentation.partner.PartnerMainActivity
-import com.example.assu_fe_app.presentation.user.UserMainActivity
-import com.example.assu_fe_app.presentation.common.login.LoginActivity
-import com.example.assu_fe_app.data.manager.TokenManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 private const val CHANNEL_ID = "fcm_default"
 
-@AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
-    @Inject
-    lateinit var tokenManager: TokenManager
 
     override fun onNewToken(token: String) {
         android.util.Log.d("FCM", "새 FCM 토큰: $token")
@@ -39,7 +29,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         Log.d("FCM", "메시지 수신: data=${message.data} notif=${message.notification}")
 
-        // 채널 보장
         ensureChannel()
 
         val title = message.data["title"] ?: message.notification?.title ?: "알림"
@@ -55,8 +44,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        // 클릭 시 이동 - 사용자 역할에 맞는 액티비티로 이동
-        val intent = getMainActivityIntent().apply {
+        // 원래 알림도 그대로 표시
+        val intent = Intent(this, AdminMainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         val pi = PendingIntent.getActivity(
@@ -82,20 +71,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val ch = NotificationChannel(CHANNEL_ID, "Default Notifications", NotificationManager.IMPORTANCE_DEFAULT)
             mgr.createNotificationChannel(ch)
-        }
-    }
-
-    private fun getMainActivityIntent(): Intent {
-        return if (tokenManager.isLoggedIn()) {
-            // 로그인된 사용자의 역할에 맞는 액티비티로 이동
-            when (tokenManager.getUserRole()?.uppercase()) {
-                "ADMIN" -> Intent(this, AdminMainActivity::class.java)
-                "PARTNER" -> Intent(this, PartnerMainActivity::class.java)
-                else -> Intent(this, UserMainActivity::class.java)
-            }
-        } else {
-            // 로그인되지 않은 경우 로그인 화면으로 이동
-            Intent(this, LoginActivity::class.java)
         }
     }
 }

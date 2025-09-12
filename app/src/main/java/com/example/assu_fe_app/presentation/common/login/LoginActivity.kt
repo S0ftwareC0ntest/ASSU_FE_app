@@ -92,7 +92,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                 }
                 is LoginState.Error -> {
                     setLoginButtonEnabled(true)
-                    Toast.makeText(this, "로그인 실패: ${state.message}", Toast.LENGTH_SHORT).show()
+                    // 에러 메시지 표시
+                    val errorMessage = when {
+                        state.message.contains("네트워크") -> "네트워크 연결을 확인해주세요."
+                        state.message.contains("401") || state.message.contains("인증") -> "이메일 또는 비밀번호를 확인해주세요."
+                        state.message.contains("404") -> "존재하지 않는 계정입니다."
+                        state.message.contains("500") -> "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                        else -> "로그인에 실패했습니다: ${state.message}"
+                    }
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                     Log.e("LoginActivity", "로그인 실패: ${state.message}")
                 }
                 is LoginState.PendingApproval -> {
@@ -118,11 +126,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                         }
                         is DeviceTokenViewModel.UiState.Fail -> {
                             Log.e("FCM", "등록 실패: ${state.code} ${state.msg}")
-                            finish() // 실패해도 로그인은 진행했으니 종료할지, 남을지는 정책대로
+                            // FCM 토큰 등록 실패해도 앱을 종료하지 않음
+                            // 로그인은 성공했으므로 사용자가 계속 사용할 수 있도록 함
                         }
                         is DeviceTokenViewModel.UiState.Error -> {
                             Log.e("FCM", "등록 오류: ${state.msg}")
-                            finish()
+                            // FCM 토큰 등록 오류가 발생해도 앱을 종료하지 않음
                         }
                     }
                 }
@@ -139,6 +148,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+        
+        // 로그인 액티비티 종료하여 매끄러운 전환
+        finish()
 
         // FCM 토큰 등록
         fetchAndRegisterFcmToken()
@@ -172,15 +184,24 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     //  서버 등록까지 한 번에
     private fun fetchAndRegisterFcmToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("FCM", "토큰 가져오기 실패", task.exception)
-                deviceTokenViewModel.register("") // 빈값 보내지 말고 여기서 종료하는 게 나음
-                return@addOnCompleteListener
+        try {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM", "토큰 가져오기 실패", task.exception)
+                    // FCM 토큰 가져오기 실패해도 앱을 종료하지 않음
+                    return@addOnCompleteListener
+                }
+                val token = task.result
+                if (token.isNullOrEmpty()) {
+                    Log.w("FCM", "FCM 토큰이 비어있음")
+                    return@addOnCompleteListener
+                }
+                Log.d("FCM", "FCM 토큰: $token")
+                deviceTokenViewModel.register(token)
             }
-            val token = task.result
-            Log.d("FCM", "FCM 토큰: $token")
-            deviceTokenViewModel.register(token)
+        } catch (e: Exception) {
+            Log.e("FCM", "FCM 토큰 등록 중 예외 발생", e)
+            // 예외가 발생해도 앱을 종료하지 않음
         }
     }
 }

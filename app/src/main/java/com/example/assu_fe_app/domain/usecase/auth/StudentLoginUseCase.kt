@@ -3,7 +3,7 @@ package com.example.assu_fe_app.domain.usecase.auth
 import com.example.assu_fe_app.data.dto.auth.StudentLoginRequestDto
 import com.example.assu_fe_app.domain.model.auth.LoginModel
 import com.example.assu_fe_app.util.RetrofitResult
-import com.example.assu_fe_app.domain.repository.AuthRepository
+import com.example.assu_fe_app.data.repository.auth.AuthRepository
 import javax.inject.Inject
 
 class StudentLoginUseCase @Inject constructor(

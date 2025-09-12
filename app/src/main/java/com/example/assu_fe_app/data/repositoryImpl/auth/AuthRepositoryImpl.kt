@@ -4,7 +4,7 @@ import com.example.assu_fe_app.data.dto.auth.CommonLoginRequestDto
 import com.example.assu_fe_app.data.dto.auth.StudentLoginRequestDto
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.domain.model.auth.LoginModel
-import com.example.assu_fe_app.domain.repository.AuthRepository
+import com.example.assu_fe_app.data.repository.auth.AuthRepository
 import com.example.assu_fe_app.util.RetrofitResult
 import com.example.assu_fe_app.util.apiHandler
 import javax.inject.Inject
