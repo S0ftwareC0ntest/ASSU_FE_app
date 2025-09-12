@@ -95,8 +95,8 @@ class TokenManager @Inject constructor(
         return prefs.getLong(KEY_USER_ID, -1L)
     }
     
-    fun saveDeviceTokenId(tokenId: Int) {
-        prefs.edit().putInt(KEY_DEVICE_TOKEN_ID, tokenId).apply()
+    fun saveDeviceTokenId(tokenId: Long) {
+        prefs.edit().putLong(KEY_DEVICE_TOKEN_ID, tokenId).apply()
     }
     
     fun getDeviceTokenId(): Int? {

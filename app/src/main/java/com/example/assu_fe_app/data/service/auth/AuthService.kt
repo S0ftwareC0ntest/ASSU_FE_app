@@ -1,6 +1,6 @@
 package com.example.assu_fe_app.data.service
 
-import com.example.assu_fe_app.data.dto.auth.BaseResponseDto
+import com.example.assu_fe_app.data.dto.BaseResponse
 import com.example.assu_fe_app.data.dto.auth.CommonLoginRequestDto
 import com.example.assu_fe_app.data.dto.auth.CommonLoginResponseDto
 import com.example.assu_fe_app.data.dto.auth.StudentLoginRequestDto
@@ -13,13 +13,13 @@ interface AuthService {
     @POST("auth/students/login")
     suspend fun studentLogin(
         @Body request: StudentLoginRequestDto
-    ): BaseResponseDto<StudentLoginResponseDto>
+    ): BaseResponse<StudentLoginResponseDto>
     
     @POST("auth/commons/login")
     suspend fun commonLogin(
         @Body request: CommonLoginRequestDto
-    ): BaseResponseDto<CommonLoginResponseDto>
+    ): BaseResponse<CommonLoginResponseDto>
     
     @POST("auth/logout")
-    suspend fun logout(): BaseResponseDto<Unit>
+    suspend fun logout(): BaseResponse<Unit>
 }

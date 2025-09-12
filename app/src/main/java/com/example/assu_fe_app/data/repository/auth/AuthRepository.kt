@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.domain.repository
+package com.example.assu_fe_app.data.repository.auth
 
 import com.example.assu_fe_app.data.dto.auth.CommonLoginRequestDto
 import com.example.assu_fe_app.data.dto.auth.StudentLoginRequestDto

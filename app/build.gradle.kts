@@ -1,13 +1,14 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-        plugins {
-            alias(libs.plugins.android.application)
-            alias(libs.plugins.kotlin.android)
-            alias(libs.plugins.hilt.android)
-            id("kotlin-kapt")
-            id("com.google.gms.google-services")
-        }
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android)
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("com.google.gms.google-services")
+}
 
 val properties = Properties().apply {
     load(FileInputStream(rootProject.file("local.properties")))
@@ -15,7 +16,7 @@ val properties = Properties().apply {
 
 android {
     namespace = "com.example.assu_fe_app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.assu_fe_app"
@@ -43,11 +44,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -124,4 +125,8 @@ dependencies {
 
     // 테스트 (서버 목)
     testImplementation("com.squareup.okhttp3:mockwebserver:5.1.0")
+
+    // QR 생성
+    implementation("com.google.zxing:core:3.5.3")
+
 }

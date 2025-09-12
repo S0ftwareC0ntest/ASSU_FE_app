@@ -42,8 +42,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 채널 보장
         ensureChannel()
 
-        val title = message.notification?.title ?: message.data["title"] ?: "알림"
-        val body  = message.notification?.body  ?: message.data["body"]  ?: "새 메시지"
+        val title = message.data["title"] ?: message.notification?.title ?: "알림"
+        val body  = message.data["body"]  ?: message.notification?.body  ?: "새 메시지"
+        val type  = message.data["type"]  ?: ""   // 서버에서 내려주는 type 값
+
+        // 주문 안내라면 TTS로 읽어주기
+        if (type.equals("ORDER", ignoreCase = true) || title.contains("주문 안내")) {
+            val script = if (title.isNotBlank()) "$title. $body" else body
+            if (script.isNotBlank()) {
+                Log.w("TTS", "➡️ try speak: $script")
+                TtsManager.speak(this, script)
+            }
+        }
 
         // 클릭 시 이동 - 사용자 역할에 맞는 액티비티로 이동
         val intent = getMainActivityIntent().apply {
@@ -55,14 +65,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         )
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_account_bell) // 프로젝트에 있는 작은 아이콘으로 바꿔줘
+            .setSmallIcon(R.drawable.ic_account_bell)
+
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
             .setContentIntent(pi)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        NotificationManagerCompat.from(this).notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
+        NotificationManagerCompat.from(this)
+            .notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
     }
 
     private fun ensureChannel() {
@@ -72,7 +84,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             mgr.createNotificationChannel(ch)
         }
     }
-    
+
     private fun getMainActivityIntent(): Intent {
         return if (tokenManager.isLoggedIn()) {
             // 로그인된 사용자의 역할에 맞는 액티비티로 이동

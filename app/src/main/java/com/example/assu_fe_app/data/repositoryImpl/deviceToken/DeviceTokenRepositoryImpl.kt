@@ -15,7 +15,7 @@ class DeviceTokenRepositoryImpl @Inject constructor(
             execute = { api.registerToken(token) },
             mapper = { it } // String 그대로
         )
-    
+
     override suspend fun unregister(tokenId: Int): RetrofitResult<Unit> =
         apiHandler(
             execute = { api.unregisterToken(tokenId) },

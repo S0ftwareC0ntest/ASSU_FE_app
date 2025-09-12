@@ -1,10 +1,7 @@
 package com.example.assu_fe_app.data.repositoryImpl
 
-import com.example.assu_fe_app.data.dto.auth.BaseResponseDto
 import com.example.assu_fe_app.data.dto.auth.CommonLoginRequestDto
-import com.example.assu_fe_app.data.dto.auth.CommonLoginResponseDto
 import com.example.assu_fe_app.data.dto.auth.StudentLoginRequestDto
-import com.example.assu_fe_app.data.dto.auth.StudentLoginResponseDto
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.domain.model.auth.LoginModel
 import com.example.assu_fe_app.domain.repository.AuthRepository

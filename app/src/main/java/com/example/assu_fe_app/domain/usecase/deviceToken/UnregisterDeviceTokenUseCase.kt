@@ -7,6 +7,6 @@ import javax.inject.Inject
 class UnregisterDeviceTokenUseCase @Inject constructor(
     private val repo: DeviceTokenRepository
 ) {
-    suspend operator fun invoke(tokenId: Int): RetrofitResult<Unit> =
-        repo.unregister(tokenId)
+    suspend operator fun invoke(tokenId: Long): RetrofitResult<String> =
+        repo.unregisterToken(tokenId)
 }

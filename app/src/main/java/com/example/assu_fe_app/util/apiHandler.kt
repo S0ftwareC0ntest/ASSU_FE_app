@@ -1,14 +1,13 @@
 package com.example.assu_fe_app.util
 
 import com.example.assu_fe_app.MyApplication
-import com.example.assu_fe_app.data.dto.auth.BaseResponseDto
-import retrofit2.Response
+import com.example.assu_fe_app.data.dto.BaseResponse
 import com.example.assu_fe_app.di.ServiceModule
 import retrofit2.HttpException
 import java.io.IOException
 
 suspend fun <T : Any, R : Any> apiHandler(
-    execute: suspend () -> BaseResponseDto<T>,
+    execute: suspend () -> BaseResponse<T>,
     mapper: (T) -> R
 ): RetrofitResult<R> {
     if (MyApplication.isOnline().not()) {
@@ -44,5 +43,6 @@ suspend fun <T : Any, R : Any> apiHandler(
     } catch (e: Exception) {
         RetrofitResult.Error(e)
     }
+
 }
 
