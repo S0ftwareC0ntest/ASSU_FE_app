@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.presentation.user.mypage
+package com.example.assu_fe_app.presentation.common.mypage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
