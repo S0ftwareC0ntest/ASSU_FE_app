@@ -46,6 +46,8 @@ class UserMypageFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lateinit var tokenManager: TokenManager
+        binding.tvAccountName.setText(tokenManager.getUserName())
         initClick() // 여기서 호출
     }
 

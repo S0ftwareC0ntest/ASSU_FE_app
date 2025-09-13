@@ -12,6 +12,7 @@ import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.FragmentAdminMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.login.LoginViewModel
 import com.example.assu_fe_app.presentation.common.mypage.CustomerServiceDialogFragment
 import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,9 +26,7 @@ class AdminMypageFragment : BaseFragment<FragmentAdminMypageBinding>(R.layout.fr
 
     @Inject
     lateinit var tokenManager: TokenManager
-
     private val loginViewModel: LoginViewModel by viewModels()
-
     private val viewModel: MypageViewModel by viewModels()
 
     override fun initView(){
@@ -47,6 +46,8 @@ class AdminMypageFragment : BaseFragment<FragmentAdminMypageBinding>(R.layout.fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvAdmAccountName.setText(tokenManager.getUserName())
         initClick()
     }
 
