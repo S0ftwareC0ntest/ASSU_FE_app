@@ -10,6 +10,7 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentPartnerMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.mypage.CustomerServiceDialogFragment
 import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +52,12 @@ class PartnerMypageFragment
             findNavController().navigate(
                 R.id.action_partner_mypage_to_mypage_account
             )
+        }
+
+        // 고객센터
+        binding.clPartnerAccountComponent5.setOnClickListener {
+            CustomerServiceDialogFragment()
+                .show(childFragmentManager, "CustomerServiceDialog")
         }
     }
 

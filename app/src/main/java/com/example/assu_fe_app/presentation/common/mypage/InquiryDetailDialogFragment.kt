@@ -1,5 +1,6 @@
-package com.example.assu_fe_app.presentation.user.mypage
+package com.example.assu_fe_app.presentation.common.mypage
 
+import android.R
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.assu_fe_app.data.dto.InquiryItem
 import com.example.assu_fe_app.databinding.FragmentUserInquiryDetailBinding
 
-class UserInquiryDetailDialogFragment : DialogFragment() {
+class InquiryDetailDialogFragment : DialogFragment() {
 
     private var _binding: FragmentUserInquiryDetailBinding? = null
     private val binding get() = _binding!!
@@ -27,7 +28,7 @@ class UserInquiryDetailDialogFragment : DialogFragment() {
         super.onStart()
         dialog?.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setBackgroundDrawableResource(android.R.color.transparent)
+            setBackgroundDrawableResource(R.color.transparent)
         }
     }
 
@@ -79,8 +80,8 @@ class UserInquiryDetailDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(inquiryItem: InquiryItem): UserInquiryDetailDialogFragment {
-            return UserInquiryDetailDialogFragment().apply {
+        fun newInstance(inquiryItem: InquiryItem): InquiryDetailDialogFragment {
+            return InquiryDetailDialogFragment().apply {
                 this.inquiryItem = inquiryItem
             }
         }

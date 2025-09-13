@@ -1,18 +1,22 @@
-package com.example.assu_fe_app.presentation.user.mypage
+package com.example.assu_fe_app.presentation.common.mypage
 
+import android.R
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.data.dto.InquiryItem
 import com.example.assu_fe_app.data.dto.InquiryStatus
 import com.example.assu_fe_app.databinding.FragmentUserCustomerServiceBinding
 
-class UserCustomerServiceDialogFragment : DialogFragment() {
+class CustomerServiceDialogFragment : DialogFragment() {
 
     private var _binding: FragmentUserCustomerServiceBinding? = null
     private val binding get() = _binding!!
@@ -29,7 +33,7 @@ class UserCustomerServiceDialogFragment : DialogFragment() {
         super.onStart()
         dialog?.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setBackgroundDrawableResource(android.R.color.transparent)
+            setBackgroundDrawableResource(R.color.transparent)
         }
     }
 
@@ -97,7 +101,7 @@ class UserCustomerServiceDialogFragment : DialogFragment() {
                 binding.inquiryLayout.etInquiryEmail.error = "이메일을 입력해주세요"
                 return
             }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                 binding.inquiryLayout.etInquiryEmail.error = "올바른 이메일 형식을 입력해주세요"
                 return
             }
@@ -105,7 +109,7 @@ class UserCustomerServiceDialogFragment : DialogFragment() {
 
         // TODO: 실제 서버에 문의사항 전송
         // 여기서는 간단히 토스트 메시지만 표시
-        android.widget.Toast.makeText(requireContext(), "문의사항이 성공적으로 등록되었습니다.", android.widget.Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "문의사항이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
 
         // 입력 필드 초기화
         binding.inquiryLayout.etInquiryTitle.text.clear()
@@ -134,7 +138,7 @@ class UserCustomerServiceDialogFragment : DialogFragment() {
         inquiryHistoryAdapter = InquiryHistoryAdapter(
             onItemClick = { inquiryItem ->
                 // 문의내역 클릭 시 상세보기 다이얼로그 표시
-                val detailDialogFragment = UserInquiryDetailDialogFragment.newInstance(inquiryItem)
+                val detailDialogFragment = InquiryDetailDialogFragment.newInstance(inquiryItem)
                 detailDialogFragment.show(childFragmentManager, "InquiryDetailDialog")
             }
         )
@@ -143,7 +147,7 @@ class UserCustomerServiceDialogFragment : DialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = inquiryHistoryAdapter
             addItemDecoration(
-                androidx.recyclerview.widget.DividerItemDecoration(requireContext(), androidx.recyclerview.widget.DividerItemDecoration.VERTICAL).apply {
+                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
                     setDrawable(resources.getDrawable(com.example.assu_fe_app.R.drawable.divider_inquiry_item, null))
                 }
             )
