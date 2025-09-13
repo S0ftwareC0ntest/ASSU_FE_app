@@ -65,8 +65,9 @@ class UserMypageFragment
 
         // 고객센터
         binding.clAccountComponent6.setOnClickListener {
-            CustomerServiceDialogFragment()
-                .show(childFragmentManager, "CustomerServiceDialog")
+            findNavController().navigate(
+                R.id.action_user_mypage_to_inquiry
+            )
         }
 
         // 로그아웃: 서버에서 unregister 성공 시에만 화면 이동 (observer에서 처리)

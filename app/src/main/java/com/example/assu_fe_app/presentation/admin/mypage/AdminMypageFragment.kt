@@ -62,8 +62,9 @@ class AdminMypageFragment
 
         // 고객센터
         binding.clAdmAccountComponent5.setOnClickListener {
-            CustomerServiceDialogFragment()
-                .show(childFragmentManager, "CustomerServiceDialog")
+            findNavController().navigate(
+                R.id.action_admin_mypage_to_inquiry
+            )
         }
     }
 

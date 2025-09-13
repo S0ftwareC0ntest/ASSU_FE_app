@@ -1,220 +1,124 @@
 package com.example.assu_fe_app.presentation.common.mypage
 
-import android.R
-import android.app.Dialog
+// ❌ import android.app.Fragment  제거
 import android.os.Bundle
-import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.assu_fe_app.data.dto.InquiryItem
-import com.example.assu_fe_app.data.dto.InquiryStatus
+import androidx.recyclerview.widget.RecyclerView
+import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentUserCustomerServiceBinding
+import com.example.assu_fe_app.domain.model.inquiry.InquiryModel
+import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.ui.inquiry.InquiryViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-class CustomerServiceDialogFragment : DialogFragment() {
+@AndroidEntryPoint
+class CustomerServiceDialogFragment :
+    BaseFragment<FragmentUserCustomerServiceBinding>(R.layout.fragment_user_customer_service) {
 
-    private var _binding: FragmentUserCustomerServiceBinding? = null
-    private val binding get() = _binding!!
+    private val vm: InquiryViewModel by activityViewModels()
+    private lateinit var historyAdapter: InquiryHistoryAdapter
 
-    private lateinit var inquiryHistoryAdapter: InquiryHistoryAdapter
+    override fun initObserver() { /* 필요 시 */ }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return dialog
+    // ✅ BaseFragment가 이미 DataBinding inflate → 여기서 바로 binding 사용
+    override fun initView() {
+        setupTabs()
+        setupInquirySubmit()
+        setupHistoryList()
+        showInquiryTab()
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setBackgroundDrawableResource(R.color.transparent)
-        }
-    }
+    /** 문의하기 탭 - 제출 */
+    private fun setupInquirySubmit() = with(binding.inquiryLayout) {
+        btnSubmitInquiry.setOnClickListener {
+            val title = etInquiryTitle.text.toString().trim()
+            val content = etInquiryContent.text.toString().trim()
+            val email = etInquiryEmail.text.toString().trim()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentUserCustomerServiceBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
-        setupViews()
-        setupTabNavigation()
-        setupInquiryHistory()
-        loadSampleInquiryData()
-    }
-
-    private fun setupViews() {
-        // 뒤로가기 버튼
-        binding.btnCsBack.setOnClickListener {
-            dismiss()
-        }
-
-        // 문의하기 작성하기 버튼
-        binding.inquiryLayout.btnSubmitInquiry.setOnClickListener {
-            submitInquiry()
-        }
-    }
-
-    private fun setupTabNavigation() {
-        // 문의하기 탭 클릭
-        binding.tabInquiry.setOnClickListener {
-            switchToInquiryTab()
-        }
-
-        // 문의내역확인 탭 클릭
-        binding.tabHistory.setOnClickListener {
-            switchToHistoryTab()
-        }
-
-        // 기본적으로 문의하기 탭 선택
-        switchToInquiryTab()
-    }
-
-    private fun submitInquiry() {
-        val title = binding.inquiryLayout.etInquiryTitle.text.toString().trim()
-        val content = binding.inquiryLayout.etInquiryContent.text.toString().trim()
-        val email = binding.inquiryLayout.etInquiryEmail.text.toString().trim()
-
-        // 입력 검증
-        when {
-            title.isEmpty() -> {
-                binding.inquiryLayout.etInquiryTitle.error = "제목을 입력해주세요"
-                return
+            if (title.isEmpty() || content.isEmpty() || email.isEmpty()) {
+                return@setOnClickListener
             }
-            content.isEmpty() -> {
-                binding.inquiryLayout.etInquiryContent.error = "문의 내용을 입력해주세요"
-                return
-            }
-            email.isEmpty() -> {
-                binding.inquiryLayout.etInquiryEmail.error = "이메일을 입력해주세요"
-                return
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                binding.inquiryLayout.etInquiryEmail.error = "올바른 이메일 형식을 입력해주세요"
-                return
-            }
+            vm.create(title, content, email)
         }
 
-        // TODO: 실제 서버에 문의사항 전송
-        // 여기서는 간단히 토스트 메시지만 표시
-        Toast.makeText(requireContext(), "문의사항이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
-
-        // 입력 필드 초기화
-        binding.inquiryLayout.etInquiryTitle.text.clear()
-        binding.inquiryLayout.etInquiryContent.text.clear()
-        binding.inquiryLayout.etInquiryEmail.text.clear()
-
-        // 문의내역확인 탭으로 이동
-        switchToHistoryTab()
-    }
-
-    private fun switchToInquiryTab() {
-        // 탭 텍스트 색상 변경
-        binding.tvTabInquiry.setTextColor(resources.getColor(com.example.assu_fe_app.R.color.assu_font_main, null))
-        binding.tvTabHistory.setTextColor(resources.getColor(com.example.assu_fe_app.R.color.assu_font_sub, null))
-
-        // 탭 하단 라인 표시/숨김
-        binding.tabInquiryBottomLine.visibility = View.VISIBLE
-        binding.tabHistoryBottomLine.visibility = View.GONE
-
-        // 컨텐츠 변경
-        binding.inquiryLayout.root.visibility = View.VISIBLE
-        binding.historyLayout.root.visibility = View.GONE
-    }
-
-    private fun setupInquiryHistory() {
-        inquiryHistoryAdapter = InquiryHistoryAdapter(
-            onItemClick = { inquiryItem ->
-                // 문의내역 클릭 시 상세보기 다이얼로그 표시
-                val detailDialogFragment = InquiryDetailDialogFragment.newInstance(inquiryItem)
-                detailDialogFragment.show(childFragmentManager, "InquiryDetailDialog")
-            }
-        )
-
-        binding.historyLayout.rvInquiryHistory.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = inquiryHistoryAdapter
-            addItemDecoration(
-                DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                    setDrawable(resources.getDrawable(com.example.assu_fe_app.R.drawable.divider_inquiry_item, null))
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.createResult.collect { newId ->
+                    etInquiryTitle.setText("")
+                    etInquiryContent.setText("")
+                    etInquiryEmail.setText("")
+                    showHistoryTab()
+                    vm.refresh(status = "all")
                 }
-            )
+            }
         }
     }
 
-    private fun loadSampleInquiryData() {
-        val sampleInquiries = listOf(
-            InquiryItem(
-                id = "1",
-                title = "상호명 변경 문의드립니다.",
-                content = "안녕하세요. 역전할머니 맥주 숭실대점 대표 이수민입니다. 다름이 아니라 상호명이 역전할머니 맥주 숭실대점에서 역후할머니 맥주 숭실대점으로 변경하게 되어 이를 변경 요청하고자 문의드렸습니다. 감사합니다.",
-                email = "example@gmail.com",
-                date = "2025-03-15",
-                time = "18:36",
-                status = InquiryStatus.PENDING
-            ),
-            InquiryItem(
-                id = "2",
-                title = "제휴 관련 추가정보 문의 드립니다.",
-                content = "제휴 신청 시 필요한 추가 정보가 있는지 궁금합니다.",
-                email = "example@gmail.com",
-                date = "2025-03-15",
-                time = "18:36",
-                status = InquiryStatus.COMPLETED,
-                answer = "안녕하세요. A:SSU입니다.\n\n제휴 신청 시 필요한 추가 정보는 다음과 같습니다:\n1. 사업자등록증\n2. 대표자 신분증\n3. 매장 사진\n\n추가 문의사항이 있으시면 언제든 연락주세요."
-            ),
-            InquiryItem(
-                id = "3",
-                title = "제휴 인증이 안돼요 ㅜ",
-                content = "제휴 인증 과정에서 문제가 발생했습니다. 도움을 받을 수 있을까요?",
-                email = "example@gmail.com",
-                date = "2025-03-15",
-                time = "18:36",
-                status = InquiryStatus.COMPLETED,
-                answer = "안녕하세요. A:SSU입니다.\n\n제휴 인증 문제를 해결해드리겠습니다. 구체적인 오류 메시지나 상황을 알려주시면 더 정확한 도움을 드릴 수 있습니다."
-            )
-        )
+    /** 내역 탭 */
+    private fun setupHistoryList() = with(binding.historyLayout) {
+        historyAdapter = InquiryHistoryAdapter(onClick = ::openDetail)
+        rvInquiryHistory.layoutManager = LinearLayoutManager(requireContext())
+        rvInquiryHistory.adapter = historyAdapter
 
-        inquiryHistoryAdapter.submitList(sampleInquiries)
-        
-        // 데이터가 없을 때 빈 상태 UI 표시
-        if (sampleInquiries.isEmpty()) {
-            binding.historyLayout.emptyStateContainer.visibility = View.VISIBLE
-            binding.historyLayout.rvInquiryHistory.visibility = View.GONE
-        } else {
-            binding.historyLayout.emptyStateContainer.visibility = View.GONE
-            binding.historyLayout.rvInquiryHistory.visibility = View.VISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.list.collectLatest { st -> historyAdapter.submitList(st.items) }
+            }
         }
+
+        rvInquiryHistory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+                if (dy <= 0) return
+                val lm = rv.layoutManager as LinearLayoutManager
+                val last = lm.findLastVisibleItemPosition()
+                val total = rv.adapter?.itemCount ?: 0
+                if (total > 0 && last >= total - 3) vm.loadMore()
+            }
+        })
     }
 
-    private fun switchToHistoryTab() {
-        // 탭 텍스트 색상 변경
-        binding.tvTabInquiry.setTextColor(resources.getColor(com.example.assu_fe_app.R.color.assu_font_sub, null))
-        binding.tvTabHistory.setTextColor(resources.getColor(com.example.assu_fe_app.R.color.assu_font_main, null))
-
-        // 탭 하단 라인 표시/숨김
-        binding.tabInquiryBottomLine.visibility = View.GONE
-        binding.tabHistoryBottomLine.visibility = View.VISIBLE
-
-        // 컨텐츠 변경
-        binding.inquiryLayout.root.visibility = View.GONE
-        binding.historyLayout.root.visibility = View.VISIBLE
+    private fun openDetail(item: InquiryModel) {
+        InquiryDetailDialogFragment.newInstance(item.id)
+            .show(childFragmentManager, "inquiry_detail")
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    /** 탭 스위칭 */
+    private fun setupTabs() = with(binding) {
+        tabInquiry.setOnClickListener { showInquiryTab() }
+        tabHistory.setOnClickListener {
+            showHistoryTab()
+            if (vm.list.value.items.isEmpty()) vm.refresh(status = "all")
+        }
+        btnCsBack.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun showInquiryTab() = with(binding) {
+        inquiryLayout.root.visibility = View.VISIBLE
+        historyLayout.root.visibility = View.GONE
+
+        // 선택 탭 = 메인색, 비선택 탭 = 서브색
+        tvTabInquiry.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_font_main))
+        tvTabHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_font_sub))
+        tabInquiryBottomLine.visibility = View.VISIBLE
+        tabHistoryBottomLine.visibility = View.GONE
+    }
+
+    private fun showHistoryTab() = with(binding) {
+        inquiryLayout.root.visibility = View.GONE
+        historyLayout.root.visibility = View.VISIBLE
+
+        tvTabInquiry.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_font_sub))
+        tvTabHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.assu_font_main))
+        tabInquiryBottomLine.visibility = View.GONE
+        tabHistoryBottomLine.visibility = View.VISIBLE
     }
 }

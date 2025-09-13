@@ -56,15 +56,18 @@ class PartnerMypageFragment
 
         // 고객센터
         binding.clPartnerAccountComponent5.setOnClickListener {
-            CustomerServiceDialogFragment()
-                .show(childFragmentManager, "CustomerServiceDialog")
-        }
+            findNavController().navigate(
+                R.id.action_partner_mypage_to_inquiry
+            )
     }
-
+}
     private fun navigateToLoginAndClear() {
         val intent = Intent(requireContext(), LoginActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         startActivity(intent)
     }
+
 }
+
+
