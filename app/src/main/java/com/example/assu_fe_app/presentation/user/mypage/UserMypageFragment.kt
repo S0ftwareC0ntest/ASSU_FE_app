@@ -11,6 +11,7 @@ import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.FragmentUserMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.common.mypage.CustomerServiceDialogFragment
 import com.example.assu_fe_app.presentation.common.login.LoginViewModel
 import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import com.example.assu_fe_app.presentation.user.review.mypage.UserMyReviewActivity
@@ -72,7 +73,7 @@ class UserMypageFragment
 
         // 고객센터
         binding.clAccountComponent6.setOnClickListener {
-            UserCustomerServiceDialogFragment()
+            CustomerServiceDialogFragment()
                 .show(childFragmentManager, "CustomerServiceDialog")
         }
 
