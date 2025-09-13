@@ -10,13 +10,11 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentPartnerMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
-import com.example.assu_fe_app.presentation.common.mypage.CustomerServiceDialogFragment
 import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import com.example.assu_fe_app.presentation.common.login.LoginViewModel
 import com.example.assu_fe_app.data.manager.TokenManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -26,9 +24,7 @@ class PartnerMypageFragment
 
     @Inject
     lateinit var tokenManager: TokenManager
-
     private val loginViewModel: LoginViewModel by viewModels()
-
     private val viewModel: MypageViewModel by viewModels()
 
     override fun initView(){
@@ -47,6 +43,7 @@ class PartnerMypageFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvPartnerAccountName.setText(tokenManager.getUserName())
         initClickListeners()
     }
 
