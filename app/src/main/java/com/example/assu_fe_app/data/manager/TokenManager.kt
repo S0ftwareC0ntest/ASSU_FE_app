@@ -3,6 +3,7 @@ package com.example.assu_fe_app.data.manager
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.example.assu_fe_app.data.dto.UserRole
 import com.example.assu_fe_app.domain.model.auth.LoginModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -91,7 +92,17 @@ class TokenManager @Inject constructor(
     fun getUserRole(): String? {
         return prefs.getString(KEY_USER_ROLE, null)
     }
-    
+
+    fun getUserRoleEnum(): UserRole? {
+        return when (getUserRole()) {
+            "ADMIN" -> UserRole.ADMIN
+            "PARTNER" -> UserRole.PARTNER
+            "STUDENT" -> UserRole.STUDENT
+            else -> null
+        }
+    }
+
+
     fun getUserId(): Long {
         return prefs.getLong(KEY_USER_ID, -1L)
     }
