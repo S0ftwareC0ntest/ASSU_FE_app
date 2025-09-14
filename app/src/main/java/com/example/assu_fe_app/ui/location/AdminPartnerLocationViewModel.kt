@@ -52,7 +52,6 @@ class AdminPartnerLocationViewModel @Inject constructor(
                     }
                 }
                 UserRole.STUDENT -> {
-                    // 이 프래그먼트에서 STUDENT는 안 씀(유저용은 UserLocationFragment)
                     _state.value = UiState.Fail("ROLE_MISMATCH", "STUDENT는 지원하지 않는 화면입니다.")
                 }
             }

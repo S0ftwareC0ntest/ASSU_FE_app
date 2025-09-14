@@ -1,29 +1,30 @@
 package com.example.assu_fe_app.data.dto.location.response
 
 import com.example.assu_fe_app.domain.model.location.PartnerOnMap
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PartnerMapResponseDto(
-    val partnerId: Long,
-    val name: String,
-    val address: String?,
-    val isPartnered: Boolean,
-    val partnershipId: Long?,
-    val partnershipStartDate: String?,
-    val partnershipEndDate: String?,
-    val latitude: Double,
-    val longitude: Double
+    @Json(name = "partnerId") val partnerId: Long,
+    @Json(name = "name") val name: String,
+    @Json(name = "address") val address: String?,
+    @Json(name = "partnered") val partnered: Boolean = false,
+    @Json(name = "partnershipId") val partnershipId: Long?,
+    @Json(name = "partnershipStartDate") val partnershipStartDate: String?,
+    @Json(name = "partnershipEndDate") val partnershipEndDate: String?,
+    @Json(name = "latitude") val latitude: Double,
+    @Json(name = "longitude") val longitude: Double
 ) {
     fun toModel() = PartnerOnMap(
-        partnerId = this.partnerId,
-        name = this.name,
-        address = this.address,
-        isPartnered = this.isPartnered,
-        partnershipId = this.partnershipId,
-        partnershipStartDate = this.partnershipStartDate,
-        partnershipEndDate = this.partnershipEndDate,
-        latitude = this.latitude,
-        longitude = this.longitude
+        partnerId = partnerId,
+        name = name,
+        address = address,
+        partnered = partnered,
+        partnershipId = partnershipId,
+        partnershipStartDate = partnershipStartDate,
+        partnershipEndDate = partnershipEndDate,
+        latitude = latitude,
+        longitude = longitude
     )
 }
