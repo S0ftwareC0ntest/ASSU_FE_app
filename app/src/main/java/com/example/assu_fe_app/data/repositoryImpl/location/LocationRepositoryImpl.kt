@@ -15,21 +15,21 @@ class LocationRepositoryImpl @Inject constructor(
     private val api: LocationService
 ) : LocationRepository {
 
-    override suspend fun getNearbyStores(v: ViewportQuery): RetrofitResult<List<StoreOnMap>> =
-        apiHandler(
-            execute = { api.getStores(v.minLng, v.minLat, v.maxLng, v.maxLat) },
-            mapper  = { list -> list.map { it.toModel() } }
-        )
-
     override suspend fun getNearbyPartners(v: ViewportQuery): RetrofitResult<List<PartnerOnMap>> =
         apiHandler(
-            execute = { api.getPartners(v.minLng, v.minLat, v.maxLng, v.maxLat) },
+            execute = { api.getPartners(v.lng1, v.lat1, v.lng2, v.lat2, v.lng3, v.lat3, v.lng4, v.lat4) },
             mapper  = { list -> list.map { it.toModel() } }
         )
 
     override suspend fun getNearbyAdmins(v: ViewportQuery): RetrofitResult<List<AdminOnMap>> =
         apiHandler(
-            execute = { api.getAdmins(v.minLng, v.minLat, v.maxLng, v.maxLat) },
+            execute = { api.getAdmins(v.lng1, v.lat1, v.lng2, v.lat2, v.lng3, v.lat3, v.lng4, v.lat4) },
+            mapper  = { list -> list.map { it.toModel() } }
+        )
+
+    override suspend fun getNearbyStores(v: ViewportQuery): RetrofitResult<List<StoreOnMap>> =
+        apiHandler(
+            execute = { api.getStores(v.lng1, v.lat1, v.lng2, v.lat2, v.lng3, v.lat3, v.lng4, v.lat4) },
             mapper  = { list -> list.map { it.toModel() } }
         )
 }

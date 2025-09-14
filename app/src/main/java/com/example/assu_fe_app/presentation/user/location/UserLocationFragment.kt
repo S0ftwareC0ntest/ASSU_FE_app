@@ -4,7 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Bundle
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,17 +20,15 @@ import com.example.assu_fe_app.databinding.FragmentUserLoactionBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.user.review.store.UserReviewStoreActivity
 import com.example.assu_fe_app.ui.location.UserLocationViewModel
-import com.kakao.vectormap.GestureType
-import com.kakao.vectormap.KakaoMap
-import com.kakao.vectormap.KakaoMapReadyCallback
-import com.kakao.vectormap.LatLng
-import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
-import com.kakao.vectormap.camera.CameraPosition
-import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.kakao.vectormap.*
+import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.Label
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,7 +38,12 @@ class UserLocationFragment :
 
     // Kakao Map
     private lateinit var mapView: MapView
-    private lateinit var kakaoMap: KakaoMap
+    private var kakaoMap: KakaoMap? = null
+    private var mapReady = false
+
+    // 현재 위치 라벨
+    private var myLocStyles: LabelStyles? = null
+    private var myLocLabel: Label? = null
 
     // ViewModel
     private val vm: UserLocationViewModel by viewModels()
@@ -51,14 +55,13 @@ class UserLocationFragment :
     ) { result ->
         val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        if (granted) fetchLocationAndQuery()
-        else moveToDefaultThenQuery() // 퍼미션 거부 → 기본 위치로 조회
+        if (granted) fetchLocationAndQuery() else moveToDefaultThenQuery()
     }
 
     // 기본 위치(서울 시청 근처)
     private val DEFAULT_LATITUDE = 37.5662952
     private val DEFAULT_LONGITUDE = 126.9779451
-    private val DEFAULT_ZOOM = 15               // << Int 로 변경!
+    private val DEFAULT_ZOOM = 15
 
     override fun initView() {
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
@@ -75,37 +78,31 @@ class UserLocationFragment :
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = binding.userLocationMapView
 
         mapView.start(
             object : MapLifeCycleCallback() {
-                override fun onMapDestroy() {
-                    Log.d("KakaoMap", "onMapDestroy (UserLocationFragment)")
-                }
-                override fun onMapError(error: Exception) {
-                    Log.e("KakaoMap", "onMapError (UserLocationFragment)", error)
-                }
+                override fun onMapDestroy() { Log.d("KakaoMap", "onMapDestroy (UserLocationFragment)") }
+                override fun onMapError(error: Exception) { Log.e("KakaoMap", "onMapError (UserLocationFragment)", error) }
             },
             object : KakaoMapReadyCallback() {
                 override fun onMapReady(map: KakaoMap) {
                     kakaoMap = map
+                    mapReady = true
 
-                    // 카메라 이동 종료시 현재 화면 기준으로 재조회
-                    kakaoMap.setOnCameraMoveEndListener(
-                        object : KakaoMap.OnCameraMoveEndListener {
-                            override fun onCameraMoveEnd(
-                                map: KakaoMap,
-                                cameraPosition: CameraPosition,
-                                gestureType: GestureType
-                            ) {
-                                requestNearbyFromCurrentViewport()
-                            }
-                        }
-                    )
+                    // 현재 위치 아이콘 스타일 준비 (ic_present_location 벡터 사용)
+                    val locBmp = vectorToBitmap(R.drawable.ic_present_location, 24)
+                    val myLocStyle = LabelStyle.from(locBmp).setAnchorPoint(0.5f, 1.0f)
+                    myLocStyles = map.labelManager?.addLabelStyles(LabelStyles.from(myLocStyle))
 
-                    // 최초 1회: 권한 확인 후 현재 위치로 이동 → 조회
+                    // 카메라 이동 종료 시 현재 뷰포인트로 재조회
+                    map.setOnCameraMoveEndListener { _, _, _ ->
+                        requestNearbyFromCurrentViewport()
+                    }
+
+                    // 권한/현재위치 흐름 시작
                     checkPermissionAndRun()
                 }
             }
@@ -117,19 +114,10 @@ class UserLocationFragment :
                 vm.state.collect { state ->
                     when (state) {
                         is UserLocationViewModel.UiState.Idle -> Unit
-                        is UserLocationViewModel.UiState.Loading -> {
-                            Log.d("UIState", "Loading…")
-                        }
-                        is UserLocationViewModel.UiState.Success -> {
-                            Log.d("UIState", "Loaded ${state.items.size} stores")
-                            // TODO: 마커/리스트 갱신
-                        }
-                        is UserLocationViewModel.UiState.Fail -> {
-                            Log.e("UIState", "Fail: ${state.code}, ${state.message}")
-                        }
-                        is UserLocationViewModel.UiState.Error -> {
-                            Log.e("UIState", "Error", state.t)
-                        }
+                        is UserLocationViewModel.UiState.Loading -> Log.d("UIState", "Loading…")
+                        is UserLocationViewModel.UiState.Success -> Log.d("UIState", "Loaded ${state.items.size} stores")
+                        is UserLocationViewModel.UiState.Fail -> Log.e("UIState", "Fail: ${state.code}, ${state.message}")
+                        is UserLocationViewModel.UiState.Error -> Log.e("UIState", "Error", state.t)
                     }
                 }
             }
@@ -143,54 +131,33 @@ class UserLocationFragment :
     }
 
     // ===== MapView lifecycle =====
-    override fun onResume() {
-        super.onResume()
-        if (::mapView.isInitialized) mapView.resume()
-    }
-    override fun onPause() {
-        super.onPause()
-        if (::mapView.isInitialized) mapView.pause()
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (::mapView.isInitialized) mapView.removeAllViews()
-    }
+    override fun onResume() { super.onResume(); if (::mapView.isInitialized) mapView.resume() }
+    override fun onPause() { super.onPause(); if (::mapView.isInitialized) mapView.pause() }
+    override fun onDestroyView() { super.onDestroyView(); if (::mapView.isInitialized) mapView.removeAllViews() }
 
     // ===== Permission & location =====
     private fun checkPermissionAndRun() {
-        val fineGranted = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        val coarseGranted = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (fineGranted || coarseGranted) {
-            fetchLocationAndQuery()
-        } else {
-            permLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
-        }
+        val fine = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarse = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (fine || coarse) fetchLocationAndQuery()
+        else permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
     }
 
-    @SuppressLint("MissingPermission") // checkPermissionAndRun() 에서 보장
+    @SuppressLint("MissingPermission")
     private fun fetchLocationAndQuery() {
-        // 1) lastLocation 우선
         fused.lastLocation
             .addOnSuccessListener { loc ->
                 if (loc != null) {
                     moveCameraAndQuery(loc.latitude, loc.longitude)
+                    showCurrentLocation(loc.latitude, loc.longitude)
                 } else {
-                    // 2) 없으면 즉시 한 번 측위
                     val cts = CancellationTokenSource()
                     fused.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
                         .addOnSuccessListener { cur ->
-                            if (cur != null) moveCameraAndQuery(cur.latitude, cur.longitude)
-                            else moveToDefaultThenQuery()
+                            if (cur != null) {
+                                moveCameraAndQuery(cur.latitude, cur.longitude)
+                                showCurrentLocation(cur.latitude, cur.longitude)
+                            } else moveToDefaultThenQuery()
                         }
                         .addOnFailureListener {
                             Log.e("Location", "getCurrentLocation failed", it)
@@ -205,38 +172,44 @@ class UserLocationFragment :
     }
 
     private fun moveCameraAndQuery(lat: Double, lng: Double) {
-        if (!::kakaoMap.isInitialized) return
-
-        // 줌 레벨은 Int 사용!
-        kakaoMap.moveCamera(
-            CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
-        )
-
-        // 초기 1회 바로 조회 (이후엔 moveEnd 리스너에서 자동)
+        if (!mapReady || kakaoMap == null) return
+        kakaoMap?.moveCamera(CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM))
         requestNearbyFromCurrentViewport()
     }
 
     private fun moveToDefaultThenQuery() {
         moveCameraAndQuery(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
+        showCurrentLocation(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     }
 
     private fun requestNearbyFromCurrentViewport() {
-        if (!::kakaoMap.isInitialized || mapView.width == 0 || mapView.height == 0) return
-
-        val vp = mapView.getViewportCorners(kakaoMap)
+        if (!mapReady || kakaoMap == null || mapView.width == 0 || mapView.height == 0) return
+        val vp = mapView.getViewportCorners(kakaoMap!!)
         val query = ViewportQuery(
-            minLng = vp.minLng, minLat = vp.minLat,
-            maxLng = vp.maxLng, maxLat = vp.maxLat
+            lng1 = vp.nw.longitude, lat1 = vp.nw.latitude,
+            lng2 = vp.ne.longitude, lat2 = vp.ne.latitude,
+            lng3 = vp.se.longitude, lat3 = vp.se.latitude,
+            lng4 = vp.sw.longitude, lat4 = vp.sw.latitude
         )
         Log.d("Viewport", "query=$query")
         vm.load(query)
     }
 
+    // ===== 현재 위치 라벨 표시 =====
+    private fun showCurrentLocation(lat: Double, lng: Double) {
+        if (!mapReady || kakaoMap == null) return
+        val styles = myLocStyles ?: return
+        val layer = kakaoMap!!.labelManager?.layer ?: return
+
+        myLocLabel?.remove()
+        val opts = LabelOptions.from(LatLng.from(lat, lng)).setStyles(styles)
+        myLocLabel = layer.addLabel(opts)
+    }
+
     // ===== Viewport 계산 =====
     fun MapView.getViewportCorners(kakaoMap: KakaoMap): Viewport {
-        val w = width   // Int
-        val h = height  // Int
-
+        val w = width
+        val h = height
         val nw = kakaoMap.fromScreenPoint(0, 0)!!
         val ne = kakaoMap.fromScreenPoint(w, 0)!!
         val se = kakaoMap.fromScreenPoint(w, h)!!
@@ -258,4 +231,18 @@ class UserLocationFragment :
         val maxLng: Double, val maxLat: Double,
         val nw: LatLng, val ne: LatLng, val se: LatLng, val sw: LatLng
     )
+
+    // ===== 벡터 → 비트맵 변환 =====
+    private fun vectorToBitmap(resId: Int, targetDp: Int): Bitmap {
+        val d = ContextCompat.getDrawable(requireContext(), resId)
+            ?: throw IllegalArgumentException("Drawable not found")
+        val density = resources.displayMetrics.density
+        val w = (targetDp * density).toInt().coerceAtLeast(1)
+        val h = (targetDp * density).toInt().coerceAtLeast(1)
+        val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        d.setBounds(0, 0, canvas.width, canvas.height)
+        d.draw(canvas)
+        return bmp
+    }
 }

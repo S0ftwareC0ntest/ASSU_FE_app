@@ -4,7 +4,7 @@ data class AdminOnMap(
     val adminId: Long,
     val name: String,
     val address: String?,
-    val isPartnered: Boolean,
+    val partnered: Boolean,
     val partnershipId: Long?,
     val partnershipStartDate: String?,
     val partnershipEndDate: String?,
