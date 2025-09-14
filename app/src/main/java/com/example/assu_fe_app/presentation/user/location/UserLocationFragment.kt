@@ -41,24 +41,25 @@ class UserLocationFragment :
     private var kakaoMap: KakaoMap? = null
     private var mapReady = false
 
-    // 현재 위치 라벨
+    // 현재 위치 라벨 (초기엔 사용 안 함)
     private var myLocStyles: LabelStyles? = null
     private var myLocLabel: Label? = null
 
     // ViewModel
     private val vm: UserLocationViewModel by viewModels()
 
-    // Location
+    // Location (나중에 사용할 예정)
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
+        // ✅ 권한 결과와 무관하게 지금은 아무 것도 하지 않음 (시청 기준 유지)
         val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        if (granted) fetchLocationAndQuery() else moveToDefaultThenQuery()
+        Log.d("Permission", "location granted=$granted (but keeping City Hall view)")
     }
 
-    // 기본 위치(서울 시청 근처)
+    // 기본 위치(서울 시청)
     private val DEFAULT_LATITUDE = 37.5662952
     private val DEFAULT_LONGITUDE = 126.9779451
     private val DEFAULT_ZOOM = 15
@@ -78,7 +79,7 @@ class UserLocationFragment :
         }
     }
 
-    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = binding.userLocationMapView
 
@@ -92,18 +93,19 @@ class UserLocationFragment :
                     kakaoMap = map
                     mapReady = true
 
-                    // 현재 위치 아이콘 스타일 준비 (ic_present_location 벡터 사용)
+                    // 현재 위치 아이콘 스타일(나중에 사용할 예정)
                     val locBmp = vectorToBitmap(R.drawable.ic_present_location, 24)
                     val myLocStyle = LabelStyle.from(locBmp).setAnchorPoint(0.5f, 1.0f)
                     myLocStyles = map.labelManager?.addLabelStyles(LabelStyles.from(myLocStyle))
 
-                    // 카메라 이동 종료 시 현재 뷰포인트로 재조회
-                    map.setOnCameraMoveEndListener { _, _, _ ->
-                        requestNearbyFromCurrentViewport()
-                    }
+                    // 카메라 이동 종료 시 현재 뷰포인트 재조회
+                    map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
 
-                    // 권한/현재위치 흐름 시작
-                    checkPermissionAndRun()
+                    // ✅ 항상 서울시청 기준으로 먼저 이동/조회
+                    moveToDefaultThenQuery()
+
+                    // 권한 요청은 하되, 지금은 현재 위치로 이동/표시는 안 함
+                    requestLocationPermissionsIfNeeded()
                 }
             }
         )
@@ -135,14 +137,19 @@ class UserLocationFragment :
     override fun onPause() { super.onPause(); if (::mapView.isInitialized) mapView.pause() }
     override fun onDestroyView() { super.onDestroyView(); if (::mapView.isInitialized) mapView.removeAllViews() }
 
-    // ===== Permission & location =====
-    private fun checkPermissionAndRun() {
+    // ===== Permission (요청만; 현재 위치 이동/표시는 하지 않음) =====
+    private fun requestLocationPermissionsIfNeeded() {
         val fine = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         val coarse = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        if (fine || coarse) fetchLocationAndQuery()
-        else permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+        if (!fine && !coarse) {
+            permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+        } else {
+            Log.d("Permission", "already granted (keeping City Hall view)")
+            // 나중에 현재 위치로 바꿀 때 fetchLocationAndQuery() 호출 예정
+        }
     }
 
+    // ===== 현재 위치로 바꾸는 함수(지금은 호출 안 함) =====
     @SuppressLint("MissingPermission")
     private fun fetchLocationAndQuery() {
         fused.lastLocation
@@ -157,29 +164,29 @@ class UserLocationFragment :
                             if (cur != null) {
                                 moveCameraAndQuery(cur.latitude, cur.longitude)
                                 showCurrentLocation(cur.latitude, cur.longitude)
-                            } else moveToDefaultThenQuery()
+                            }
                         }
                         .addOnFailureListener {
                             Log.e("Location", "getCurrentLocation failed", it)
-                            moveToDefaultThenQuery()
                         }
                 }
             }
             .addOnFailureListener {
                 Log.e("Location", "lastLocation failed", it)
-                moveToDefaultThenQuery()
             }
     }
 
     private fun moveCameraAndQuery(lat: Double, lng: Double) {
         if (!mapReady || kakaoMap == null) return
-        kakaoMap?.moveCamera(CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM))
+        kakaoMap?.moveCamera(
+            CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
+        )
         requestNearbyFromCurrentViewport()
     }
 
     private fun moveToDefaultThenQuery() {
+        // ✅ 기본: 서울시청으로만 이동/조회 (현재 위치 마커는 표시하지 않음)
         moveCameraAndQuery(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
-        showCurrentLocation(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     }
 
     private fun requestNearbyFromCurrentViewport() {
@@ -195,7 +202,7 @@ class UserLocationFragment :
         vm.load(query)
     }
 
-    // ===== 현재 위치 라벨 표시 =====
+    // ===== 현재 위치 라벨 표시(지금은 호출 안 함) =====
     private fun showCurrentLocation(lat: Double, lng: Double) {
         if (!mapReady || kakaoMap == null) return
         val styles = myLocStyles ?: return
