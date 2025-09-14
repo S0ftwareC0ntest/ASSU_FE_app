@@ -145,4 +145,7 @@ dependencies {
     // QR 생성
     implementation("com.google.zxing:core:3.5.3")
 
+    // 현재 위치 받아오기
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
 }
