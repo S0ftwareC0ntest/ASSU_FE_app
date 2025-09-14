@@ -2,7 +2,6 @@ package com.example.assu_fe_app.presentation.common.location
 
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
 import com.example.assu_fe_app.data.dto.chatting.request.CreateChatRoomRequestDto
@@ -33,16 +32,18 @@ class LocationItemFragment :
     fun showCapsuleInfo(item: LocationAdminPartnerSearchResultItem) {
         lastItem = item
 
-        binding.tvAdminPartnerLocationAddressDate.text =
-            if (item.isPartnered) item.shopName else item.address
+        binding.tvAdminPartnerLocationShopName.text = item.shopName
 
         if (item.isPartnered) {
             binding.ivAdminPartnerLocationCapsule.visibility = View.VISIBLE
             binding.tvAdminPartnerLocationCapsuleText.visibility = View.VISIBLE
-            binding.tvAdminPartnerLocationCapsuleText.text = item.term
+            binding.tvAdminPartnerLocationAddressDate.text = item.term
+            binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_partner)
         } else {
             binding.ivAdminPartnerLocationCapsule.visibility = View.GONE
             binding.tvAdminPartnerLocationCapsuleText.visibility = View.GONE
+            binding.tvAdminPartnerLocationAddressDate.text = item.address
+            binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_ssu)
         }
 
         binding.tvAdminPartnerLocationContact.text =
@@ -51,20 +52,22 @@ class LocationItemFragment :
         val clicker = View.OnClickListener {
             val current = lastItem ?: return@OnClickListener
             if (!current.isPartnered) {
-                val myId = tokenManager.getUserId()  // 내 ID
-                val otherId = current.id.toLong() // 상대방 ID
-
-                val req = if (role == UserRole.ADMIN) {
-                    // 내가 관리자면 → adminId = 내 ID, partnerId = 상대
-                    CreateChatRoomRequestDto(adminId = myId, partnerId = otherId)
-                } else {
-                    // 내가 파트너면 → partnerId = 내 ID, adminId = 상대
-                    CreateChatRoomRequestDto(adminId = otherId, partnerId = myId)
+                val req = when (role) {
+                    UserRole.ADMIN -> {
+                        val storeId = current.storeId                ?: return@OnClickListener
+                        val partnerId = tokenManager.getUserId()     ?: return@OnClickListener
+                        CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId)
+                    }
+                    UserRole.PARTNER -> {
+                        val storeId = tokenManager.getUserId()      ?: return@OnClickListener
+                        val partnerId = current.id.toLongOrNull()    ?: return@OnClickListener
+                        CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId)
+                    }
+                    else -> return@OnClickListener
                 }
-
                 chatVm.createRoom(req)
             } else {
-                // TODO: 제휴 계약서 보기 동작 연결
+                // 제휴 계약서 보기 동작
             }
         }
 

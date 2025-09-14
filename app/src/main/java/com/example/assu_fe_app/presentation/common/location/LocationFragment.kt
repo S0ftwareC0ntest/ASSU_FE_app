@@ -1,7 +1,5 @@
 package com.example.assu_fe_app.presentation.common.location
 
-import android.Manifest
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -25,7 +23,6 @@ import com.example.assu_fe_app.databinding.FragmentLoactionBinding
 import com.example.assu_fe_app.domain.model.location.AdminOnMap
 import com.example.assu_fe_app.domain.model.location.PartnerOnMap
 import com.example.assu_fe_app.presentation.base.BaseFragment
-import com.example.assu_fe_app.presentation.common.chatting.ChattingActivity
 import com.example.assu_fe_app.presentation.common.location.adapter.AdminPartnerLocationAdapter
 import com.example.assu_fe_app.presentation.common.location.adapter.LocationSharedViewModel
 import com.example.assu_fe_app.ui.chatting.ChattingViewModel
@@ -52,6 +49,7 @@ class LocationFragment :
 
     private lateinit var mapView: MapView
     private lateinit var kakaoMap: KakaoMap
+    private var mapReady = false
 
     @Inject lateinit var tokenManager: TokenManager
 
@@ -59,37 +57,22 @@ class LocationFragment :
     private var partnerStyles: LabelStyles? = null
     private var adminStyles: LabelStyles? = null
 
-    // 라벨 ↔ 데이터 매핑
     private val labelToPartner = mutableMapOf<Label, PartnerOnMap>()
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
 
-    // 채팅
     private val chatVm: ChattingViewModel by viewModels()
-
-    // 위치 + 목록 조회 (Admin/Partner 공용)
     private val vm: AdminPartnerLocationViewModel by viewModels()
 
     private val role: UserRole by lazy {
         // tokenManager.getUserRoleEnum() ?: UserRole.ADMIN
-        UserRole.PARTNER // 테스트 강제
+        UserRole.ADMIN // 테스트 강제
     }
 
-    // 위치 권한 (현재는 테스트용으로 주석 흐름 유지)
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { r ->
-        val granted = r[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                r[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        if (granted) {
-            // fetchLocationAndQuery()
-            moveToDefaultThenQuery()
-        } else {
-            moveToDefaultThenQuery()
-        }
-    }
+    ) { _ -> moveToDefaultThenQuery() }
 
-    // 기본 카메라(서울 시청 근처)
     private val DEFAULT_LATITUDE = 37.5662952
     private val DEFAULT_LONGITUDE = 126.9779451
     private val DEFAULT_ZOOM = 17
@@ -98,6 +81,20 @@ class LocationFragment :
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
         binding.ivLocationSearchIc.setOnClickListener { navigateToSearch() }
         binding.tvLocationHint.setOnClickListener { navigateToSearch() }
+
+        // 캡슐 전체 클릭 시 (기존 로직 유지)
+        binding.fvLocationItem.setOnClickListener {
+            val item = currentItem ?: return@setOnClickListener
+            val storeId = 1L
+            val partnerId = 5L
+            val entryMessage = if (item.isPartnered) {
+                "'제휴 계약서 보기' 버튼을 통해 이동했습니다."
+            } else {
+                "'문의하기' 버튼을 통해 이동했습니다.이거야?"
+            }
+            chatVm.createRoom(CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId))
+            binding.root.tag = entryMessage
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,14 +109,17 @@ class LocationFragment :
             object : KakaoMapReadyCallback() {
                 override fun onMapReady(map: KakaoMap) {
                     kakaoMap = map
+                    mapReady = true
 
-                    // 라벨 클릭 리스너
-                    kakaoMap.setOnLabelClickListener { _, _, label ->
-                        handleLabelClick(label)
-                        true
-                    }
+                    // 클릭 리스너
+                    kakaoMap.setOnLabelClickListener(object : KakaoMap.OnLabelClickListener {
+                        override fun onLabelClicked(map: KakaoMap, layer: LabelLayer, label: Label): Boolean {
+                            handleLabelClick(label)
+                            return true
+                        }
+                    })
 
-                    // 마커 스타일 준비
+                    // 마커 스타일 (벡터 → 비트맵, 크기 24dp)
                     val partnerBmp = vectorToBitmap(R.drawable.ic_marker, 24)
                     partnerStyles = kakaoMap.labelManager?.addLabelStyles(
                         LabelStyles.from(LabelStyle.from(partnerBmp).setAnchorPoint(0.5f, 1.0f))
@@ -132,6 +132,25 @@ class LocationFragment :
                     poiLayer = kakaoMap.labelManager?.layer
 
                     kakaoMap.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            vm.state.collect { s ->
+                                when (s) {
+                                    is AdminPartnerLocationViewModel.UiState.Idle -> Unit
+                                    is AdminPartnerLocationViewModel.UiState.Loading -> Log.d("UIState", "Loading…")
+                                    is AdminPartnerLocationViewModel.UiState.PartnerSuccess -> drawMarkersPartners(s.items)
+                                    is AdminPartnerLocationViewModel.UiState.AdminSuccess -> drawMarkersAdmins(s.items)
+                                    is AdminPartnerLocationViewModel.UiState.Fail ->
+                                        Log.e("UIState", "Fail: ${s.code}, ${s.message}")
+                                    is AdminPartnerLocationViewModel.UiState.Error ->
+                                        Log.e("UIState", "Error", s.t)
+                                }
+                            }
+                        }
+                    }
+
+                    moveToDefaultThenQuery()
 
                     moveToDefaultThenQuery()
                 }
@@ -147,7 +166,7 @@ class LocationFragment :
                         is ChattingViewModel.CreateRoomUiState.Loading -> setCreateLoading(true)
                         is ChattingViewModel.CreateRoomUiState.Success -> {
                             setCreateLoading(false)
-                            val intent = Intent(requireContext(), ChattingActivity::class.java).apply {
+                            val intent = android.content.Intent(requireContext(), com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java).apply {
                                 putExtra("roomId", state.data.roomId)
                                 (binding.root.tag as? String)?.let { putExtra("entryMessage", it) }
                             }
@@ -170,10 +189,11 @@ class LocationFragment :
             }
         }
 
-        // 목록 상태 수집 + 마커 표시
+        // 목록 상태 수집 + 마커 표시 (지도 준비 안됐으면 스킵)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.state.collect { s ->
+                    if (!mapReady) return@collect
                     when (s) {
                         is AdminPartnerLocationViewModel.UiState.Idle -> Unit
                         is AdminPartnerLocationViewModel.UiState.Loading -> Log.d("UIState", "Loading…")
@@ -199,7 +219,7 @@ class LocationFragment :
     }
 
     private fun navigateToSearch() {
-        startActivity(Intent(requireContext(), LocationSearchActivity::class.java))
+        startActivity(android.content.Intent(requireContext(), LocationSearchActivity::class.java))
     }
 
     private fun setCreateLoading(loading: Boolean) {
@@ -208,7 +228,7 @@ class LocationFragment :
 
     // ===== 카메라 이동 & 조회 =====
     private fun moveCameraAndQuery(lat: Double, lng: Double) {
-        if (!::kakaoMap.isInitialized) return
+        if (!mapReady) return
         kakaoMap.moveCamera(
             CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
         )
@@ -220,7 +240,7 @@ class LocationFragment :
     }
 
     private fun requestNearbyFromCurrentViewport() {
-        if (!::kakaoMap.isInitialized || mapView.width == 0 || mapView.height == 0) return
+        if (!mapReady || mapView.width == 0 || mapView.height == 0) return
         val vp = mapView.getViewportCorners(kakaoMap)
         val q = ViewportQuery(
             lng1 = vp.nw.longitude, lat1 = vp.nw.latitude,
@@ -234,6 +254,7 @@ class LocationFragment :
     private fun MapView.getViewportCorners(kakaoMap: KakaoMap): Viewport {
         val w = width
         val h = height
+
         val nw = kakaoMap.fromScreenPoint(0, 0)!!
         val ne = kakaoMap.fromScreenPoint(w, 0)!!
         val se = kakaoMap.fromScreenPoint(w, h)!!
@@ -254,8 +275,9 @@ class LocationFragment :
         val nw: LatLng, val ne: LatLng, val se: LatLng, val sw: LatLng
     )
 
-    // ===== 파트너 마커 찍기 (ADMIN에서 보는 목록) =====
+    // ===== 파트너 마커 (ADMIN에서 보는 목록) =====
     private fun drawMarkersPartners(items: List<PartnerOnMap>) {
+        if (!mapReady) return
         val layer = poiLayer ?: kakaoMap.labelManager?.layer ?: return
         val styles = partnerStyles ?: return
 
@@ -272,8 +294,9 @@ class LocationFragment :
         }
     }
 
-    // ===== 관리자(기관) 마커 찍기 (PARTNER에서 보는 목록) =====
+    // ===== 관리자(기관) 마커 (PARTNER에서 보는 목록) =====
     private fun drawMarkersAdmins(items: List<AdminOnMap>) {
+        if (!mapReady) return
         val layer = poiLayer ?: kakaoMap.labelManager?.layer ?: return
         val styles = adminStyles ?: return
 
@@ -290,48 +313,47 @@ class LocationFragment :
         }
     }
 
-    // ===== 라벨 클릭 처리 =====
+    // ===== 라벨 클릭 → 아래 캡슐 띄우기 =====
     private fun handleLabelClick(label: Label) {
-        // Partner 마커
         labelToPartner[label]?.let { p ->
-            val item = LocationAdminPartnerSearchResultItem(
-                shopName    = p.name,
-                address     = p.address ?: "",
-                isPartnered = p.partnered,
-                term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
-                    "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
-                id          = p.partnerId.toString(),
-                paperId     = p.partnerId
+            showCapsule(
+                LocationAdminPartnerSearchResultItem(
+                    shopName    = p.name,
+                    address     = p.address ?: "",
+                    isPartnered = p.partnered,
+                    term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
+                        "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
+                    id          = p.partnerId.toString(),
+                    paperId     = p.partnerId,
+                    storeId = p.partnerId
+                )
             )
-            showCapsule(item)
             return
         }
-
-        // Admin 마커
         labelToAdmin[label]?.let { a ->
             val item = LocationAdminPartnerSearchResultItem(
-                shopName    = a.name,
-                address     = a.address ?: "",
+                shopName = a.name,
+                address = a.address ?: "",
                 isPartnered = a.partnered,
-                term        = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
+                term = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
                     "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
-                id          = a.adminId.toString(),
-                paperId     = a.adminId
+                id = a.adminId.toString(),
+                paperId = a.adminId,
+                storeId = a.adminId
             )
-            showCapsule(item)
-            return
+            showCapsule(item); return
         }
     }
 
-    // ===== 캡슐 프래그먼트 표시 =====
     private fun showCapsule(item: LocationAdminPartnerSearchResultItem) {
         val frag = childFragmentManager.findFragmentById(R.id.fv_location_item) as? LocationItemFragment
             ?: LocationItemFragment().also {
-                childFragmentManager.beginTransaction()
+                childFragmentManager
+                    .beginTransaction()
                     .replace(R.id.fv_location_item, it)
                     .commitNowAllowingStateLoss()
             }
-
+        currentItem = item
         frag.showCapsuleInfo(item)
         binding.fvLocationItem.apply {
             visibility = View.VISIBLE
@@ -341,16 +363,11 @@ class LocationFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
+        mapReady = false
         if (::mapView.isInitialized) mapView.removeAllViews()
     }
-    override fun onResume() {
-        super.onResume()
-        if (::mapView.isInitialized) mapView.resume()
-    }
-    override fun onPause() {
-        super.onPause()
-        if (::mapView.isInitialized) mapView.pause()
-    }
+    override fun onResume() { super.onResume(); if (::mapView.isInitialized) mapView.resume() }
+    override fun onPause() { super.onPause(); if (::mapView.isInitialized) mapView.pause() }
 
     // ===== 벡터 → 비트맵 =====
     private fun vectorToBitmap(resId: Int, targetDp: Int): Bitmap {

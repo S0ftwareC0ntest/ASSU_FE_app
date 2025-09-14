@@ -16,7 +16,7 @@ import retrofit2.http.Path
 
 interface ChattingService {
     // 채팅방 생성 api
-    @POST("chat/create/rooms")
+    @POST("chat/rooms")
     suspend fun createChatRoom(
         @Body request: CreateChatRoomRequestDto
     ): BaseResponse<CreateChatRoomResponseDto>
