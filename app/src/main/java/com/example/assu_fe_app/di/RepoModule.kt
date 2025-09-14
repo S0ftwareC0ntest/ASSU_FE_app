@@ -7,10 +7,12 @@ import com.example.assu_fe_app.data.repository.auth.AuthRepository
 import com.example.assu_fe_app.data.repository.chatting.ChattingRepository
 import com.example.assu_fe_app.data.repositoryImpl.chatting.ChattingRepositoryImpl
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
+import com.example.assu_fe_app.data.repository.location.LocationRepository
 import com.example.assu_fe_app.data.repository.notification.NotificationRepository
 import com.example.assu_fe_app.data.repository.suggestion.SuggestionRepository
 import com.example.assu_fe_app.data.repositoryImpl.AuthRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.deviceToken.DeviceTokenRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.location.LocationRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.notification.NotificationRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.suggestion.SuggestionRepositoryImpl
 import dagger.Binds
@@ -53,4 +55,9 @@ abstract class RepoModule {
     abstract fun bindSuggestionRepository(
         impl: SuggestionRepositoryImpl
     ): SuggestionRepository
+
+    @Binds @Singleton
+    abstract fun bindLocationRepository(
+        impl: LocationRepositoryImpl
+    ): LocationRepository
 }

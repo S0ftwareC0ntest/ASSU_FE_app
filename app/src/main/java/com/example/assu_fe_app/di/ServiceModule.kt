@@ -5,6 +5,7 @@ import com.example.assu_fe_app.data.BearerInterceptor
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.data.service.chatting.ChattingService
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
+import com.example.assu_fe_app.data.service.location.LocationService
 import com.example.assu_fe_app.data.service.notification.NotificationService
 import com.example.assu_fe_app.data.service.suggestion.SuggestionService
 import com.squareup.moshi.Moshi
@@ -111,4 +112,9 @@ object ServiceModule {
     @Singleton
     fun provideSuggestionService(@Auth retrofit: Retrofit): SuggestionService =
         retrofit.create(SuggestionService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLocationService(@Auth retrofit: Retrofit): LocationService =
+        retrofit.create(LocationService::class.java)
 }
