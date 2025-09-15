@@ -6,11 +6,12 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentUserHomeBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.data.manager.TokenManager
+import dagger.hilt.android.AndroidEntryPoint
 
 
 private lateinit var tokenManager: TokenManager
 
-
+@AndroidEntryPoint
 class UserHomeFragment :
     BaseFragment<FragmentUserHomeBinding>(R.layout.fragment_user_home){
     override fun initObserver() {
