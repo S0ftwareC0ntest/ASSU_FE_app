@@ -93,11 +93,13 @@ object ServiceModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideChattingService(@Auth retrofit: Retrofit): ChattingService =
         retrofit.create(ChattingService::class.java)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideAuthService(@NoAuth retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
