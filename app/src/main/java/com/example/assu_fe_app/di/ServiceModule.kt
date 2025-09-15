@@ -2,11 +2,13 @@ package com.example.assu_fe_app.di
 
 import com.example.assu_fe_app.BuildConfig
 import com.example.assu_fe_app.data.BearerInterceptor
+import com.example.assu_fe_app.data.dto.converter.LocalDateAdapter
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.data.service.chatting.ChattingService
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
 import com.example.assu_fe_app.data.service.inquiry.InquiryService
 import com.example.assu_fe_app.data.service.notification.NotificationService
+import com.example.assu_fe_app.data.service.partnership.PartnershipService
 import com.example.assu_fe_app.data.service.suggestion.SuggestionService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -71,6 +73,7 @@ object ServiceModule {
     @Provides @Singleton
     fun provideMoshi(): Moshi =
         Moshi.Builder()
+            .add(LocalDateAdapter)
             .add(KotlinJsonAdapterFactory())  // ← 추가
             .build()
 
@@ -117,4 +120,10 @@ object ServiceModule {
     @Singleton
     fun provideInquiryService(@Auth retrofit: Retrofit): InquiryService =
         retrofit.create(InquiryService::class.java)
+
+    @Provides
+    @Singleton
+    fun providePartnershipService(@Auth retrofit: Retrofit): PartnershipService =
+        retrofit.create(PartnershipService::class.java)
+
 }
