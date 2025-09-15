@@ -30,9 +30,8 @@ android {
 
     buildTypes {
         debug {
-//            buildConfigField("String", "BASE_URL", "\"https://assu.shop/\"") // 에뮬레이터 → PC 로컬
+            buildConfigField("String", "BASE_URL", "\"https://assu.shop/\"") // 에뮬레이터 → PC 로컬
             // PC 로컬 서버 (예: localhost:8080)
-            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
             buildConfigField("String", "DEV_BEARER", "\"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoUmVhbG0iOiJDT01NT04iLCJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjksInVzZXJuYW1lIjoiandhZG1pbnRlc3RAZXhhbXBsZS5jb20iLCJqdGkiOiI3NzA0NGUwOC02NjkwLTQ3MDQtOTg3ZS00OTQ4N2MwMGYzZGEiLCJpYXQiOjE3NTc4NDYxMTAsImV4cCI6MTc1Nzg0OTcxMH0.XavkGnCZGAu7QaysLGOWkXUZ7wF1qqMibQBCwvuJamk\"") // 🔴 임시
 
         }

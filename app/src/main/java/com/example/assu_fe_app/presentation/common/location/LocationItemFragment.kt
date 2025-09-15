@@ -13,6 +13,7 @@ import com.example.assu_fe_app.ui.chatting.ChattingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+// LocationItemFragment.kt
 @AndroidEntryPoint
 class LocationItemFragment :
     BaseFragment<ItemLocationBinding>(R.layout.item_location) {
@@ -54,24 +55,64 @@ class LocationItemFragment :
             if (!current.isPartnered) {
                 val req = when (role) {
                     UserRole.ADMIN -> {
-                        val storeId = current.storeId                ?: return@OnClickListener
-                        val partnerId = tokenManager.getUserId()     ?: return@OnClickListener
-                        CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId)
+                        // ADMIN: adminId = 내 ID, partnerId = 상대(파트너) ID
+                        val adminId   = tokenManager.getUserId()            ?: return@OnClickListener
+                        val partnerId = current.id.toLongOrNull()           ?: return@OnClickListener
+                        CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     UserRole.PARTNER -> {
-                        val storeId = tokenManager.getUserId()      ?: return@OnClickListener
-                        val partnerId = current.id.toLongOrNull()    ?: return@OnClickListener
-                        CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId)
+                        // PARTNER: adminId = 상대(관리자) ID, partnerId = 내 ID
+                        val adminId   = current.id.toLongOrNull()           ?: return@OnClickListener
+                        val partnerId = tokenManager.getUserId()            ?: return@OnClickListener
+                        CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     else -> return@OnClickListener
                 }
                 chatVm.createRoom(req)
             } else {
-                // 제휴 계약서 보기 동작
+                // 제휴 계약서 보기
+                openContractDialog(current)
             }
         }
 
         binding.ivAdminPartnerLocationContact.setOnClickListener(clicker)
         binding.tvAdminPartnerLocationContact.setOnClickListener(clicker)
+    }
+
+    /**
+     * 제휴 계약서 다이얼로그 오픈
+     * - 현재 캡슐의 정보로 기본 ContractData를 만들어 다이얼로그에 전달
+     * - 추후 API 연동 시, 여기서 비동기 호출로 실제 데이터를 받아서 넘기면 됨
+     */
+    private fun openContractDialog(item: LocationAdminPartnerSearchResultItem) {
+        // term: "YYYY-MM-DD ~ YYYY-MM-DD" 형태 가정
+        val (start, end) = parseTerm(item.term)
+
+        val data = com.example.assu_fe_app.data.dto.partnership.PartnershipContractData(
+            partnerName = item.shopName,              // 파트너명: 현재 카드 상호명으로 대체
+            adminName = "관리자",                       // 필요 시 서버데이터로 교체
+            periodStart = start,
+            periodEnd = end,
+            options = emptyList()                     // 옵션은 API 연동 뒤 실제 값으로 대체
+        )
+
+        val dialog = com.example.assu_fe_app.presentation.common.contract
+            .PartnershipContractDialogFragment
+            .newInstance(data)
+
+        // LocationItemFragment는 child로 붙어 있으므로 activity 혹은 parentFragmentManager 사용
+        dialog.show(parentFragmentManager, "PartnershipContractDialog")
+    }
+
+    private fun parseTerm(term: String?): Pair<String?, String?> {
+        if (term.isNullOrBlank()) return null to null
+        // "2025-09-14 ~ 2025-11-14" 형태 분해
+        return term.split("~")
+            .map { it.trim() }
+            .let { parts ->
+                val start = parts.getOrNull(0)
+                val end = parts.getOrNull(1)
+                start to end
+            }
     }
 }

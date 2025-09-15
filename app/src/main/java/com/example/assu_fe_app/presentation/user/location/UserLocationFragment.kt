@@ -101,7 +101,7 @@ class UserLocationFragment :
                     // 카메라 이동 종료 시 현재 뷰포인트 재조회
                     map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
 
-                    // ✅ 항상 서울시청 기준으로 먼저 이동/조회
+                    // 항상 서울시청 기준으로 먼저 이동/조회
                     moveToDefaultThenQuery()
 
                     // 권한 요청은 하되, 지금은 현재 위치로 이동/표시는 안 함

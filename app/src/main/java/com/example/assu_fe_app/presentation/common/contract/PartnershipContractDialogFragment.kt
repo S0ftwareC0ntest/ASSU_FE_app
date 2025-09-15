@@ -10,6 +10,7 @@ import com.example.assu_fe_app.data.dto.partnership.PartnershipContractData
 import com.example.assu_fe_app.databinding.FragmentPartnershipContentBinding
 import com.example.assu_fe_app.presentation.common.contract.adapter.PartnershipContractAdapter
 
+// 계약서
 class PartnershipContractDialogFragment() : DialogFragment( ) {
 
     private var _binding: FragmentPartnershipContentBinding? = null

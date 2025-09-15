@@ -60,12 +60,12 @@ class LocationFragment :
     private val labelToPartner = mutableMapOf<Label, PartnerOnMap>()
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
 
-    private val chatVm: ChattingViewModel by viewModels()
+    private val chatVm: ChattingViewModel by activityViewModels()
     private val vm: AdminPartnerLocationViewModel by viewModels()
 
     private val role: UserRole by lazy {
         // tokenManager.getUserRoleEnum() ?: UserRole.ADMIN
-        UserRole.ADMIN // 테스트 강제
+        UserRole.PARTNER // 테스트 강제
     }
 
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
@@ -81,20 +81,6 @@ class LocationFragment :
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
         binding.ivLocationSearchIc.setOnClickListener { navigateToSearch() }
         binding.tvLocationHint.setOnClickListener { navigateToSearch() }
-
-        // 캡슐 전체 클릭 시 (기존 로직 유지)
-        binding.fvLocationItem.setOnClickListener {
-            val item = currentItem ?: return@setOnClickListener
-            val storeId = 1L
-            val partnerId = 5L
-            val entryMessage = if (item.isPartnered) {
-                "'제휴 계약서 보기' 버튼을 통해 이동했습니다."
-            } else {
-                "'문의하기' 버튼을 통해 이동했습니다.이거야?"
-            }
-            chatVm.createRoom(CreateChatRoomRequestDto(storeId = storeId, partnerId = partnerId))
-            binding.root.tag = entryMessage
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -149,8 +135,6 @@ class LocationFragment :
                             }
                         }
                     }
-
-                    moveToDefaultThenQuery()
 
                     moveToDefaultThenQuery()
                 }
@@ -210,11 +194,74 @@ class LocationFragment :
     }
 
     override fun initObserver() {
+        // 1) 지도 아래 캡슐 초기 데이터 바인딩 (첫 번째 아이템)
         sharedViewModel.locationList.observe(viewLifecycleOwner) { list ->
-            val item = list.getOrNull(1) ?: return@observe
+            val item = list.getOrNull(0) ?: return@observe
             currentItem = item
-            val fragment = childFragmentManager.findFragmentById(R.id.fv_location_item) as? LocationItemFragment
+            val fragment = childFragmentManager
+                .findFragmentById(R.id.fv_location_item) as? LocationItemFragment
             fragment?.showCapsuleInfo(item)
+        }
+
+        // 2) 채팅방 생성 상태 수집 → 성공 시 ChattingActivity 이동
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                chatVm.createRoomState.collect { state ->
+                    when (state) {
+                        is ChattingViewModel.CreateRoomUiState.Idle -> {
+                            setCreateLoading(false)
+                        }
+                        is ChattingViewModel.CreateRoomUiState.Loading -> {
+                            setCreateLoading(true)
+                        }
+                        is ChattingViewModel.CreateRoomUiState.Success -> {
+                            setCreateLoading(false)
+
+                            Log.d("CreateRoom", "roomId=${state.data.roomId}, adminView=${state.data.adminViewName}, partnerView=${state.data.partnerViewName}")
+
+                            // 서버 응답: roomId, adminViewName, partnerViewName 사용
+                            val roomId = state.data.roomId
+                            // TODO: 거꾸로 되어있는 것 같음 
+                            val displayName = if (role == UserRole.ADMIN) {
+                                state.data.adminViewName
+                            } else {
+                                state.data.partnerViewName
+                            }
+
+                            val intent = android.content.Intent(
+                                requireContext(),
+                                com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java
+                            ).apply {
+                                putExtra("roomId", roomId)
+                                putExtra("opponentName", displayName)
+                                // 캡슐 클릭 시 넣어둔 안내 메시지 (optional)
+                                (binding.root.tag as? String)?.let { putExtra("entryMessage", it) }
+                            }
+                            startActivity(intent)
+
+                            chatVm.resetCreateState()
+                        }
+                        is ChattingViewModel.CreateRoomUiState.Fail -> {
+                            setCreateLoading(false)
+                            android.widget.Toast.makeText(
+                                requireContext(),
+                                "채팅방 생성 실패(${state.code}) ${state.message ?: ""}",
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                            chatVm.resetCreateState()
+                        }
+                        is ChattingViewModel.CreateRoomUiState.Error -> {
+                            setCreateLoading(false)
+                            android.widget.Toast.makeText(
+                                requireContext(),
+                                "오류: ${state.message}",
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                            chatVm.resetCreateState()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -315,33 +362,42 @@ class LocationFragment :
 
     // ===== 라벨 클릭 → 아래 캡슐 띄우기 =====
     private fun handleLabelClick(label: Label) {
-        labelToPartner[label]?.let { p ->
-            showCapsule(
-                LocationAdminPartnerSearchResultItem(
-                    shopName    = p.name,
-                    address     = p.address ?: "",
-                    isPartnered = p.partnered,
-                    term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
-                        "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
-                    id          = p.partnerId.toString(),
-                    paperId     = p.partnerId,
-                    storeId = p.partnerId
+        when (role) {
+            UserRole.ADMIN -> {
+                // ADMIN은 파트너 마커만 유효
+                val p = labelToPartner[label] ?: return
+                showCapsule(
+                    LocationAdminPartnerSearchResultItem(
+                        shopName    = p.name,
+                        address     = p.address ?: "",
+                        isPartnered = p.partnered,
+                        term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
+                            "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
+                        id          = p.partnerId.toString(), // 상대(파트너) 사용자 ID
+                        paperId     = p.partnerId,
+                        storeId     = p.partnerId
+                    )
                 )
-            )
-            return
-        }
-        labelToAdmin[label]?.let { a ->
-            val item = LocationAdminPartnerSearchResultItem(
-                shopName = a.name,
-                address = a.address ?: "",
-                isPartnered = a.partnered,
-                term = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
-                    "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
-                id = a.adminId.toString(),
-                paperId = a.adminId,
-                storeId = a.adminId
-            )
-            showCapsule(item); return
+            }
+
+            UserRole.PARTNER -> {
+                // PARTNER는 관리자 마커만 유효
+                val a = labelToAdmin[label] ?: return
+                showCapsule(
+                    LocationAdminPartnerSearchResultItem(
+                        shopName    = a.name,
+                        address     = a.address ?: "",
+                        isPartnered = a.partnered,
+                        term        = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
+                            "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
+                        id          = a.adminId.toString(), // 상대(관리자) 사용자 ID
+                        paperId     = a.adminId,
+                        storeId     = a.adminId
+                    )
+                )
+            }
+
+            else -> return
         }
     }
 

@@ -15,7 +15,6 @@ import androidx.navigation.Navigation
 import com.example.assu_fe_app.presentation.common.contract.PartnershipContractDialogFragment
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.chatting.request.CreateChatRoomRequestDto
-import com.example.assu_fe_app.data.dto.partner_admin.home.PartnershipContractItem
 import com.example.assu_fe_app.data.dto.partnership.response.CriterionType
 import com.example.assu_fe_app.data.dto.partnership.response.OptionType
 import com.example.assu_fe_app.data.manager.TokenManager
@@ -217,7 +216,7 @@ class PartnerHomeFragment :
         binding.viewPartnerHomeCardBg.setOnClickListener {
             val req = CreateChatRoomRequestDto(
                 //TODO : 유저 정보 받아오기
-                storeId = 1L,
+                adminId = 1L,
                 partnerId = 5L
             )
             chattingViewModel.createRoom(req)
