@@ -247,7 +247,7 @@
 
                     <!-- 매장 이름 -->
                     <TextView
-                        android:id="@+id/tv_market_name2"
+                        android:id="@+id/tv_admin_name2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="숭실대학교 IT대학 학생회"
@@ -271,7 +271,7 @@
                         android:textSize="13sp"
                         android:fontFamily="@font/pretendard_medium"
                         android:includeFontPadding="false"
-                        app:layout_constraintTop_toBottomOf="@id/tv_market_name2"
+                        app:layout_constraintTop_toBottomOf="@id/tv_admin_name2"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <!-- 제휴내용 설명 -->
@@ -384,6 +384,7 @@
                             android:fontFamily="@font/pretendard_regular" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_recommend_inquiry1"
                             android:layout_marginTop="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -453,6 +454,7 @@
                             android:fontFamily="@font/pretendard_regular" />
 
                         <FrameLayout
+                            android:id="@+id/fl_recommend_inquiry2"
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:layout_marginTop="10dp"
@@ -460,6 +462,7 @@
                             android:clickable="true">
 
                             <TextView
+                                android:id="@+id/tv_recommend_inquiry2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
