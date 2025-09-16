@@ -1,7 +1,7 @@
-package com.example.assu_fe_app.data.service.map
+package com.example.assu_fe_app.data.service.location
 
 import com.example.assu_fe_app.data.dto.BaseResponse
-import com.example.assu_fe_app.data.dto.map.SearchPlaceByKakaoDto
+import com.example.assu_fe_app.data.dto.location.response.SearchPlaceByKakaoDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

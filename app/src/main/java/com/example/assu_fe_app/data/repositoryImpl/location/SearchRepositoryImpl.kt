@@ -1,8 +1,8 @@
-package com.example.assu_fe_app.data.repositoryImpl.map
+package com.example.assu_fe_app.data.repositoryImpl.location
 
-import com.example.assu_fe_app.data.dto.map.SearchPlaceByKakaoDto
-import com.example.assu_fe_app.data.repository.map.SearchRepository
-import com.example.assu_fe_app.data.service.map.SearchLocationService
+import com.example.assu_fe_app.data.dto.location.response.SearchPlaceByKakaoDto
+import com.example.assu_fe_app.data.repository.location.SearchRepository
+import com.example.assu_fe_app.data.service.location.SearchLocationService
 import com.example.assu_fe_app.presentation.common.search.LocationInfo
 import com.example.assu_fe_app.util.RetrofitResult
 import com.example.assu_fe_app.util.apiHandler
@@ -18,8 +18,8 @@ class SearchRepositoryImpl @Inject constructor(
     ): RetrofitResult<List<LocationInfo>> {
         return try{
             apiHandler(
-                {api.searchPlaceByKaKao(keyword, limit)},
-                {dto ->toLocationInfo(dto) }
+                { api.searchPlaceByKaKao(keyword, limit) },
+                { dto -> toLocationInfo(dto) }
             )
         } catch(e: Exception) {
             RetrofitResult.Error(e)

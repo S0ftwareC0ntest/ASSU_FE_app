@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.data.repository.map
+package com.example.assu_fe_app.data.repository.location
 
 import com.example.assu_fe_app.presentation.common.search.LocationInfo
 import com.example.assu_fe_app.util.RetrofitResult

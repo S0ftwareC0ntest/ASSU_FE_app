@@ -14,6 +14,7 @@ import com.example.assu_fe_app.ui.user.UserHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class UserHomeFragment :
     BaseFragment<FragmentUserHomeBinding>(R.layout.fragment_user_home){

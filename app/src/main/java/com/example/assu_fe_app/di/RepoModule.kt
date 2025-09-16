@@ -2,7 +2,6 @@ package com.example.assu_fe_app.di
 
 import com.example.assu_fe_app.data.local.TokenProvider
 import com.example.assu_fe_app.data.local.TokenProviderImpl
-import com.example.assu_fe_app.data.remote.AuthInterceptor
 import com.example.assu_fe_app.data.repository.auth.AuthRepository
 import com.example.assu_fe_app.data.repository.certification.CertificationRepository
 import com.example.assu_fe_app.data.repository.chatting.ChattingRepository
@@ -11,8 +10,7 @@ import com.example.assu_fe_app.data.repository.dashboard.PartnerDashboardReposit
 import com.example.assu_fe_app.data.repositoryImpl.chatting.ChattingRepositoryImpl
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
 import com.example.assu_fe_app.data.repository.location.LocationRepository
-import com.example.assu_fe_app.data.repository.map.MapRepository
-import com.example.assu_fe_app.data.repository.map.SearchRepository
+import com.example.assu_fe_app.data.repository.location.SearchRepository
 import com.example.assu_fe_app.data.repository.review.ReviewRepository
 import com.example.assu_fe_app.data.repository.store.StoreRepository
 import com.example.assu_fe_app.data.repository.usage.UsageRepository
@@ -27,8 +25,7 @@ import com.example.assu_fe_app.data.repository.user.UserHomeRepository
 import com.example.assu_fe_app.data.repositoryImpl.AuthRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.deviceToken.DeviceTokenRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.location.LocationRepositoryImpl
-import com.example.assu_fe_app.data.repositoryImpl.map.MapRepositoryImpl
-import com.example.assu_fe_app.data.repositoryImpl.map.SearchRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.location.SearchRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.store.StoreRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.usage.UsageRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.notification.NotificationRepositoryImpl
@@ -109,17 +106,17 @@ abstract class RepoModule {
     ): SuggestionRepository
 
     @Binds @Singleton
+    abstract fun bindLocationRepository(
+        impl: LocationRepositoryImpl
+    ): LocationRepository
+
+    @Binds @Singleton
     abstract fun bindPartnershipRepository(
         impl: PartnershipRepositoryImpl
     ): PartnershipRepository
 
     @Binds @Singleton
-    abstract fun bindMapRepository(
-        impl: MapRepositoryImpl
-    ): MapRepository
-
-    @Binds @Singleton
-    abstract fun bindSearchRespository(
+    abstract fun bindSearchRepository(
         impl: SearchRepositoryImpl
     ): SearchRepository
 
@@ -129,8 +126,4 @@ abstract class RepoModule {
         userHomeRepositoryImpl: UserHomeRepositoryImpl
     ): UserHomeRepository
 
-    @Binds @Singleton
-    abstract fun bindLocationRepository(
-        impl: LocationRepositoryImpl
-    ): LocationRepository
 }

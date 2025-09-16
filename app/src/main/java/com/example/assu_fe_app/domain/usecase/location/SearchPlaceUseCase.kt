@@ -1,6 +1,6 @@
-package com.example.assu_fe_app.domain.usecase.map
+package com.example.assu_fe_app.domain.usecase.location
 
-import com.example.assu_fe_app.data.repository.map.SearchRepository
+import com.example.assu_fe_app.data.repository.location.SearchRepository
 import com.example.assu_fe_app.presentation.common.search.LocationInfo
 import com.example.assu_fe_app.util.RetrofitResult
 import javax.inject.Inject

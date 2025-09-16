@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class StoreMapResponseDto(
-    val storeId: Long,
-    val adminId: Long?,
+    val storeId: Long? = null,
+    val adminId: Long? = null,
     val name: String,
     val address: String?,
     val rate: Double?,

@@ -6,10 +6,10 @@ import kotlin.String
 
 @JsonClass(generateAdapter = true)
 data class AdminMapResponseDto(
-    val adminId: Long,
+    val adminId: Long? = null,
     val name: String,
     val address: String?,
-    val isPartnered: Boolean,
+    val partnered: Boolean,
     val partnershipId: Long?,
     val partnershipStartDate: String?,
     val partnershipEndDate: String?,
@@ -20,7 +20,7 @@ data class AdminMapResponseDto(
         adminId = this.adminId,
         name = this.name,
         address = this.address,
-        isPartnered = this.isPartnered,
+        partnered = this.partnered,
         partnershipId = this.partnershipId,
         partnershipStartDate = this.partnershipStartDate,
         partnershipEndDate = this.partnershipEndDate,

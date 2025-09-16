@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.data.dto.map
+package com.example.assu_fe_app.data.dto.location.response
 
 data class SearchPlaceByKakaoDto(
     val address: String,

@@ -1,4 +1,4 @@
-package com.example.assu_fe_app.domain.model.admin
+package com.example.assu_fe_app.domain.model.partnership
 
 import com.example.assu_fe_app.data.dto.partnership.response.CriterionType
 import com.example.assu_fe_app.data.dto.partnership.response.OptionType
