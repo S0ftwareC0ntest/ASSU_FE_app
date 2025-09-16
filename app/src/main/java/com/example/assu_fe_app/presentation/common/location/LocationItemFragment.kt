@@ -2,6 +2,7 @@ package com.example.assu_fe_app.presentation.common.location
 
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
 import com.example.assu_fe_app.data.dto.chatting.request.CreateChatRoomRequestDto
@@ -9,26 +10,75 @@ import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResul
 import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.ItemLocationBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.presentation.common.contract.PartnershipContractDialogFragment
 import com.example.assu_fe_app.ui.chatting.ChattingViewModel
+import com.example.assu_fe_app.ui.partnership.PartnershipViewModel
+import com.example.assu_fe_app.presentation.common.contract.toContractData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
-// LocationItemFragment.kt
 @AndroidEntryPoint
 class LocationItemFragment :
     BaseFragment<ItemLocationBinding>(R.layout.item_location) {
 
     private val chatVm: ChattingViewModel by activityViewModels()
+    private val partnershipVm: PartnershipViewModel by activityViewModels()
 
     @Inject lateinit var tokenManager: TokenManager
 
     private var lastItem: LocationAdminPartnerSearchResultItem? = null
+    private var pendingPartnershipId: Long? = null
+
     private val role: UserRole by lazy {
         tokenManager.getUserRoleEnum() ?: UserRole.ADMIN
     }
 
-    override fun initObserver() = Unit
     override fun initView() = Unit
+
+    override fun initObserver() {
+        // 제휴 상세 상태 구독: 성공 시 다이얼로그 표시
+        viewLifecycleOwner.lifecycleScope.launch {
+            partnershipVm.getPartnershipDetailUiState.collect { state ->
+                when (state) {
+                    is PartnershipViewModel.PartnershipDetailUiState.Loading -> {
+                        showLoading(true)
+                    }
+                    is PartnershipViewModel.PartnershipDetailUiState.Success -> {
+                        showLoading(false)
+                        val wanted = pendingPartnershipId
+                        if (wanted == null || state.data.partnershipId != wanted) return@collect
+                        pendingPartnershipId = null
+
+                        val current = lastItem
+                        val (fallbackStart, fallbackEnd) = parseTerm(current?.term)
+
+                        val data = state.data.toContractData(
+                            partnerNameFallback = current?.shopName ?: "-",
+                            adminNameFallback   = tokenManager.getUserName() ?: "관리자",
+                            fallbackStart = fallbackStart,
+                            fallbackEnd = fallbackEnd
+                        )
+
+                        PartnershipContractDialogFragment
+                            .newInstance(data)
+                            .show(parentFragmentManager, "PartnershipContractDialog")
+                    }
+                    is PartnershipViewModel.PartnershipDetailUiState.Fail -> {
+                        showLoading(false)
+                        pendingPartnershipId = null
+                        toast(state.message ?: "서버 처리 실패(${state.code})")
+                    }
+                    is PartnershipViewModel.PartnershipDetailUiState.Error -> {
+                        showLoading(false)
+                        pendingPartnershipId = null
+                        toast(state.message)
+                    }
+                    PartnershipViewModel.PartnershipDetailUiState.Idle -> Unit
+                }
+            }
+        }
+    }
 
     fun showCapsuleInfo(item: LocationAdminPartnerSearchResultItem) {
         lastItem = item
@@ -52,26 +102,33 @@ class LocationItemFragment :
 
         val clicker = View.OnClickListener {
             val current = lastItem ?: return@OnClickListener
+
             if (!current.isPartnered) {
+                // 채팅방 생성
                 val req = when (role) {
                     UserRole.ADMIN -> {
-                        // ADMIN: adminId = 내 ID, partnerId = 상대(파트너) ID
-                        val adminId   = tokenManager.getUserId()            ?: return@OnClickListener
-                        val partnerId = current.id.toLongOrNull()           ?: return@OnClickListener
+                        val adminId   = tokenManager.getUserId()  ?: return@OnClickListener
+                        val partnerId = current.id.toLongOrNull() ?: return@OnClickListener
                         CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     UserRole.PARTNER -> {
-                        // PARTNER: adminId = 상대(관리자) ID, partnerId = 내 ID
-                        val adminId   = current.id.toLongOrNull()           ?: return@OnClickListener
-                        val partnerId = tokenManager.getUserId()            ?: return@OnClickListener
+                        val adminId   = current.id.toLongOrNull() ?: return@OnClickListener
+                        val partnerId = tokenManager.getUserId()  ?: return@OnClickListener
                         CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     else -> return@OnClickListener
                 }
                 chatVm.createRoom(req)
             } else {
-                // 제휴 계약서 보기
-                openContractDialog(current)
+                // 제휴 계약서 보기: partnershipId 필요
+                val partnershipId: Long? = current.partnershipId
+                if (partnershipId == null) {
+                    // partnershipId 없으면 카드 정보로 임시 표시
+                    openContractDialogFallback(current)
+                    return@OnClickListener
+                }
+                pendingPartnershipId = partnershipId
+                partnershipVm.getPartnershipDetail(partnershipId)
             }
         }
 
@@ -79,40 +136,33 @@ class LocationItemFragment :
         binding.tvAdminPartnerLocationContact.setOnClickListener(clicker)
     }
 
-    /**
-     * 제휴 계약서 다이얼로그 오픈
-     * - 현재 캡슐의 정보로 기본 ContractData를 만들어 다이얼로그에 전달
-     * - 추후 API 연동 시, 여기서 비동기 호출로 실제 데이터를 받아서 넘기면 됨
-     */
-    private fun openContractDialog(item: LocationAdminPartnerSearchResultItem) {
-        // term: "YYYY-MM-DD ~ YYYY-MM-DD" 형태 가정
+    // partnershipId 없거나 API 실패 시 임시 다이얼로그
+    private fun openContractDialogFallback(item: LocationAdminPartnerSearchResultItem) {
         val (start, end) = parseTerm(item.term)
-
         val data = com.example.assu_fe_app.data.dto.partnership.PartnershipContractData(
-            partnerName = item.shopName,              // 파트너명: 현재 카드 상호명으로 대체
-            adminName = "관리자",                       // 필요 시 서버데이터로 교체
+            partnerName = item.shopName,
+            adminName = "관리자",
+            options = emptyList(),
             periodStart = start,
-            periodEnd = end,
-            options = emptyList()                     // 옵션은 API 연동 뒤 실제 값으로 대체
+            periodEnd = end
         )
 
-        val dialog = com.example.assu_fe_app.presentation.common.contract
-            .PartnershipContractDialogFragment
+        PartnershipContractDialogFragment
             .newInstance(data)
-
-        // LocationItemFragment는 child로 붙어 있으므로 activity 혹은 parentFragmentManager 사용
-        dialog.show(parentFragmentManager, "PartnershipContractDialog")
+            .show(parentFragmentManager, "PartnershipContractDialog")
     }
 
     private fun parseTerm(term: String?): Pair<String?, String?> {
         if (term.isNullOrBlank()) return null to null
-        // "2025-09-14 ~ 2025-11-14" 형태 분해
-        return term.split("~")
-            .map { it.trim() }
-            .let { parts ->
-                val start = parts.getOrNull(0)
-                val end = parts.getOrNull(1)
-                start to end
-            }
+        val parts = term.split("~").map { it.trim() }
+        return parts.getOrNull(0) to parts.getOrNull(1)
+    }
+
+    // 필요 시 프로젝트 공통 유틸과 교체
+    private fun toast(msg: String) {
+        android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show()
+    }
+    private fun showLoading(show: Boolean) {
+        // TODO: ProgressBar 노출/숨김 (프로젝트 공통 로딩 뷰 사용 시 교체)
     }
 }

@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.partner_admin.home.PartnershipContractItem
 import com.example.assu_fe_app.databinding.ItemPartnershipContentListBinding
+import com.example.assu_fe_app.domain.model.partnership.PartnershipOptionModel
+
 
 class PartnershipContractAdapter (
     private val items: List<PartnershipContractItem>

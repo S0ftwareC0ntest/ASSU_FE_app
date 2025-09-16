@@ -222,10 +222,10 @@ class LocationFragment :
                             // 서버 응답: roomId, adminViewName, partnerViewName 사용
                             val roomId = state.data.roomId
                             // TODO: 거꾸로 되어있는 것 같음 
-                            val displayName = if (role == UserRole.ADMIN) {
-                                state.data.adminViewName
-                            } else {
-                                state.data.partnerViewName
+                            val displayName = when (role) {
+                                UserRole.ADMIN   -> state.data.adminViewName
+                                UserRole.PARTNER -> state.data.partnerViewName
+                                else             -> state.data.adminViewName
                             }
 
                             val intent = android.content.Intent(
@@ -374,8 +374,9 @@ class LocationFragment :
                         term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
                             "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
                         id          = p.partnerId.toString(), // 상대(파트너) 사용자 ID
-                        paperId     = p.partnerId,
-                        storeId     = p.partnerId
+                        paperId     = null,
+                        storeId     = p.partnerId,
+                        partnershipId = p.partnershipId
                     )
                 )
             }
@@ -391,8 +392,9 @@ class LocationFragment :
                         term        = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
                             "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
                         id          = a.adminId.toString(), // 상대(관리자) 사용자 ID
-                        paperId     = a.adminId,
-                        storeId     = a.adminId
+                        paperId     = null,
+                        storeId     = a.adminId,
+                        partnershipId = a.partnershipId
                     )
                 )
             }
