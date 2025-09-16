@@ -1,19 +1,14 @@
 package com.example.assu_fe_app.presentation.common.contract
 
+import android.util.Log
 import com.example.assu_fe_app.data.dto.partnership.PartnershipContractData
 import com.example.assu_fe_app.data.dto.partner_admin.home.PartnershipContractItem
-import com.example.assu_fe_app.domain.model.partnership.PartnershipDetailModel
+import com.example.assu_fe_app.data.dto.partnership.response.OptionType
+import com.example.assu_fe_app.data.dto.partnership.response.CriterionType
 import com.example.assu_fe_app.domain.model.partnership.PartnershipOptionModel
+import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsModel
 
-/**
- * Domain -> Dialog 전용 데이터로 변환
- *
- * @param partnerNameFallback 카드/리스트 상호명(서버 필드 없을 때 사용)
- * @param adminNameFallback   관리자명 임시값(실명 필요 시 교체)
- * @param fallbackStart       서버 기간 누락 시 대체 시작일 (YYYY-MM-DD)
- * @param fallbackEnd         서버 기간 누락 시 대체 종료일 (YYYY-MM-DD)
- */
-fun PartnershipDetailModel.toContractData(
+fun ProposalPartnerDetailsModel.toContractData(
     partnerNameFallback: String,
     adminNameFallback: String? = "관리자",
     fallbackStart: String? = null,
@@ -28,49 +23,52 @@ fun PartnershipDetailModel.toContractData(
 
     return PartnershipContractData(
         partnerName = partnerNameFallback,
-        adminName = adminNameFallback ?: "관리자",
-        options = items,
+        adminName   = adminNameFallback ?: "관리자",
+        options     = items,
         periodStart = start,
-        periodEnd = end
+        periodEnd   = end
     )
 }
 
 /**
- * PartnershipOptionModel -> PartnershipContractItem
- *
- * optionType:   "SERVICE" | "DISCOUNT"
- * criterionType:"PEOPLE"  | "PRICE"
+ * PartnershipOptionModel (domain.model.admin) -> PartnershipContractItem
  */
 private fun PartnershipOptionModel.toContractItem(): PartnershipContractItem? {
-    val opt = optionType?.uppercase().orEmpty()
-    val cri = criterionType?.uppercase().orEmpty()
+    Log.d(
+        "OptionDebug",
+        "optionType=$optionType, criterionType=$criterionType, people=$people, cost=$cost, " +
+                "category=$category, discountRate=$discountRate, goods=${goods.map { it.goodsName }}"
+    )
 
-    // goods 이름을 ", "로 연결 (없으면 빈 문자열)
-    val goodsNames = goods.joinToString(", ") { it.name }
+    // goods 우선, 없으면 category 사용
+    val goodsNames = when {
+        goods.isNotEmpty()     -> goods.joinToString(", ") { it.goodsName }
+        category.isNotBlank()  -> category
+        else                   -> ""
+    }
 
-    return when (opt) {
-        "SERVICE" -> when (cri) {
-            "PEOPLE" -> PartnershipContractItem.Service.ByPeople(
-                minPeople = (people ?: 0).coerceAtLeast(0),
-                items = goodsNames
+    return when (optionType) {
+        OptionType.SERVICE -> when (criterionType) {
+            CriterionType.HEADCOUNT -> PartnershipContractItem.Service.ByPeople(
+                minPeople = people.coerceAtLeast(0),
+                items     = goodsNames
             )
-            "PRICE" -> PartnershipContractItem.Service.ByAmount(
-                minAmount = (cost ?: 0).coerceAtLeast(0),
-                items = goodsNames
+            CriterionType.PRICE -> PartnershipContractItem.Service.ByAmount(
+                // ✅ Long -> Int 변환
+                minAmount = cost.toInt().coerceAtLeast(0),
+                items     = goodsNames
             )
-            else -> null
         }
-        "DISCOUNT" -> when (cri) {
-            "PEOPLE" -> PartnershipContractItem.Discount.ByPeople(
-                minPeople = (people ?: 0).coerceAtLeast(0),
-                percent = (discountRate ?: 0).coerceIn(0, 100)
+        OptionType.DISCOUNT -> when (criterionType) {
+            CriterionType.HEADCOUNT -> PartnershipContractItem.Discount.ByPeople(
+                minPeople = people.coerceAtLeast(0),
+                percent   = discountRate.toInt().coerceIn(0, 100)
             )
-            "PRICE" -> PartnershipContractItem.Discount.ByAmount(
-                minAmount = (cost ?: 0).coerceAtLeast(0),
-                percent = (discountRate ?: 0).coerceIn(0, 100)
+            CriterionType.PRICE -> PartnershipContractItem.Discount.ByAmount(
+                // ✅ Long -> Int 변환
+                minAmount = cost.toInt().coerceAtLeast(0),
+                percent   = discountRate.toInt().coerceIn(0, 100)
             )
-            else -> null
         }
-        else -> null
     }
 }

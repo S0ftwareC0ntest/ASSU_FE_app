@@ -1,6 +1,6 @@
 package com.example.assu_fe_app.data.dto.partnership.response
 
-import com.example.assu_fe_app.domain.model.partnership.PartnershipDetailModel
+import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsModel
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -13,7 +13,7 @@ data class WritePartnershipResponseDto(
     val storeId: Long?,
     val options: List<PartnershipOptionResponseDto>?
 ) {
-    fun toModel() = PartnershipDetailModel(
+    fun toModel() = ProposalPartnerDetailsModel(
         partnershipId = partnershipId,
         periodStart = partnershipPeriodStart.orEmpty(),
         periodEnd = partnershipPeriodEnd.orEmpty(),
@@ -23,3 +23,4 @@ data class WritePartnershipResponseDto(
         options = (options ?: emptyList()).map { it.toModel() }
     )
 }
+

@@ -107,13 +107,13 @@ class LocationItemFragment :
                 // 채팅방 생성
                 val req = when (role) {
                     UserRole.ADMIN -> {
-                        val adminId   = tokenManager.getUserId()  ?: return@OnClickListener
-                        val partnerId = current.id.toLongOrNull() ?: return@OnClickListener
+                        val adminId   = tokenManager.getUserId()
+                        val partnerId = current.id
                         CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     UserRole.PARTNER -> {
-                        val adminId   = current.id.toLongOrNull() ?: return@OnClickListener
-                        val partnerId = tokenManager.getUserId()  ?: return@OnClickListener
+                        val adminId   = current.id
+                        val partnerId = tokenManager.getUserId()
                         CreateChatRoomRequestDto(adminId = adminId, partnerId = partnerId)
                     }
                     else -> return@OnClickListener

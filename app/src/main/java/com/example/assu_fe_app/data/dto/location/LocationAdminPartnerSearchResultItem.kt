@@ -7,6 +7,5 @@ data class LocationAdminPartnerSearchResultItem(
     val isPartnered: Boolean,
     val paperId: Long?,
     val term: String?,
-    val storeId: Long? = null,
     val partnershipId: Long? = null
 )

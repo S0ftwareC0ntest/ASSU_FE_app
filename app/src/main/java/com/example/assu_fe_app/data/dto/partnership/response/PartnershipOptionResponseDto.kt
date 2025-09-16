@@ -5,17 +5,17 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PartnershipOptionResponseDto(
-    val optionType: String?,     // enum이면 String 유지
-    val criterionType: String?,  // enum이면 String 유지
+    val optionType: OptionType,     // enum이면 String 유지
+    val criterionType: CriterionType,  // enum이면 String 유지
     val people: Int?,
-    val cost: Int?,
+    val cost: Long?,
     val category: String?,
-    val discountRate: Int?,      // 서버의 discount와 매핑
+    val discountRate: Long?,      // 서버의 discount와 매핑
     val goods: List<GoodsResponseDto>?
 ) {
     fun toModel() = PartnershipOptionModel(
-        optionType = optionType.orEmpty(),
-        criterionType = criterionType.orEmpty(),
+        optionType = optionType,
+        criterionType = criterionType,
         people = people ?: 0,
         cost = cost ?: 0,
         category = category.orEmpty(),

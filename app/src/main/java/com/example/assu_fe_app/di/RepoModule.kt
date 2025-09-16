@@ -9,8 +9,7 @@ import com.example.assu_fe_app.data.repository.chatting.ChattingRepository
 import com.example.assu_fe_app.data.repositoryImpl.chatting.ChattingRepositoryImpl
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
 import com.example.assu_fe_app.data.repository.location.LocationRepository
-import com.example.assu_fe_app.data.repository.map.MapRepository
-import com.example.assu_fe_app.data.repository.map.SearchRepository
+import com.example.assu_fe_app.data.repository.location.SearchRepository
 import com.example.assu_fe_app.data.repository.review.ReviewRepository
 import com.example.assu_fe_app.data.repository.store.StoreRepository
 import com.example.assu_fe_app.data.repository.usage.UsageRepository
@@ -22,7 +21,7 @@ import com.example.assu_fe_app.data.repository.suggestion.SuggestionRepository
 import com.example.assu_fe_app.data.repositoryImpl.AuthRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.deviceToken.DeviceTokenRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.location.LocationRepositoryImpl
-import com.example.assu_fe_app.data.repositoryImpl.map.SearchRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.location.SearchRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.store.StoreRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.usage.UsageRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.notification.NotificationRepositoryImpl

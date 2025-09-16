@@ -4,12 +4,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.assu_fe_app.BuildConfig
 import com.example.assu_fe_app.data.BearerInterceptor
+import com.example.assu_fe_app.data.dto.converter.LocalDateAdapter
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.data.service.certification.CertificationService
 import com.example.assu_fe_app.data.service.chatting.ChattingService
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
-import com.example.assu_fe_app.data.service.map.MapService
-import com.example.assu_fe_app.data.service.map.SearchLocationService
+import com.example.assu_fe_app.data.service.location.SearchLocationService
 import com.example.assu_fe_app.data.service.location.LocationService
 import com.example.assu_fe_app.data.service.notification.NotificationService
 import com.example.assu_fe_app.data.service.review.ReviewService
@@ -18,7 +18,6 @@ import com.example.assu_fe_app.data.service.partnership.PartnershipService
 import com.example.assu_fe_app.data.service.suggestion.SuggestionService
 import com.example.assu_fe_app.data.service.usage.UsageService
 import com.example.assu_fe_app.util.LocalDateMoshiAdapter
-import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

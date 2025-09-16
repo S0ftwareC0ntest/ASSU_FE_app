@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assu_fe_app.domain.model.admin.GetProposalAdminListModel
 import com.example.assu_fe_app.domain.model.admin.GetProposalPartnerListModel
+import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsModel
 import com.example.assu_fe_app.domain.usecase.partnership.GetProposalAdminListUseCase
 import com.example.assu_fe_app.domain.usecase.partnership.GetProposalPartnerListUseCase
 import com.example.assu_fe_app.util.onError
@@ -91,7 +92,7 @@ class PartnershipViewModel @Inject constructor(
         object Idle : PartnershipDetailUiState
         object Loading : PartnershipDetailUiState
         data class Success(
-            val data: com.example.assu_fe_app.domain.model.partnership.PartnershipDetailModel
+            val data: ProposalPartnerDetailsModel
         ) : PartnershipDetailUiState
         data class Fail(val code: Int, val message: String?) : PartnershipDetailUiState
         data class Error(val message: String) : PartnershipDetailUiState

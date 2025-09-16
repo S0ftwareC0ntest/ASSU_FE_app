@@ -19,7 +19,7 @@ class AdminPartnerLocationAdapter :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: LocationAdminPartnerSearchResultItem, isLastItem: Boolean) {
-            binding.tvItemAdminPartnerLocationSearchResultItemShopName.text = item.name
+            binding.tvItemAdminPartnerLocationSearchResultItemShopName.text = item.shopName
 
             if (item.isPartnered) {
                 binding.tvItemAdminPartnerLocationSearchResultItemPartnered.visibility = View.VISIBLE

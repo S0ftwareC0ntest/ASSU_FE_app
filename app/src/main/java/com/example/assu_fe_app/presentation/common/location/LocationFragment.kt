@@ -373,9 +373,8 @@ class LocationFragment :
                         isPartnered = p.partnered,
                         term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
                             "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
-                        id          = p.partnerId.toString(), // 상대(파트너) 사용자 ID
+                        id          = p.partnerId, // 상대(파트너) 사용자 ID
                         paperId     = null,
-                        storeId     = p.partnerId,
                         partnershipId = p.partnershipId
                     )
                 )
@@ -391,9 +390,8 @@ class LocationFragment :
                         isPartnered = a.partnered,
                         term        = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
                             "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
-                        id          = a.adminId.toString(), // 상대(관리자) 사용자 ID
+                        id          = a.adminId, // 상대(관리자) 사용자 ID
                         paperId     = null,
-                        storeId     = a.adminId,
                         partnershipId = a.partnershipId
                     )
                 )

@@ -1,6 +1,6 @@
 package com.example.assu_fe_app.domain.model.partnership
 
-data class PartnershipDetailModel(
+data class ProposalPartnerDetailsModel(
     val partnershipId: Long,
     val periodStart: String,
     val periodEnd: String,
