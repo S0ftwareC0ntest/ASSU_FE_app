@@ -32,7 +32,7 @@ android {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://assu.shop/\"") // 에뮬레이터 → PC 로컬
             buildConfigField("String", "DEV_BEARER", "\"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdXRoUmVhbG0iOiJDT01NT04iLCJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOjExLCJ1c2VybmFtZSI6ImFkbWluQGdtYWlsLmNvbSIsImp0aSI6IjUyNWQzZTY0LWU3MzAtNGE0Yi04NzE4LTkyZDQwNGM0ZTcyNSIsImlhdCI6MTc1NzM0MTI4NSwiZXhwIjoxNzU3MzQ0ODg1fQ.M8RPD-cjpDoD3V83TBO0W72FUhq5wTMn6tZshiAuxY4\"") // 🔴 임시
-
+            buildConfigField("String", "CERTIFICATION_URL", "\"ws://10.0.2.2:8080/ws\"") // TODO 주소 바꿔주세요
         }
         release {
             buildConfigField("String", "BASE_URL", "\"https://assu.shop/\"") // 운영 주소로 교체
@@ -128,6 +128,10 @@ dependencies {
     // 테스트 (서버 목)
     testImplementation("com.squareup.okhttp3:mockwebserver:5.1.0")
 
+    //Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
     // 프로필 사진 처리
     implementation("io.coil-kt:coil:2.4.0")
 
@@ -142,7 +146,11 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.4.6")
     // QR 생성
     implementation("com.google.zxing:core:3.5.3")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
+
+    //Graph (dashboard)
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     // 현재 위치 받아오기
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
