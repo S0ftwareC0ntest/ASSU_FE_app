@@ -24,6 +24,7 @@ class PartnershipViewModel @Inject constructor(
     private val getPartnershipUseCase: com.example.assu_fe_app.domain.usecase.partnership.GetPartnershipUseCase
 ) : ViewModel() {
 
+    // ===== 파트너 제안 리스트 상태 =====
     sealed interface PartnershipPartnerListUiState {
         object Idle : PartnershipPartnerListUiState
         object Loading : PartnershipPartnerListUiState
@@ -56,6 +57,7 @@ class PartnershipViewModel @Inject constructor(
         }
     }
 
+    // ===== 어드민 제안 리스트 상태 =====
     sealed interface PartnershipAdminListUiState {
         object Idle : PartnershipAdminListUiState
         object Loading : PartnershipAdminListUiState

@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PartnerMapResponseDto(
-    @Json(name = "partnerId") val partnerId: Long,
+    @Json(name = "partnerId") val partnerId: Long? = null,
     @Json(name = "name") val name: String,
     @Json(name = "address") val address: String?,
     @Json(name = "partnered") val partnered: Boolean = false,
@@ -18,7 +18,7 @@ data class PartnerMapResponseDto(
 ) {
     fun toModel() = PartnerOnMap(
         partnerId = partnerId,
-        name = name,
+        shopName = name,
         address = address,
         partnered = partnered,
         partnershipId = partnershipId,

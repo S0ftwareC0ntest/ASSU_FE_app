@@ -11,9 +11,9 @@ import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.ItemLocationBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.contract.PartnershipContractDialogFragment
+import com.example.assu_fe_app.presentation.common.contract.toContractData
 import com.example.assu_fe_app.ui.chatting.ChattingViewModel
 import com.example.assu_fe_app.ui.partnership.PartnershipViewModel
-import com.example.assu_fe_app.presentation.common.contract.toContractData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -53,9 +53,20 @@ class LocationItemFragment :
                         val current = lastItem
                         val (fallbackStart, fallbackEnd) = parseTerm(current?.term)
 
+                        // 내 이름 / 상대 이름
+                        val meName = tokenManager.getUserName() ?: "-"
+                        val counterpartName = current?.shopName ?: "-"
+
+                        // 역할에 따라 다이얼로그용 이름 확정
+                        val (partnerNameFb, adminNameFb) = when (role) {
+                            UserRole.ADMIN   -> counterpartName to meName
+                            UserRole.PARTNER -> meName to counterpartName
+                            else             -> counterpartName to meName
+                        }
+
                         val data = state.data.toContractData(
-                            partnerNameFallback = current?.shopName ?: "-",
-                            adminNameFallback   = tokenManager.getUserName() ?: "관리자",
+                            partnerNameFallback = partnerNameFb,
+                            adminNameFallback   = adminNameFb,
                             fallbackStart = fallbackStart,
                             fallbackEnd = fallbackEnd
                         )
@@ -85,25 +96,30 @@ class LocationItemFragment :
 
         binding.tvAdminPartnerLocationShopName.text = item.shopName
 
-        if (item.isPartnered) {
+        // 🔁 이미지: 내 역할 기준으로 지정
+        when (role) {
+            UserRole.ADMIN   -> binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_partner)
+            UserRole.PARTNER -> binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_ssu)
+            else             -> binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_ssu)
+        }
+
+        if (item.partnered) {
             binding.ivAdminPartnerLocationCapsule.visibility = View.VISIBLE
             binding.tvAdminPartnerLocationCapsuleText.visibility = View.VISIBLE
             binding.tvAdminPartnerLocationAddressDate.text = item.term
-            binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_partner)
         } else {
             binding.ivAdminPartnerLocationCapsule.visibility = View.GONE
             binding.tvAdminPartnerLocationCapsuleText.visibility = View.GONE
             binding.tvAdminPartnerLocationAddressDate.text = item.address
-            binding.ivAdminPartnerLocationImg.setBackgroundResource(R.drawable.img_ssu)
         }
 
         binding.tvAdminPartnerLocationContact.text =
-            if (item.isPartnered) "제휴 계약서 보기" else "문의하기"
+            if (item.partnered) "제휴 계약서 보기" else "문의하기"
 
         val clicker = View.OnClickListener {
             val current = lastItem ?: return@OnClickListener
 
-            if (!current.isPartnered) {
+            if (!current.partnered) {
                 // 채팅방 생성
                 val req = when (role) {
                     UserRole.ADMIN -> {
@@ -123,7 +139,7 @@ class LocationItemFragment :
                 // 제휴 계약서 보기: partnershipId 필요
                 val partnershipId: Long? = current.partnershipId
                 if (partnershipId == null) {
-                    // partnershipId 없으면 카드 정보로 임시 표시
+                    // partnershipId 없으면 카드 정보로 임시 표시 (이름도 역할 기준으로 세팅)
                     openContractDialogFallback(current)
                     return@OnClickListener
                 }
@@ -136,15 +152,24 @@ class LocationItemFragment :
         binding.tvAdminPartnerLocationContact.setOnClickListener(clicker)
     }
 
-    // partnershipId 없거나 API 실패 시 임시 다이얼로그
+    // partnershipId 없거나 API 실패 시 임시 다이얼로그 (역할 기준 이름 세팅 포함)
     private fun openContractDialogFallback(item: LocationAdminPartnerSearchResultItem) {
         val (start, end) = parseTerm(item.term)
+
+        val meName = tokenManager.getUserName() ?: "-"
+        val counterpartName = item.shopName
+        val (partnerNameFb, adminNameFb) = when (role) {
+            UserRole.ADMIN   -> counterpartName to meName
+            UserRole.PARTNER -> meName to counterpartName
+            else             -> counterpartName to meName
+        }
+
         val data = com.example.assu_fe_app.data.dto.partnership.PartnershipContractData(
-            partnerName = item.shopName,
-            adminName = "관리자",
-            options = emptyList(),
+            partnerName = partnerNameFb,
+            adminName   = adminNameFb,
+            options     = emptyList(),
             periodStart = start,
-            periodEnd = end
+            periodEnd   = end
         )
 
         PartnershipContractDialogFragment
@@ -163,6 +188,6 @@ class LocationItemFragment :
         android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show()
     }
     private fun showLoading(show: Boolean) {
-        // TODO: ProgressBar 노출/숨김 (프로젝트 공통 로딩 뷰 사용 시 교체)
+        // TODO: ProgressBar 노출/숨김
     }
 }

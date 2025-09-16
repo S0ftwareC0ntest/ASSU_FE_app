@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
-import com.example.assu_fe_app.data.dto.chatting.request.CreateChatRoomRequestDto
 import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResultItem
 import com.example.assu_fe_app.data.dto.location.ViewportQuery
 import com.example.assu_fe_app.data.manager.TokenManager
@@ -64,8 +63,7 @@ class LocationFragment :
     private val vm: AdminPartnerLocationViewModel by viewModels()
 
     private val role: UserRole by lazy {
-        // tokenManager.getUserRoleEnum() ?: UserRole.ADMIN
-        UserRole.PARTNER // 테스트 강제
+         tokenManager.getUserRoleEnum() ?: UserRole.ADMIN
     }
 
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
@@ -368,14 +366,19 @@ class LocationFragment :
                 val p = labelToPartner[label] ?: return
                 showCapsule(
                     LocationAdminPartnerSearchResultItem(
-                        shopName    = p.name,
-                        address     = p.address ?: "",
-                        isPartnered = p.partnered,
-                        term        = if (p.partnershipStartDate != null && p.partnershipEndDate != null)
-                            "${p.partnershipStartDate} ~ ${p.partnershipEndDate}" else "",
-                        id          = p.partnerId, // 상대(파트너) 사용자 ID
-                        paperId     = null,
-                        partnershipId = p.partnershipId
+                        id = p.partnerId,                   // 상대(파트너) id
+                        shopName = p.shopName,
+                        address = p.address ?: "",
+                        partnered = p.partnered,
+                        partnershipId = p.partnershipId,
+                        partnershipStartDate = p.partnershipStartDate,
+                        partnershipEndDate = p.partnershipEndDate,
+                        latitude = p.latitude,
+                        longitude = p.longitude,
+                        paperId = null,
+                        term = if (!p.partnershipStartDate.isNullOrBlank() && !p.partnershipEndDate.isNullOrBlank())
+                            "${p.partnershipStartDate} ~ ${p.partnershipEndDate}"
+                        else null
                     )
                 )
             }
@@ -385,14 +388,19 @@ class LocationFragment :
                 val a = labelToAdmin[label] ?: return
                 showCapsule(
                     LocationAdminPartnerSearchResultItem(
-                        shopName    = a.name,
-                        address     = a.address ?: "",
-                        isPartnered = a.partnered,
-                        term        = if (a.partnershipStartDate != null && a.partnershipEndDate != null)
-                            "${a.partnershipStartDate} ~ ${a.partnershipEndDate}" else "",
-                        id          = a.adminId, // 상대(관리자) 사용자 ID
-                        paperId     = null,
-                        partnershipId = a.partnershipId
+                        id = a.adminId,                     // 상대(관리자) id
+                        shopName = a.name,
+                        address = a.address ?: "",
+                        partnered = a.partnered,
+                        partnershipId = a.partnershipId,
+                        partnershipStartDate = a.partnershipStartDate,
+                        partnershipEndDate = a.partnershipEndDate,
+                        latitude = a.latitude,
+                        longitude = a.longitude,
+                        paperId = null,
+                        term = if (!a.partnershipStartDate.isNullOrBlank() && !a.partnershipEndDate.isNullOrBlank())
+                            "${a.partnershipStartDate} ~ ${a.partnershipEndDate}"
+                        else null
                     )
                 )
             }

@@ -1,7 +1,7 @@
 package com.example.assu_fe_app.domain.model.location
 
 data class StoreOnMap(
-    val storeId: Long,
+    val storeId: Long?,
     val adminId: Long?,
     val name: String,
     val address: String?,

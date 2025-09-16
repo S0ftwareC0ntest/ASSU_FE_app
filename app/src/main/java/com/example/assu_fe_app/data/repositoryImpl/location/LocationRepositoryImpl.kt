@@ -1,10 +1,12 @@
 package com.example.assu_fe_app.data.repositoryImpl.location
 
+import com.example.assu_fe_app.data.dto.BaseResponse
 import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResultItem
 import com.example.assu_fe_app.data.dto.location.LocationUserSearchResultItem
 import com.example.assu_fe_app.data.dto.location.ViewportQuery
 import com.example.assu_fe_app.data.dto.location.response.AdminMapResponseDto
 import com.example.assu_fe_app.data.dto.location.response.PartnerMapResponseDto
+import com.example.assu_fe_app.data.dto.location.response.SearchPlaceByKakaoDto
 import com.example.assu_fe_app.data.dto.location.response.StoreMapResponseDto
 import com.example.assu_fe_app.data.repository.location.LocationRepository
 import com.example.assu_fe_app.data.service.location.LocationService
@@ -106,8 +108,13 @@ class LocationRepositoryImpl @Inject constructor(
                 shopName = adminDto.name,
                 address = adminDto.address.toString(),
                 paperId = adminDto.partnershipId,
-                isPartnered = adminDto.partnered,
-                term = temp
+                partnered = adminDto.partnered,
+                term = temp,
+                partnershipId = adminDto.partnershipId,
+                partnershipStartDate = adminDto.partnershipStartDate,
+                partnershipEndDate = adminDto.partnershipEndDate,
+                latitude = adminDto.latitude,
+                longitude = adminDto.longitude,
             )
         }
     }
@@ -127,8 +134,13 @@ class LocationRepositoryImpl @Inject constructor(
                 shopName = partnerDto.name,
                 address = partnerDto.address.toString(),
                 paperId = partnerDto.partnerId,
-                isPartnered = partnerDto.partnered,
-                term = temp
+                partnered = partnerDto.partnered,
+                term = temp,
+                partnershipId = partnerDto.partnershipId,
+                partnershipStartDate = partnerDto.partnershipStartDate,
+                partnershipEndDate = partnerDto.partnershipEndDate,
+                latitude = partnerDto.latitude,
+                longitude = partnerDto.longitude,
             )
         }
     }
@@ -160,4 +172,6 @@ class LocationRepositoryImpl @Inject constructor(
             else -> ""
         }
     }
+
+
 }

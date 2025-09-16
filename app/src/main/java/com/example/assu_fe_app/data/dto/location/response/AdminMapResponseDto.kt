@@ -6,7 +6,7 @@ import kotlin.String
 
 @JsonClass(generateAdapter = true)
 data class AdminMapResponseDto(
-    val adminId: Long,
+    val adminId: Long? = null,
     val name: String,
     val address: String?,
     val partnered: Boolean,

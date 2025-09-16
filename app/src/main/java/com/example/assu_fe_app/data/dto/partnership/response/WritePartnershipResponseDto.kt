@@ -6,21 +6,21 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class WritePartnershipResponseDto(
     val partnershipId: Long,
-    val partnershipPeriodStart: String?,   // ISO-8601 문자열이라고 가정
+    val partnershipPeriodStart: String?,
     val partnershipPeriodEnd: String?,
-    val adminId: Long?,                    // 수동등록이면 null 가능
-    val partnerId: Long?,                  // 수동등록이면 null
+    val adminId: Long?,
+    val partnerId: Long?,
     val storeId: Long?,
     val options: List<PartnershipOptionResponseDto>?
 ) {
     fun toModel() = ProposalPartnerDetailsModel(
         partnershipId = partnershipId,
-        periodStart = partnershipPeriodStart.orEmpty(),
-        periodEnd = partnershipPeriodEnd.orEmpty(),
-        adminId = adminId,
-        partnerId = partnerId,
-        storeId = storeId,
-        options = (options ?: emptyList()).map { it.toModel() }
+        periodStart   = partnershipPeriodStart.orEmpty(),
+        periodEnd     = partnershipPeriodEnd.orEmpty(),
+        adminId       = adminId,
+        partnerId     = partnerId,
+        storeId       = storeId,
+        options       = (options ?: emptyList()).map { it.toModel() }
     )
 }
 

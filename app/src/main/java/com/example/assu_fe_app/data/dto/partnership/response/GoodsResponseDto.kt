@@ -5,13 +5,13 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GoodsResponseDto(
-    val id: Long?,
-    val name: String?,
+    val goodsId: Long?,
+    val goodsName: String?,
     val price: Int?,            // 없으면 제거
     val description: String?    // 없으면 제거
 ) {
     fun toModel() = PartnershipGoodsModel(
-        goodsId = id ?: -1L,
-        goodsName = name.orEmpty(),
+        goodsId = goodsId ?: -1L,
+        goodsName = goodsName.orEmpty(),
     )
 }
