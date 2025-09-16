@@ -15,23 +15,15 @@ import dagger.hilt.android.HiltAndroidApp;
 public class MyApplication extends Application {
 
     private static Context appContext;
-
-    // @Override
-    // public void onCreate() {
-    // super.onCreate();
-    // appContext = getApplicaitonContext();
-    // KakaoMapSdk.init(this, BuildConfig.KAKAO_MAP_KEY);
-    // }
+  
     @Override
     public void onCreate() {
         super.onCreate();
         appContext = getApplicationContext();
-
-        if (isArmDevice() && BuildConfig.KAKAO_MAP_KEY != null && !BuildConfig.KAKAO_MAP_KEY.isEmpty()) {
+        if (isArmDevice()) {
             KakaoMapSdk.init(this, BuildConfig.KAKAO_MAP_KEY);
         }
     }
-
     private boolean isArmDevice() {
         String abi = Build.SUPPORTED_ABIS != null && Build.SUPPORTED_ABIS.length > 0
                 ? Build.SUPPORTED_ABIS[0]
