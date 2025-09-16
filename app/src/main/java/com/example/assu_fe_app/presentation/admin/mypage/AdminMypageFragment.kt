@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.manager.TokenManager
 import com.example.assu_fe_app.databinding.FragmentAdminMypageBinding
-import com.example.assu_fe_app.domain.model.profileImage.ProfileImageModel
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
 import com.example.assu_fe_app.presentation.common.mypage.MypageViewModel
@@ -116,6 +115,8 @@ class AdminMypageFragment : BaseFragment<FragmentAdminMypageBinding>(R.layout.fr
             AdminMypagePendingPartnershipDialogFragment()
                 .show(childFragmentManager, "PendingPartnershipDialog")
         }
+
+        binding.tvAdmAccountName.setText(tokenManager.getUserName())
 
         // 고객센터
         binding.clAdmAccountComponent5.setOnClickListener {

@@ -7,14 +7,14 @@ import com.example.assu_fe_app.data.BearerInterceptor
 import com.example.assu_fe_app.data.dto.converter.LocalDateAdapter
 import com.example.assu_fe_app.data.service.inquiry.InquiryService
 import com.example.assu_fe_app.data.service.AuthService
-import com.example.assu_fe_app.data.service.chatting.ChattingService
 import com.example.assu_fe_app.data.service.certification.CertificationService
+import com.example.assu_fe_app.data.service.chatting.ChattingService
 import com.example.assu_fe_app.data.service.dashboard.AdminDashboardService
 import com.example.assu_fe_app.data.service.dashboard.PartnerDashboardService
 import com.example.assu_fe_app.data.service.deviceToken.DeviceTokenService
 import com.example.assu_fe_app.data.service.notification.NotificationService
-import com.example.assu_fe_app.data.service.map.MapService
-import com.example.assu_fe_app.data.service.map.SearchLocationService
+import com.example.assu_fe_app.data.service.location.LocationService
+import com.example.assu_fe_app.data.service.location.SearchLocationService
 import com.example.assu_fe_app.data.service.review.ReviewService
 import com.example.assu_fe_app.data.service.store.StoreService
 import com.example.assu_fe_app.data.service.partnership.PartnershipService
@@ -137,6 +137,11 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun provideLocationService(@Auth retrofit: Retrofit): LocationService =
+        retrofit.create(LocationService::class.java)
+
+    @Provides
+    @Singleton
     fun provideAdminDashboardApiService(@Auth retrofit: Retrofit): AdminDashboardService =
         retrofit.create(AdminDashboardService::class.java)
 
@@ -171,11 +176,6 @@ object ServiceModule {
     @Provides @Singleton
     fun provideCertificationService(@Auth retrofit: Retrofit): CertificationService =
         retrofit.create(CertificationService::class.java)
-
-
-    @Provides @Singleton
-    fun provideMapService(@Auth retrofit: Retrofit): MapService =
-        retrofit.create(MapService::class.java)
 
     @Provides @Singleton
     fun provideSearchService(@NoAuth retrofit: Retrofit) : SearchLocationService

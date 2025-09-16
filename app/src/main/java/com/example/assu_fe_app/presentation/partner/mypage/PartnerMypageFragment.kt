@@ -61,6 +61,7 @@ class PartnerMypageFragment
             }
         }
 
+        binding.tvPartnerAccountName.setText(tokenManager.getUserName())
     }
 
     override fun initObserver() {
