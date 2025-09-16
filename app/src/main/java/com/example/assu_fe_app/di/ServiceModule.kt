@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.assu_fe_app.BuildConfig
 import com.example.assu_fe_app.data.BearerInterceptor
+import com.example.assu_fe_app.data.dto.converter.LocalDateAdapter
 import com.example.assu_fe_app.data.service.inquiry.InquiryService
 import com.example.assu_fe_app.data.service.AuthService
 import com.example.assu_fe_app.data.service.chatting.ChattingService
@@ -17,6 +18,7 @@ import com.example.assu_fe_app.data.service.map.SearchLocationService
 import com.example.assu_fe_app.data.service.review.ReviewService
 import com.example.assu_fe_app.data.service.store.StoreService
 import com.example.assu_fe_app.data.service.partnership.PartnershipService
+import com.example.assu_fe_app.data.service.profileService.ProfileService
 import com.example.assu_fe_app.data.service.suggestion.SuggestionService
 import com.example.assu_fe_app.data.service.usage.UsageService
 import com.example.assu_fe_app.util.LocalDateMoshiAdapter
@@ -183,4 +185,9 @@ object ServiceModule {
     @Singleton
     fun provideInquiryService(@Auth retrofit: Retrofit): InquiryService =
         retrofit.create(InquiryService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProfileService(@Auth retrofit: Retrofit): ProfileService =
+        retrofit.create(ProfileService::class.java)
 }
