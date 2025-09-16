@@ -4,16 +4,27 @@ import com.example.assu_fe_app.data.local.TokenProvider
 import com.example.assu_fe_app.data.local.TokenProviderImpl
 import com.example.assu_fe_app.data.remote.AuthInterceptor
 import com.example.assu_fe_app.data.repository.auth.AuthRepository
+import com.example.assu_fe_app.data.repository.certification.CertificationRepository
 import com.example.assu_fe_app.data.repository.chatting.ChattingRepository
 import com.example.assu_fe_app.data.repositoryImpl.chatting.ChattingRepositoryImpl
 import com.example.assu_fe_app.data.repository.deviceToken.DeviceTokenRepository
 import com.example.assu_fe_app.data.repository.location.LocationRepository
+import com.example.assu_fe_app.data.repository.map.MapRepository
+import com.example.assu_fe_app.data.repository.map.SearchRepository
+import com.example.assu_fe_app.data.repository.review.ReviewRepository
+import com.example.assu_fe_app.data.repository.store.StoreRepository
+import com.example.assu_fe_app.data.repository.usage.UsageRepository
+import com.example.assu_fe_app.data.repositoryImpl.certification.CertificationRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.review.ReviewRepositoryImpl
 import com.example.assu_fe_app.data.repository.notification.NotificationRepository
 import com.example.assu_fe_app.data.repository.partnership.PartnershipRepository
 import com.example.assu_fe_app.data.repository.suggestion.SuggestionRepository
 import com.example.assu_fe_app.data.repositoryImpl.AuthRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.deviceToken.DeviceTokenRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.location.LocationRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.map.SearchRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.store.StoreRepositoryImpl
+import com.example.assu_fe_app.data.repositoryImpl.usage.UsageRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.notification.NotificationRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.partnership.PartnershipRepositoryImpl
 import com.example.assu_fe_app.data.repositoryImpl.suggestion.SuggestionRepositoryImpl
@@ -42,6 +53,27 @@ abstract class RepoModule {
         impl: DeviceTokenRepositoryImpl
     ): DeviceTokenRepository
 
+    @Binds @Singleton
+    abstract fun bindReviewRepository(
+        impl: ReviewRepositoryImpl
+    ): ReviewRepository
+
+    @Binds @Singleton
+    abstract fun bindStoreRepository(
+        impl: StoreRepositoryImpl
+    ): StoreRepository
+
+    @Binds @Singleton
+    abstract fun bindUsageRepository(
+        impl: UsageRepositoryImpl
+    ): UsageRepository
+
+    @Binds @Singleton
+    abstract fun bindCertificationRepository(
+        impl: CertificationRepositoryImpl
+    ): CertificationRepository
+
+
     @Binds
     @Singleton
     abstract fun bindTokenProvider(
@@ -67,4 +99,9 @@ abstract class RepoModule {
     abstract fun bindPartnershipRepository(
         impl: PartnershipRepositoryImpl
     ): PartnershipRepository
+
+    @Binds @Singleton
+    abstract fun bindSearchRespository(
+        impl: SearchRepositoryImpl
+    ): SearchRepository
 }
