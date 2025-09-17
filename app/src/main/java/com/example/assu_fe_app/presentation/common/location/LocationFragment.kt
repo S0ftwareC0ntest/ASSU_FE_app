@@ -10,7 +10,6 @@ import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -199,7 +198,7 @@ class LocationFragment :
             }
         }
 
-        // 목록 상태 수집 + 마커 표시 (지도 준비 안됐으면 스킵)
+        // 목록 상태 수집 + 마커 표시 (지도 준비 안 됐으면 스킵)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.state.collect { s ->
