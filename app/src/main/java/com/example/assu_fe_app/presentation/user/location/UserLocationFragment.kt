@@ -132,7 +132,7 @@ class UserLocationFragment :
                                 showSpeechBubbleOver(item.latitude, item.longitude, item.name ?: "")
                             } else {
                                 // 제휴 내용 없거나 이미 한 번 보여준 이후엔 말풍선 숨김
-                                hideSpeechBubble()
+                                hideCapsuleAndBubble()
                             }
                             return true
                         }
@@ -140,12 +140,12 @@ class UserLocationFragment :
 
                     // 지도 빈 곳 클릭 → 말풍선 닫기
                     kakaoMap?.setOnMapClickListener { map, latLng, screenPt, poi ->
-                        hideSpeechBubble()
+                        hideCapsuleAndBubble()
                     }
 
                     // 카메라 움직이면 말풍선 닫기(위치 일치 깨지므로)
                     kakaoMap?.setOnCameraMoveStartListener { _, _ ->
-                        hideSpeechBubble()
+                        hideCapsuleAndBubble()
                     }
 
                     // 카메라 이동 종료 시 재조회
@@ -386,9 +386,9 @@ class UserLocationFragment :
         }
     }
 
-    private fun hideSpeechBubble() {
-        val bubble = binding.includeSpeechBubble
-        bubble.visibility = View.GONE
+    private fun hideCapsuleAndBubble() {
+        binding.fvUserLocationItem.visibility = View.GONE
+        binding.includeSpeechBubble.visibility = View.GONE
     }
 
     private fun showSpeechBubbleOver(lat: Double, lng: Double, title: String) {

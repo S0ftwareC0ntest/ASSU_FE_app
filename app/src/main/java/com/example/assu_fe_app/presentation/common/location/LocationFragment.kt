@@ -2,6 +2,7 @@ package com.example.assu_fe_app.presentation.common.location
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -102,6 +103,15 @@ class LocationFragment :
                             return true
                         }
                     })
+
+                    kakaoMap?.setOnMapClickListener { _: KakaoMap, _: LatLng, _: PointF, _: Poi? ->
+                        // 마커가 아닌 지도 임의 영역을 탭하면 아래 카드와 말풍선 숨김
+                        hideItem()
+                    }
+
+                    kakaoMap?.setOnCameraMoveStartListener { _, _ ->
+                        hideItem()
+                    }
 
                     // 마커 스타일 (벡터 → 비트맵, 크기 24dp)
                     val partnerBmp = vectorToBitmap(R.drawable.ic_marker, 24)
@@ -447,6 +457,10 @@ class LocationFragment :
         d.setBounds(0, 0, canvas.width, canvas.height)
         d.draw(canvas)
         return bmp
+    }
+
+    private fun hideItem() {
+        binding.fvLocationItem.visibility = View.GONE
     }
 
 }
