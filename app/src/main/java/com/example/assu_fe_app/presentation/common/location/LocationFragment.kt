@@ -1,5 +1,9 @@
 package com.example.assu_fe_app.presentation.common.location
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PointF
@@ -28,6 +32,8 @@ import com.example.assu_fe_app.presentation.common.location.adapter.LocationShar
 import com.example.assu_fe_app.ui.chatting.ChattingViewModel
 import com.example.assu_fe_app.ui.location.AdminPartnerLocationViewModel
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.Label
@@ -37,21 +43,28 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.jar.Manifest
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LocationFragment :
     BaseFragment<FragmentLoactionBinding>(R.layout.fragment_loaction) {
-
     private val sharedViewModel: LocationSharedViewModel by activityViewModels()
     private lateinit var adapter: AdminPartnerLocationAdapter
     private var currentItem: LocationAdminPartnerSearchResultItem? = null
+    private val chatVm: ChattingViewModel by activityViewModels()
+    private val vm: AdminPartnerLocationViewModel by viewModels()
 
     private lateinit var mapView: MapView
     private lateinit var kakaoMap: KakaoMap
     private var mapReady = false
 
-    @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
+    // KakaoMap 현재위치 라벨
+    private var myLocStyles: LabelStyles? = null
+    private var myLocLabel: Label? = null
+
+    // 마지막으로 성공한 현재 위치(재진입/되돌아가기용 캐시)
+    private var lastMyLatLng: LatLng? = null
 
     private var poiLayer: LabelLayer? = null
     private var partnerStyles: LabelStyles? = null
@@ -60,9 +73,7 @@ class LocationFragment :
     private val labelToPartner = mutableMapOf<Label, PartnerOnMap>()
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
 
-    private val chatVm: ChattingViewModel by activityViewModels()
-    private val vm: AdminPartnerLocationViewModel by viewModels()
-
+    @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
     private val role: UserRole by lazy {
         authTokenLocalStore.getUserRoleEnum() ?: UserRole.ADMIN
     }
@@ -80,6 +91,7 @@ class LocationFragment :
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
         binding.ivLocationSearchIc.setOnClickListener { navigateToSearch() }
         binding.tvLocationHint.setOnClickListener { navigateToSearch() }
+        binding.ivUserGoBack.setOnClickListener { goToMyLocation() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -104,6 +116,13 @@ class LocationFragment :
                         }
                     })
 
+                    val locBmp = vectorToBitmap(R.drawable.ic_present_location, 24)
+                    myLocStyles = map.labelManager?.addLabelStyles(
+                        LabelStyles.from(
+                            LabelStyle.from(locBmp).setAnchorPoint(0.5f, 1.0f)
+                        )
+                    )
+
                     kakaoMap?.setOnMapClickListener { _: KakaoMap, _: LatLng, _: PointF, _: Poi? ->
                         // 마커가 아닌 지도 임의 영역을 탭하면 아래 카드와 말풍선 숨김
                         hideItem()
@@ -114,7 +133,7 @@ class LocationFragment :
                     }
 
                     // 마커 스타일 (벡터 → 비트맵, 크기 24dp)
-                    val partnerBmp = vectorToBitmap(R.drawable.ic_marker, 24)
+                    val partnerBmp = vectorToBitmap(R.drawable.ic_partner_location, 24)
                     partnerStyles = kakaoMap.labelManager?.addLabelStyles(
                         LabelStyles.from(LabelStyle.from(partnerBmp).setAnchorPoint(0.5f, 1.0f))
                     )
@@ -145,6 +164,7 @@ class LocationFragment :
                     }
 
                     moveToDefaultThenQuery()
+                    goToMyLocation()
                 }
             }
         )
@@ -281,6 +301,52 @@ class LocationFragment :
         binding.fvLocationItem.isEnabled = !loading
     }
 
+    @SuppressLint("MissingPermission")
+    private fun goToMyLocation() {
+        // 권한 체크
+        val fineGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseGranted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // 권한 없으면 런처로 요청 후 return
+        if (!fineGranted && !coarseGranted) {
+            permLauncher.launch(
+                arrayOf(
+                    ACCESS_FINE_LOCATION,
+                    ACCESS_COARSE_LOCATION
+                )
+            )
+            return
+        }
+
+        // 캐시가 있으면 먼저 바로 이동(UX 빠르게)
+        lastMyLatLng?.let {
+            moveCameraAndQuery(it.latitude, it.longitude)
+        }
+
+        // 최신 위치 한 번 더 가져와 갱신
+        fused.lastLocation
+            .addOnSuccessListener { loc ->
+                if (loc != null) {
+                    centerToMyLocation(loc.latitude, loc.longitude)
+                } else {
+                    val cts = CancellationTokenSource()
+                    fused.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
+                        .addOnSuccessListener { cur ->
+                            if (cur != null) centerToMyLocation(cur.latitude, cur.longitude)
+                        }
+                        .addOnFailureListener { e -> Log.e("Location", "getCurrentLocation fail", e) }
+                }
+            }
+            .addOnFailureListener { e -> Log.e("Location", "lastLocation fail", e) }
+    }
+
     // ===== 카메라 이동 & 조회 =====
     private fun moveCameraAndQuery(lat: Double, lng: Double) {
         if (!mapReady) return
@@ -288,6 +354,12 @@ class LocationFragment :
             CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
         )
         requestNearbyFromCurrentViewport()
+    }
+
+    private fun centerToMyLocation(lat: Double, lng: Double) {
+        lastMyLatLng = LatLng.from(lat, lng)
+        showCurrentLocation(lat, lng)
+        moveCameraAndQuery(lat, lng)
     }
 
     private fun moveToDefaultThenQuery() {
@@ -461,6 +533,18 @@ class LocationFragment :
 
     private fun hideItem() {
         binding.fvLocationItem.visibility = View.GONE
+    }
+
+    private fun showCurrentLocation(lat: Double, lng: Double) {
+        if (!mapReady || kakaoMap == null) return
+        val styles = myLocStyles ?: return
+        val layer = kakaoMap!!.labelManager?.layer ?: return
+
+        // 이전 현재위치 라벨 제거 후 새로 추가(업데이트 느낌)
+        myLocLabel?.remove()
+        myLocLabel = layer.addLabel(
+            LabelOptions.from(LatLng.from(lat, lng)).setStyles(styles)
+        )
     }
 
 }

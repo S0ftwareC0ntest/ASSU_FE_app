@@ -48,18 +48,21 @@ class UserLocationFragment :
     private var partnerStyles: LabelStyles? = null
     private var normalStyles: LabelStyles? = null
 
-    // “처음 한 번만” 말풍선 보여줌 플래그
+    // 처음 한 번만 말풍선 보여줌 플래그
     private var shownPartnerBubbleOnce = false
 
-    // 현재 위치 라벨 (초기엔 사용 안 함)
+    // 현재 위치 라벨
     private var myLocStyles: LabelStyles? = null
     private var myLocLabel: Label? = null
+
+
+    // 마지막으로 성공한 현재 위치(재진입 / 되돌아가기용 캐시)
+    private var lastMyLatLng: LatLng? = null
 
     private var poiLayer: LabelLayer? = null
     private var storeStyles: LabelStyles? = null
     private val labelToStore = mutableMapOf<Label, StoreOnMap>()
 
-    // ViewModel
     private val vm: UserLocationViewModel by viewModels()
 
     // Location (나중에 사용할 예정)
@@ -82,6 +85,7 @@ class UserLocationFragment :
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
         binding.ivLocationSearchIc.setOnClickListener { navigateToSearch() }
         binding.tvLocationHint.setOnClickListener { navigateToSearch() }
+        binding.ivUserGoBack.setOnClickListener { goToMyLocation() }
 
         binding.userLocationMapView.setOnClickListener {
             binding.includeSpeechBubble.visibility = View.VISIBLE
@@ -118,6 +122,13 @@ class UserLocationFragment :
                         LabelStyles.from(LabelStyle.from(gray).setAnchorPoint(0.5f, 1.0f))
                     )
 
+                    val locBmp = vectorToBitmap(R.drawable.ic_present_location, 24) // 원하는 아이콘
+                    myLocStyles = map.labelManager?.addLabelStyles(
+                        LabelStyles.from(
+                            LabelStyle.from(locBmp).setAnchorPoint(0.5f, 1.0f)
+                        )
+                    )
+
                     poiLayer = map.labelManager?.layer
 
                     // 마커 클릭 → 캡슐 표시 + (처음 한 번) 말풍선 표시
@@ -152,6 +163,7 @@ class UserLocationFragment :
                     map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
 
                     moveToDefaultThenQuery()
+                    goToMyLocation()
                     requestLocationPermissionsIfNeeded()
                 }
             }
@@ -229,6 +241,12 @@ class UserLocationFragment :
             CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
         )
         requestNearbyFromCurrentViewport()
+    }
+
+    private fun centerToMyLocation(lat: Double, lng: Double) {
+        lastMyLatLng = LatLng.from(lat, lng)
+        showCurrentLocation(lat, lng)
+        moveCameraAndQuery(lat, lng)
     }
 
     private fun moveToDefaultThenQuery() {
@@ -440,5 +458,44 @@ class UserLocationFragment :
         ).any { it != null }
 
         return hasContent
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun goToMyLocation() {
+        // 권한 체크
+        val fineGranted = ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+        // 권한 없으면 런처로 요청 후 return
+        if (!fineGranted && !coarseGranted) {
+            permLauncher.launch(arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ))
+            return
+        }
+
+        // 캐시가 있으면 먼저 바로 이동(UX 빠르게)
+        lastMyLatLng?.let {
+            moveCameraAndQuery(it.latitude, it.longitude)
+        }
+
+        // 최신 위치 한 번 더 가져와 갱신
+        fused.lastLocation
+            .addOnSuccessListener { loc ->
+                if (loc != null) {
+                    centerToMyLocation(loc.latitude, loc.longitude)
+                } else {
+                    val cts = CancellationTokenSource()
+                    fused.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
+                        .addOnSuccessListener { cur ->
+                            if (cur != null) centerToMyLocation(cur.latitude, cur.longitude)
+                        }
+                        .addOnFailureListener { e -> Log.e("Location", "getCurrentLocation fail", e) }
+                }
+            }
+            .addOnFailureListener { e -> Log.e("Location", "lastLocation fail", e) }
     }
 }
