@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -17,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.location.ViewportQuery
 import com.example.assu_fe_app.databinding.FragmentUserLoactionBinding
+import com.example.assu_fe_app.domain.model.location.StoreOnMap
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.user.review.store.UserReviewStoreActivity
 import com.example.assu_fe_app.ui.location.UserLocationViewModel
@@ -26,6 +28,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.kakao.vectormap.*
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.Label
+import com.kakao.vectormap.label.LabelLayer
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
@@ -41,9 +44,20 @@ class UserLocationFragment :
     private var kakaoMap: KakaoMap? = null
     private var mapReady = false
 
+    // 마커 스타일 2종
+    private var partnerStyles: LabelStyles? = null
+    private var normalStyles: LabelStyles? = null
+
+    // “처음 한 번만” 말풍선 보여줌 플래그
+    private var shownPartnerBubbleOnce = false
+
     // 현재 위치 라벨 (초기엔 사용 안 함)
     private var myLocStyles: LabelStyles? = null
     private var myLocLabel: Label? = null
+
+    private var poiLayer: LabelLayer? = null
+    private var storeStyles: LabelStyles? = null
+    private val labelToStore = mutableMapOf<Label, StoreOnMap>()
 
     // ViewModel
     private val vm: UserLocationViewModel by viewModels()
@@ -53,7 +67,7 @@ class UserLocationFragment :
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
-        // ✅ 권한 결과와 무관하게 지금은 아무 것도 하지 않음 (시청 기준 유지)
+        // 권한 결과와 무관하게 지금은 아무 것도 하지 않음 (시청 기준 유지)
         val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         Log.d("Permission", "location granted=$granted (but keeping City Hall view)")
@@ -93,33 +107,66 @@ class UserLocationFragment :
                     kakaoMap = map
                     mapReady = true
 
-                    // 현재 위치 아이콘 스타일(나중에 사용할 예정)
-                    val locBmp = vectorToBitmap(R.drawable.ic_present_location, 24)
-                    val myLocStyle = LabelStyle.from(locBmp).setAnchorPoint(0.5f, 1.0f)
-                    myLocStyles = map.labelManager?.addLabelStyles(LabelStyles.from(myLocStyle))
+                    // 마커 스타일 생성 (24dp 권장)
+                    val blue = vectorToBitmap(R.drawable.ic_user_location_blue, 39)
+                    val gray = vectorToBitmap(R.drawable.ic_user_location_gray, 24)
 
-                    // 카메라 이동 종료 시 현재 뷰포인트 재조회
+                    partnerStyles = map.labelManager?.addLabelStyles(
+                        LabelStyles.from(LabelStyle.from(blue).setAnchorPoint(0.5f, 1.0f))
+                    )
+                    normalStyles = map.labelManager?.addLabelStyles(
+                        LabelStyles.from(LabelStyle.from(gray).setAnchorPoint(0.5f, 1.0f))
+                    )
+
+                    poiLayer = map.labelManager?.layer
+
+                    // 마커 클릭 → 캡슐 표시 + (처음 한 번) 말풍선 표시
+                    map.setOnLabelClickListener(object : KakaoMap.OnLabelClickListener {
+                        override fun onLabelClicked(map: KakaoMap, layer: LabelLayer, label: Label): Boolean {
+                            val item = labelToStore[label] ?: return true
+                            showCapsule(item)
+
+                            val hasContent = isPartnerVisual(item) // 아래 함수 참조
+                            if (hasContent && !shownPartnerBubbleOnce) {
+                                shownPartnerBubbleOnce = true
+                                showSpeechBubbleOver(item.latitude, item.longitude, item.name ?: "")
+                            } else {
+                                // 제휴 내용 없거나 이미 한 번 보여준 이후엔 말풍선 숨김
+                                hideSpeechBubble()
+                            }
+                            return true
+                        }
+                    })
+
+                    // 지도 빈 곳 클릭 → 말풍선 닫기
+                    kakaoMap?.setOnMapClickListener { map, latLng, screenPt, poi ->
+                        hideSpeechBubble()
+                    }
+
+                    // 카메라 움직이면 말풍선 닫기(위치 일치 깨지므로)
+                    kakaoMap?.setOnCameraMoveStartListener { _, _ ->
+                        hideSpeechBubble()
+                    }
+
+                    // 카메라 이동 종료 시 재조회
                     map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
 
-                    // 항상 서울시청 기준으로 먼저 이동/조회
                     moveToDefaultThenQuery()
-
-                    // 권한 요청은 하되, 지금은 현재 위치로 이동/표시는 안 함
                     requestLocationPermissionsIfNeeded()
                 }
             }
         )
 
-        // ViewModel state collect
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.state.collect { state ->
                     when (state) {
-                        is UserLocationViewModel.UiState.Idle -> Unit
-                        is UserLocationViewModel.UiState.Loading -> Log.d("UIState", "Loading…")
-                        is UserLocationViewModel.UiState.Success -> Log.d("UIState", "Loaded ${state.items.size} stores")
-                        is UserLocationViewModel.UiState.Fail -> Log.e("UIState", "Fail: ${state.code}, ${state.message}")
-                        is UserLocationViewModel.UiState.Error -> Log.e("UIState", "Error", state.t)
+                        is UserLocationViewModel.UiState.Success -> drawMarkers(state.items)
+                        is UserLocationViewModel.UiState.Fail ->
+                            Log.e("UIState", "Fail: ${state.code}, ${state.message}")
+                        is UserLocationViewModel.UiState.Error ->
+                            Log.e("UIState", "Error", state.t)
+                        else -> Unit
                     }
                 }
             }
@@ -185,7 +232,7 @@ class UserLocationFragment :
     }
 
     private fun moveToDefaultThenQuery() {
-        // ✅ 기본: 서울시청으로만 이동/조회 (현재 위치 마커는 표시하지 않음)
+        // 기본: 서울시청으로만 이동/조회 (현재 위치 마커는 표시하지 않음)
         moveCameraAndQuery(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     }
 
@@ -251,5 +298,147 @@ class UserLocationFragment :
         d.setBounds(0, 0, canvas.width, canvas.height)
         d.draw(canvas)
         return bmp
+    }
+
+    // 마커 그림
+    private fun drawMarkers(items: List<StoreOnMap>) {
+        if (!mapReady) return
+        val layer = poiLayer ?: kakaoMap?.labelManager?.layer ?: return
+        val pStyles = partnerStyles ?: return
+        val nStyles = normalStyles ?: return
+
+        labelToStore.clear()
+        layer.removeAll()
+
+        items.forEach { s ->
+            val styles = if (isPartnerVisual(s)) pStyles else nStyles
+            val label = layer.addLabel(
+                LabelOptions.from(LatLng.from(s.latitude, s.longitude))
+                    .setStyles(styles)
+                    .setTag(s.storeId.toString())
+            )
+            labelToStore[label] = s
+        }
+    }
+
+    // 하단 캡슐(아이템 프래그먼트)에 바인딩
+    private fun showCapsule(item: StoreOnMap) {
+        val frag = childFragmentManager.findFragmentById(R.id.fv_user_location_item) as? UserLocationItemFragment
+            ?: UserLocationItemFragment().also {
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fv_user_location_item, it)
+                    .commitNowAllowingStateLoss()
+            }
+
+        // criterionType/optionType → 설명 문자열로 포매팅
+        val description = formatCriterion(item)
+        frag.bind(
+            UserLocationItemFragment.UserStoreItem(
+                shopName = item.name ?: "-",
+                criterionType = description,
+                rating = (item.rate ?: 0).toFloat()
+            )
+        )
+
+        binding.includeSpeechBubble.visibility = View.VISIBLE
+        binding.fvUserLocationItem.visibility = View.VISIBLE
+
+        // 카드 클릭 시 상세로 이동(기존 동작 유지)
+        binding.fvUserLocationItem.setOnClickListener {
+            startActivity(Intent(requireContext(), UserReviewStoreActivity::class.java)
+                .putExtra("storeId", item.storeId)
+                .putExtra("storeName", item.name))
+        }
+    }
+
+    // 서버 응답을 사람이 읽기 쉬운 문구로
+    private fun formatCriterion(s: StoreOnMap): String {
+        return when (s.optionType) {
+            "SERVICE" -> when (s.criterionType) {
+                "PRICE" -> {
+                    val cost = s.cost?.toString() ?: "-"
+                    val gift = s.category ?: "상품"
+                    "${cost}원 이상 구매 시 ${gift} 증정"
+                }
+                "HEADCOUNT" -> {
+                    val people = s.people?.toString() ?: "-"
+                    val gift = s.category ?: "상품"
+                    "${people}명 이상 방문 시 ${gift} 증정"
+                }
+                else -> "서비스 혜택"
+            }
+
+            "DISCOUNT" -> when (s.criterionType) {
+                "PRICE" -> {
+                    val cost = s.cost?.toString() ?: "-"
+                    val rate = s.discountRate?.toString() ?: "-"
+                    "${cost}원 이상 구매 시 ${rate}% 할인"
+                }
+                "HEADCOUNT" -> {
+                    val people = s.people?.toString() ?: "-"
+                    val rate = s.discountRate?.toString() ?: "-"
+                    "${people}명 이상 방문 시 ${rate}% 할인"
+                }
+                else -> "할인 혜택"
+            }
+
+            else -> s.address.toString()
+        }
+    }
+
+    private fun hideSpeechBubble() {
+        val bubble = binding.includeSpeechBubble
+        bubble.visibility = View.GONE
+    }
+
+    private fun showSpeechBubbleOver(lat: Double, lng: Double, title: String) {
+        if (!mapReady || kakaoMap == null) return
+
+        val bubbleBinding = binding.includeSpeechBubble
+        val bubble = bubbleBinding
+
+        // (선택) 말풍선 내부 텍스트가 있으면 채우기
+        // bubbleBinding.tvTitle.text = title
+
+        // 지도 좌표 → MapView 내부 스크린 좌표
+        val screenPt = kakaoMap!!.toScreenPoint(LatLng.from(lat, lng)) ?: return
+
+        // bubble이 배치될 "부모 뷰" 좌표계와 MapView 좌표계의 차이를 보정
+        val parent = bubble.parent as ViewGroup
+        val parentLoc = IntArray(2)
+        val mapLoc = IntArray(2)
+        parent.getLocationOnScreen(parentLoc)
+        binding.userLocationMapView.getLocationOnScreen(mapLoc)
+
+        val offsetX = mapLoc[0] - parentLoc[0]
+        val offsetY = mapLoc[1] - parentLoc[1]
+
+        // 측정 이후 배치 (width/height 확보용)
+        bubble.post {
+            val anchorYOffset = bubble.height + dp(8) // 마커 위 8dp
+            bubble.x = offsetX + screenPt.x - bubble.width / 2f
+            bubble.y = offsetY + screenPt.y - anchorYOffset
+            bubble.visibility = View.VISIBLE
+            bubble.bringToFront()
+        }
+    }
+
+    // dp → px
+    private fun dp(value: Int): Float =
+        value * resources.displayMetrics.density
+
+    private fun isPartnerVisual(s: StoreOnMap): Boolean {
+        // 제휴 내용이 있는지 확인
+        val hasContent = listOf(
+            s.criterionType,
+            s.optionType,
+            s.category
+        ).any { it != null } || listOf(
+            s.cost,
+            s.people,
+            s.discountRate
+        ).any { it != null }
+
+        return hasContent
     }
 }

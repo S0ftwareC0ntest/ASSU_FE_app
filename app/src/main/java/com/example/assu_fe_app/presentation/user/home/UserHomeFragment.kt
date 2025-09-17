@@ -47,6 +47,9 @@ class UserHomeFragment :
     }
 
     override fun initView() {
+        val name = authTokenLocalStore.getUserName();
+        binding.tvHome1.setText("안녕하세요, ${name}님!")
+
         // 제휴 QR 박스 클릭 시 인증 액티비티로 이동
         binding.clHomeQrBox.setOnClickListener {
             val intent = Intent(requireContext(), UserQRVerifyActivity::class.java)
