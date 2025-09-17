@@ -87,7 +87,7 @@ class LocationFragment :
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
         binding.ivLocationSearchIc.setOnClickListener { navigateToSearch() }
         binding.tvLocationHint.setOnClickListener { navigateToSearch() }
-        binding.ivUserGoBack.setOnClickListener { goToMyLocation() }
+        binding.ivGoBack.setOnClickListener { goToMyLocation() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
