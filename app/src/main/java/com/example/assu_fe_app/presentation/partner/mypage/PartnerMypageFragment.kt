@@ -60,7 +60,7 @@ class PartnerMypageFragment
                 pickContent.launch("image/*")
             }
         }
-
+        profileViewModel.fetchProfileImage()
         binding.tvPartnerAccountName.setText(authTokenLocalStore.getUserName())
     }
 
@@ -76,16 +76,25 @@ class PartnerMypageFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             profileViewModel.profileUi.collectLatest { s ->
+                // 1) 서버에서 받은 presigned URL 있으면 표시
+                s.remoteUrl?.let { url ->
+                    Glide.with(this@PartnerMypageFragment)
+                        .load(url)
+                        .placeholder(R.drawable.img_partner) // 선택
+                        .error(R.drawable.img_partner)        // 선택
+                        .into(binding.ivPartnerAccountProfileImg)
+                }
 
+                // 2) 방금 업로드한 로컬 미리보기 우선 표시 (있으면)
                 s.lastLocalPreview?.let { uri ->
                     Glide.with(this@PartnerMypageFragment)
                         .load(uri)
-                        .into(binding.ivPartnerAccountProfileImg) // 프로필 이미지뷰 id 가정: ivAdmProfile
+                        .into(binding.ivPartnerAccountProfileImg)
                 }
 
+                // 메시지는 필요 시 Snackbar/Toast
                 s.message?.let { msg ->
-                    // Snackbar/Toast 중 택1
-                    // Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                    // Log.e("Profile", msg) // 또는 Snackbar/Toast
                 }
             }
         }
