@@ -1,6 +1,8 @@
 package com.example.assu_fe_app.presentation.user.location
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -65,21 +67,16 @@ class UserLocationFragment :
 
     private val vm: UserLocationViewModel by viewModels()
 
-    // Location (나중에 사용할 예정)
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
-        // 권한 결과와 무관하게 지금은 아무 것도 하지 않음 (시청 기준 유지)
-        val granted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-        Log.d("Permission", "location granted=$granted (but keeping City Hall view)")
+        val granted = (result[ACCESS_FINE_LOCATION] == true) || (result[ACCESS_COARSE_LOCATION] == true)
+        if (granted) goToMyLocation()
     }
 
     // 기본 위치(서울 시청)
-    private val DEFAULT_LATITUDE = 37.5662952
-    private val DEFAULT_LONGITUDE = 126.9779451
-    private val DEFAULT_ZOOM = 15
+    private val DEFAULT_ZOOM = 17
 
     override fun initView() {
         binding.viewLocationSearchBar.setOnClickListener { navigateToSearch() }
@@ -131,13 +128,13 @@ class UserLocationFragment :
 
                     poiLayer = map.labelManager?.layer
 
-                    // 마커 클릭 → 캡슐 표시 + (처음 한 번) 말풍선 표시
+                    // 마커 클릭 → 캡슐 표시 + 처음 한 번 말풍선 표시
                     map.setOnLabelClickListener(object : KakaoMap.OnLabelClickListener {
                         override fun onLabelClicked(map: KakaoMap, layer: LabelLayer, label: Label): Boolean {
                             val item = labelToStore[label] ?: return true
                             showCapsule(item)
 
-                            val hasContent = isPartnerVisual(item) // 아래 함수 참조
+                            val hasContent = isPartnerVisual(item)
                             if (hasContent && !shownPartnerBubbleOnce) {
                                 shownPartnerBubbleOnce = true
                                 showSpeechBubbleOver(item.latitude, item.longitude, item.name ?: "")
@@ -161,8 +158,6 @@ class UserLocationFragment :
 
                     // 카메라 이동 종료 시 재조회
                     map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
-
-                    moveToDefaultThenQuery()
                     goToMyLocation()
                     requestLocationPermissionsIfNeeded()
                 }
@@ -247,11 +242,6 @@ class UserLocationFragment :
         lastMyLatLng = LatLng.from(lat, lng)
         showCurrentLocation(lat, lng)
         moveCameraAndQuery(lat, lng)
-    }
-
-    private fun moveToDefaultThenQuery() {
-        // 기본: 서울시청으로만 이동/조회 (현재 위치 마커는 표시하지 않음)
-        moveCameraAndQuery(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     }
 
     private fun requestNearbyFromCurrentViewport() {
@@ -462,27 +452,17 @@ class UserLocationFragment :
 
     @SuppressLint("MissingPermission")
     private fun goToMyLocation() {
-        // 권한 체크
-        val fineGranted = ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        val coarseGranted = ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val fineGranted   = ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ContextCompat.checkSelfPermission(requireContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-        // 권한 없으면 런처로 요청 후 return
         if (!fineGranted && !coarseGranted) {
-            permLauncher.launch(arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ))
+            permLauncher.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
             return
         }
 
-        // 캐시가 있으면 먼저 바로 이동(UX 빠르게)
-        lastMyLatLng?.let {
-            moveCameraAndQuery(it.latitude, it.longitude)
-        }
+        // UX 빠르게: 마지막 좌표로 먼저 이동
+        lastMyLatLng?.let { moveCameraAndQuery(it.latitude, it.longitude) }
 
-        // 최신 위치 한 번 더 가져와 갱신
         fused.lastLocation
             .addOnSuccessListener { loc ->
                 if (loc != null) {
@@ -493,9 +473,7 @@ class UserLocationFragment :
                         .addOnSuccessListener { cur ->
                             if (cur != null) centerToMyLocation(cur.latitude, cur.longitude)
                         }
-                        .addOnFailureListener { e -> Log.e("Location", "getCurrentLocation fail", e) }
                 }
             }
-            .addOnFailureListener { e -> Log.e("Location", "lastLocation fail", e) }
     }
 }

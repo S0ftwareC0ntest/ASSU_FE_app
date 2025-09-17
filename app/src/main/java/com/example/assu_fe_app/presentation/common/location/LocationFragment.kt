@@ -43,7 +43,6 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.jar.Manifest
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -81,10 +80,8 @@ class LocationFragment :
     private val fused by lazy { LocationServices.getFusedLocationProviderClient(requireContext()) }
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { _ -> moveToDefaultThenQuery() }
+    ) { _ -> goToMyLocation() }
 
-    private val DEFAULT_LATITUDE = 37.5662952
-    private val DEFAULT_LONGITUDE = 126.9779451
     private val DEFAULT_ZOOM = 17
 
     override fun initView() {
@@ -162,8 +159,6 @@ class LocationFragment :
                             }
                         }
                     }
-
-                    moveToDefaultThenQuery()
                     goToMyLocation()
                 }
             }
@@ -187,14 +182,17 @@ class LocationFragment :
                         }
                         is ChattingViewModel.CreateRoomUiState.Fail -> {
                             setCreateLoading(false)
-                            Toast.makeText(requireContext(),
-                                "채팅방 생성 실패(${state.code}) ${state.message ?: ""}",
-                                Toast.LENGTH_SHORT).show()
+                            Log.e(
+                                "CreateRoom",
+                                "채팅방 생성 실패(code=${state.code}) message=${state.message ?: ""}"
+                            )
                         }
                         is ChattingViewModel.CreateRoomUiState.Error -> {
                             setCreateLoading(false)
-                            Toast.makeText(requireContext(),
-                                "오류: ${state.message}", Toast.LENGTH_SHORT).show()
+                            Log.e(
+                                "CreateRoom",
+                                "오류 발생: ${state.message}"
+                            )
                         }
                     }
                 }
@@ -303,34 +301,17 @@ class LocationFragment :
 
     @SuppressLint("MissingPermission")
     private fun goToMyLocation() {
-        // 권한 체크
-        val fineGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+        val fineGranted   = ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ContextCompat.checkSelfPermission(requireContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-        val coarseGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        // 권한 없으면 런처로 요청 후 return
         if (!fineGranted && !coarseGranted) {
-            permLauncher.launch(
-                arrayOf(
-                    ACCESS_FINE_LOCATION,
-                    ACCESS_COARSE_LOCATION
-                )
-            )
+            permLauncher.launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
             return
         }
 
-        // 캐시가 있으면 먼저 바로 이동(UX 빠르게)
-        lastMyLatLng?.let {
-            moveCameraAndQuery(it.latitude, it.longitude)
-        }
+        // UX 빠르게: 마지막 좌표로 먼저 이동
+        lastMyLatLng?.let { moveCameraAndQuery(it.latitude, it.longitude) }
 
-        // 최신 위치 한 번 더 가져와 갱신
         fused.lastLocation
             .addOnSuccessListener { loc ->
                 if (loc != null) {
@@ -341,18 +322,15 @@ class LocationFragment :
                         .addOnSuccessListener { cur ->
                             if (cur != null) centerToMyLocation(cur.latitude, cur.longitude)
                         }
-                        .addOnFailureListener { e -> Log.e("Location", "getCurrentLocation fail", e) }
                 }
             }
-            .addOnFailureListener { e -> Log.e("Location", "lastLocation fail", e) }
     }
+
 
     // ===== 카메라 이동 & 조회 =====
     private fun moveCameraAndQuery(lat: Double, lng: Double) {
         if (!mapReady) return
-        kakaoMap.moveCamera(
-            CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM)
-        )
+        kakaoMap.moveCamera(CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lng), DEFAULT_ZOOM))
         requestNearbyFromCurrentViewport()
     }
 
@@ -360,10 +338,6 @@ class LocationFragment :
         lastMyLatLng = LatLng.from(lat, lng)
         showCurrentLocation(lat, lng)
         moveCameraAndQuery(lat, lng)
-    }
-
-    private fun moveToDefaultThenQuery() {
-        moveCameraAndQuery(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
     }
 
     private fun requestNearbyFromCurrentViewport() {
