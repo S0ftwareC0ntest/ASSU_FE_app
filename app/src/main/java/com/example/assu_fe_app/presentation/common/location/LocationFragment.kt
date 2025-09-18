@@ -129,11 +129,11 @@ class LocationFragment :
                     }
 
                     // 마커 스타일 (벡터 → 비트맵, 크기 24dp)
-                    val partnerBmp = vectorToBitmap(R.drawable.ic_partner_location, 24)
+                    val partnerBmp = vectorToBitmap(R.drawable.ic_marker, 24)
                     partnerStyles = kakaoMap.labelManager?.addLabelStyles(
                         LabelStyles.from(LabelStyle.from(partnerBmp).setAnchorPoint(0.5f, 1.0f))
                     )
-                    val adminBmp = vectorToBitmap(R.drawable.ic_marker, 24)
+                    val adminBmp = vectorToBitmap(R.drawable.ic_partner_location, 24)
                     adminStyles = kakaoMap.labelManager?.addLabelStyles(
                         LabelStyles.from(LabelStyle.from(adminBmp).setAnchorPoint(0.5f, 1.0f))
                     )
