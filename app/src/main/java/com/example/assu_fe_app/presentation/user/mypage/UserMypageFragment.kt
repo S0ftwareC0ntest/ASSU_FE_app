@@ -31,7 +31,9 @@ class UserMypageFragment
     private val profileViewModel: ProfileImageViewModel by viewModels()
 
 
-    override fun initView() { /* no-op */ }
+    override fun initView() {
+
+    }
 
     override fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -43,48 +45,18 @@ class UserMypageFragment
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            profileViewModel.profileUi.collectLatest { s ->
-                // 1) 서버에서 받은 presigned URL 있으면 표시
-                s.remoteUrl?.let { url ->
-                    Glide.with(this@UserMypageFragment)
-                        .load(url)
-                        .placeholder(R.drawable.img_user) // 선택
-                        .error(R.drawable.img_user)        // 선택
-                        .into(binding.ivAccountProfileImg)
-                }
-
-                // 2) 방금 업로드한 로컬 미리보기 우선 표시 (있으면)
-                s.lastLocalPreview?.let { uri ->
-                    Glide.with(this@UserMypageFragment)
-                        .load(uri)
-                        .into(binding.ivAccountProfileImg)
-                }
-
-                // 메시지는 필요 시 Snackbar/Toast
-                s.message?.let { msg ->
-                    // Log.e("Profile", msg) // 또는 Snackbar/Toast
-                }
-            }
-        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvAccountName.setText(authTokenLocalStore.getUserName())
-        profileViewModel.fetchProfileImage()
+        binding.tvAccountImageEdit.setText(authTokenLocalStore.getBasicInfoMajor())
         initClick()
     }
 
     private fun initClick() {
         binding.clAccountComponent1.setOnClickListener {
             startActivity(Intent(requireContext(), UserMyReviewActivity::class.java))
-        }
-
-        // 프로필 수정
-        binding.clAccountComponent2.setOnClickListener {
-            // TODO: 구현 예정
         }
 
         // 계정관리 페이지 이동
