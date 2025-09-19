@@ -1,5 +1,6 @@
 package com.example.assu_fe_app.presentation.common.location
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,12 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
+import com.example.assu_fe_app.data.dto.partnership.OpenContractArgs
 import com.example.assu_fe_app.data.local.AuthTokenLocalStore
 import com.example.assu_fe_app.databinding.FragmentLocationSearchSuccessBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.location.adapter.AdminPartnerLocationAdapter
 import com.example.assu_fe_app.presentation.common.location.adapter.LocationSharedViewModel
 import com.example.assu_fe_app.ui.map.AdminPartnerKeyWordSearchViewModel
+import com.example.assu_fe_app.ui.map.MapBridgeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +28,7 @@ class LocationSearchSuccessFragment :
 
     private val sharedViewModel: LocationSharedViewModel by viewModels()
     private val searchViewModel : AdminPartnerKeyWordSearchViewModel by activityViewModels()
+    private val bridgeVm: MapBridgeViewModel by viewModels()
 
     private lateinit var adapter: AdminPartnerLocationAdapter
     private lateinit var role: UserRole
@@ -63,13 +67,22 @@ class LocationSearchSuccessFragment :
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun initAdapter(){
-        adapter = AdminPartnerLocationAdapter(role)
-        binding.rvLocationSearchSuccess.apply{
-            layoutManager = LinearLayoutManager(requireContext())
-            this.adapter = this@LocationSearchSuccessFragment.adapter
+    private fun initAdapter() {
+        adapter = AdminPartnerLocationAdapter(role,
+            authTokenLocalStore.getUserName().toString()
+        ) { args ->
+            // 결과로 돌려주고 현재 검색 액티비티 종료
+            val data = android.content.Intent().apply {
+                putExtra("open_contract_args", args) // Serializable or Parcelable
+            }
+            requireActivity().setResult(android.app.Activity.RESULT_OK, data)
+            requireActivity().finish()
         }
 
+        binding.rvLocationSearchSuccess.apply {
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+            this.adapter = this@LocationSearchSuccessFragment.adapter
+        }
     }
 
 }

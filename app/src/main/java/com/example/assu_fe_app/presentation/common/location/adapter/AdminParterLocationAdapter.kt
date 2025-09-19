@@ -11,13 +11,16 @@ import com.bumptech.glide.Glide
 import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
 import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResultItem
+import com.example.assu_fe_app.data.dto.partnership.OpenContractArgs
 import com.example.assu_fe_app.data.local.AuthTokenLocalStore
 import com.example.assu_fe_app.databinding.ItemAdminPartnerLocationSearchResultItemBinding
 import com.example.assu_fe_app.presentation.common.chatting.ChattingActivity
 import javax.inject.Inject
 
 class AdminPartnerLocationAdapter(
-    private val role: UserRole
+    private val role: UserRole,
+    private val myName: String? = null,
+    private val onOpenContract: (OpenContractArgs) -> Unit
 ) :
     ListAdapter<LocationAdminPartnerSearchResultItem, AdminPartnerLocationAdapter.ViewHolder>(DiffCallback) {
     inner class ViewHolder(
@@ -43,17 +46,38 @@ class AdminPartnerLocationAdapter(
                 if (isLastItem) View.GONE else View.VISIBLE
 
             binding.tvItemAdminPartnerLocationSearchResultItemContact.setOnClickListener {
-                val context = it.context
-                val intent = Intent(context, ChattingActivity::class.java)
+                val itemIsPartnered = item.partnered
 
-                val message = if (item.partnered) {
-                    "'제휴 계약서 보기' 버튼을 통해 이동했습니다."
+                if (itemIsPartnered) {
+                    val pid = item.partnershipId
+                    if (pid != null) {
+                        val (partnerName, adminName) = when (role) {
+                            UserRole.ADMIN   -> item.shopName to myName
+                            UserRole.PARTNER -> myName to item.shopName
+                            else             -> item.shopName to myName
+                        }
+
+                        onOpenContract(
+                            OpenContractArgs(
+                                partnershipId = pid,
+                                latitude = item.latitude,
+                                longitude = item.longitude,
+                                partnerName = partnerName,
+                                adminName = adminName,
+                                term = item.term,
+                                profileUrl = item.profileUrl
+                            )
+                        )
+                    } else {
+                        android.util.Log.w("contract", "partnershipId is null; cannot open contract")
+                    }
                 } else {
-                    "'문의하기' 버튼을 통해 이동했습니다."
+                    // 기존 문의하기 로직 그대로
+                    val ctx = it.context
+                    val intent = android.content.Intent(ctx, com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java)
+                    intent.putExtra("entryMessage", "'문의하기' 버튼을 통해 이동했습니다.")
+                    ctx.startActivity(intent)
                 }
-
-                intent.putExtra("entryMessage", message)
-                context.startActivity(intent)
             }
         }
 

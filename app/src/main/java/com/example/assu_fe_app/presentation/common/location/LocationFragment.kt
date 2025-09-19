@@ -21,15 +21,22 @@ import com.example.assu_fe_app.R
 import com.example.assu_fe_app.data.dto.UserRole
 import com.example.assu_fe_app.data.dto.location.LocationAdminPartnerSearchResultItem
 import com.example.assu_fe_app.data.dto.location.ViewportQuery
+import com.example.assu_fe_app.data.dto.partnership.OpenContractArgs
 import com.example.assu_fe_app.data.local.AuthTokenLocalStore
 import com.example.assu_fe_app.databinding.FragmentLoactionBinding
 import com.example.assu_fe_app.domain.model.location.AdminOnMap
 import com.example.assu_fe_app.domain.model.location.PartnerOnMap
+import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsModel
 import com.example.assu_fe_app.presentation.base.BaseFragment
+import com.example.assu_fe_app.presentation.common.contract.PartnershipContractDialogFragment
+import com.example.assu_fe_app.presentation.common.contract.toContractData
 import com.example.assu_fe_app.presentation.common.location.adapter.AdminPartnerLocationAdapter
 import com.example.assu_fe_app.presentation.common.location.adapter.LocationSharedViewModel
 import com.example.assu_fe_app.ui.chatting.ChattingViewModel
 import com.example.assu_fe_app.ui.location.AdminPartnerLocationViewModel
+import com.example.assu_fe_app.ui.map.MapBridgeViewModel
+import com.example.assu_fe_app.ui.map.MapEvent
+import com.example.assu_fe_app.ui.partnership.PartnershipViewModel
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -52,6 +59,7 @@ class LocationFragment :
     private var currentItem: LocationAdminPartnerSearchResultItem? = null
     private val chatVm: ChattingViewModel by activityViewModels()
     private val vm: AdminPartnerLocationViewModel by viewModels()
+    private val bridgeVm: MapBridgeViewModel by activityViewModels()
 
     private lateinit var mapView: MapView
     private lateinit var kakaoMap: KakaoMap
@@ -60,6 +68,11 @@ class LocationFragment :
     // KakaoMap 현재위치 라벨
     private var myLocStyles: LabelStyles? = null
     private var myLocLabel: Label? = null
+
+    private val partnershipVm: PartnershipViewModel by activityViewModels()
+
+    private var pendingPartnershipId: Long? = null
+    private var contractFallback: OpenContractArgs? = null
 
     // 마지막으로 성공한 현재 위치(재진입/되돌아가기용 캐시)
     private var lastMyLatLng: LatLng? = null
@@ -70,6 +83,9 @@ class LocationFragment :
 
     private val labelToPartner = mutableMapOf<Label, PartnerOnMap>()
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
+
+    // TODO: DEL
+    private val SEOUL_CITY_HALL = LatLng.from(37.5665, 126.9780)
 
     @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
     private val role: UserRole by lazy {
@@ -158,7 +174,8 @@ class LocationFragment :
                             }
                         }
                     }
-                    goToMyLocation()
+                    //goToMyLocation()
+                    moveCameraAndQuery(SEOUL_CITY_HALL.latitude, SEOUL_CITY_HALL.longitude)
                 }
             }
         )
@@ -212,6 +229,43 @@ class LocationFragment :
                             Log.e("UIState", "Fail: ${s.code}, ${s.message}")
                         is AdminPartnerLocationViewModel.UiState.Error ->
                             Log.e("UIState", "Error", s.t)
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                partnershipVm.getPartnershipDetailUiState.collect { s ->
+                    when (s) {
+                        is PartnershipViewModel.PartnershipDetailUiState.Success -> {
+                            val wanted = pendingPartnershipId
+                            if (wanted != null && s.data.partnershipId == wanted) {
+                                val fb = contractFallback
+                                val data = s.data.toContractData(
+                                    partnerNameFallback = fb?.partnerName, // 이름만 보강
+                                    adminNameFallback   = fb?.adminName,
+                                    fallbackStart       = null,            // ← 기간은 응답값 사용
+                                    fallbackEnd         = null
+                                )
+                                PartnershipContractDialogFragment.newInstance(data)
+                                    .show(parentFragmentManager, "PartnershipContractDialog")
+
+                                pendingPartnershipId = null
+                                contractFallback = null
+                            }
+                        }
+                        is PartnershipViewModel.PartnershipDetailUiState.Fail -> {
+                            Log.e("LocationFragment", "계약 상세 실패: ${s.code}, ${s.message}")
+                            pendingPartnershipId = null
+                            contractFallback = null
+                        }
+                        is PartnershipViewModel.PartnershipDetailUiState.Error -> {
+                            Log.e("LocationFragment", "계약 상세 에러: ${s.message}")
+                            pendingPartnershipId = null
+                            contractFallback = null
+                        }
+                        else -> Unit
                     }
                 }
             }
@@ -288,10 +342,34 @@ class LocationFragment :
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                bridgeVm.events.collect { ev ->
+                    when (ev) {
+                        is MapEvent.ShowContract -> {
+                            ev.latitude?.let { lat -> ev.longitude?.let { lng -> moveCameraAndQuery(lat, lng) } }
+                            contractFallback = OpenContractArgs(
+                                partnershipId = ev.partnershipId,
+                                latitude = ev.latitude,
+                                longitude = ev.longitude,
+                                partnerName = ev.partnerName,   // 이벤트에 있다면 사용
+                                adminName   = ev.adminName,
+                                term        = ev.term,
+                                profileUrl  = ev.profileUrl
+                            )
+                            pendingPartnershipId = ev.partnershipId
+                            partnershipVm.getPartnershipDetail(ev.partnershipId)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun navigateToSearch() {
-        startActivity(android.content.Intent(requireContext(), LocationSearchActivity::class.java))
+        val intent = android.content.Intent(requireContext(), LocationSearchActivity::class.java)
+        searchLauncher.launch(intent)
     }
 
     private fun setCreateLoading(loading: Boolean) {
@@ -520,4 +598,38 @@ class LocationFragment :
         )
     }
 
+    private fun showContractDialog(args: OpenContractArgs) {
+        val start = args.term?.split("~")?.getOrNull(0)?.trim().orEmpty()
+        val end   = args.term?.split("~")?.getOrNull(1)?.trim().orEmpty()
+
+        val data = com.example.assu_fe_app.data.dto.partnership.PartnershipContractData(
+            partnerName = args.partnerName ?: "-",
+            adminName   = args.adminName ?: "-",
+            periodStart = start,
+            periodEnd   = end,
+            options     = emptyList() // 지금은 args-only 플로우이므로 옵션은 비움
+        )
+
+        PartnershipContractDialogFragment
+            .newInstance(data)
+            .show(parentFragmentManager, "contractDialog")
+    }
+
+    private val searchLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == android.app.Activity.RESULT_OK) {
+                val args = result.data?.getSerializableExtra("open_contract_args") as? OpenContractArgs
+                    ?: return@registerForActivityResult
+
+                if (args.latitude != null && args.longitude != null) {
+                    moveCameraAndQuery(args.latitude, args.longitude)
+                }
+
+                // ✅ fallback 저장 + 상세조회 호출
+                contractFallback = args
+                pendingPartnershipId = args.partnershipId
+                partnershipVm.getPartnershipDetail(args.partnershipId)
+                Log.d("LocationFragment", "검색 선택: pid=${args.partnershipId}, 상세조회 호출")
+            }
+        }
 }
