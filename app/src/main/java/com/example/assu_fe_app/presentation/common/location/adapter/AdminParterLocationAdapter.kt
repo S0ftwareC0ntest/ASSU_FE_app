@@ -20,7 +20,8 @@ import javax.inject.Inject
 class AdminPartnerLocationAdapter(
     private val role: UserRole,
     private val myName: String? = null,
-    private val onOpenContract: (OpenContractArgs) -> Unit
+    private val onOpenContract: (OpenContractArgs) -> Unit,
+    private val onAskChat: (LocationAdminPartnerSearchResultItem) -> Unit
 ) :
     ListAdapter<LocationAdminPartnerSearchResultItem, AdminPartnerLocationAdapter.ViewHolder>(DiffCallback) {
     inner class ViewHolder(
@@ -72,11 +73,7 @@ class AdminPartnerLocationAdapter(
                         android.util.Log.w("contract", "partnershipId is null; cannot open contract")
                     }
                 } else {
-                    // 기존 문의하기 로직 그대로
-                    val ctx = it.context
-                    val intent = android.content.Intent(ctx, com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java)
-                    intent.putExtra("entryMessage", "'문의하기' 버튼을 통해 이동했습니다.")
-                    ctx.startActivity(intent)
+                    onAskChat(item)
                 }
             }
         }
