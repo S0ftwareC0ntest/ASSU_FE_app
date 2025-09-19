@@ -17,6 +17,7 @@ import com.example.assu_fe_app.data.local.AuthTokenLocalStore
 import com.example.assu_fe_app.databinding.FragmentAdminMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.user.mypage.UserMypagePrivacyDialogFragment
 import com.example.assu_fe_app.ui.common.mypage.MypageViewModel
 import com.example.assu_fe_app.ui.profileImage.ProfileImageViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -129,6 +130,12 @@ class AdminMypageFragment : BaseFragment<FragmentAdminMypageBinding>(R.layout.fr
         }
 
         binding.tvAdmAccountName.setText(authTokenLocalStore.getUserName())
+
+        // 개인정보 처리방침
+        binding.clAdmAccountComponent4.setOnClickListener {
+            UserMypagePrivacyDialogFragment()
+                .show(childFragmentManager, "PrivacyDialog")
+        }
 
         // 고객센터
         binding.clAdmAccountComponent5.setOnClickListener {

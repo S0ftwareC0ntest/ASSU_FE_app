@@ -16,6 +16,7 @@ import com.example.assu_fe_app.data.local.AuthTokenLocalStore
 import com.example.assu_fe_app.databinding.FragmentPartnerMypageBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
 import com.example.assu_fe_app.presentation.common.login.LoginActivity
+import com.example.assu_fe_app.presentation.user.mypage.UserMypagePrivacyDialogFragment
 import com.example.assu_fe_app.ui.common.mypage.MypageViewModel
 import com.example.assu_fe_app.ui.profileImage.ProfileImageViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,19 +108,26 @@ class PartnerMypageFragment
     }
 
     private fun initClickListeners() {
-        // 알림 설정
+        // 알림 설정으로 이동
         binding.clPartnerAccountComponent1.setOnClickListener {
             PartnerMypageAlarmDialogFragment()
                 .show(childFragmentManager, "AlarmDialog")
         }
 
-        // 계정관리 페이지 이동
+        // 계정관리로 이동
         binding.clPartnerAccountComponent2.setOnClickListener {
             findNavController().navigate(
                 R.id.action_partner_mypage_to_mypage_account
             )
         }
 
+        // 개인정보 처리방침으로 이동
+        binding.clPartnerAccountComponent4.setOnClickListener {
+            UserMypagePrivacyDialogFragment()
+                .show(childFragmentManager, "PrivacyDialog")
+        }
+
+        // 고객센터로 이동
         binding.clPartnerAccountComponent5.setOnClickListener {
             findNavController().navigate(
                 R.id.action_partner_mypage_to_inquiry
