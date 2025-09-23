@@ -71,7 +71,7 @@ class CustomerServiceDialogFragment :
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.list.collectLatest { st -> historyAdapter.submitList(st.items) }
+                vm.list.collectLatest { st -> historyAdapter.submitList(st.items.toList()) }
             }
         }
 
