@@ -78,6 +78,9 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
             onItemClick   = { item ->
                 lastClickedItem = item
                 pendingPartnershipId = item.paperId
+
+                pendingContractAdapter.selectById(item.paperId)
+
                 partnershipVm.getPartnershipDetail(item.paperId) // paperId == partnershipId
             }
         )
@@ -155,8 +158,15 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
                             fallbackEnd   = state.data.periodEnd    // null 가능
                         )
 
+                        /*PartnershipContractDialogFragment
+                            .newInstance(data)
+                            .show(childFragmentManager, "PartnershipContractDialog")*/
+
                         PartnershipContractDialogFragment
                             .newInstance(data)
+                            .apply {
+                                onDismissListener = { pendingContractAdapter.clearSelection() }
+                            }
                             .show(childFragmentManager, "PartnershipContractDialog")
                     }
 

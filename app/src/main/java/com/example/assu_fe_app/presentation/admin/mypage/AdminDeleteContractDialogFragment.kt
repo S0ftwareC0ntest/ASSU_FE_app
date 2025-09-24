@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import com.example.assu_fe_app.R
+import android.content.DialogInterface
 import com.example.assu_fe_app.databinding.DialogAdminDeleteContractBinding
 import com.example.assu_fe_app.domain.model.partnership.SuspendedPaperModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AdminDeleteContractDialogFragment : DialogFragment() {
+    var onDismissListener: (() -> Unit)? = null
 
     private var _binding: DialogAdminDeleteContractBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +35,11 @@ class AdminDeleteContractDialogFragment : DialogFragment() {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(android.R.color.transparent)
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener?.invoke()
     }
 
     override fun onCreateView(

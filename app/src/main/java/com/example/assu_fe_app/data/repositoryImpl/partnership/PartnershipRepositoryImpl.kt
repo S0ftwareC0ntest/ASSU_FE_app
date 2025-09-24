@@ -13,6 +13,7 @@ import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsMo
 import com.example.assu_fe_app.domain.model.partnership.SuspendedPaperModel
 import com.example.assu_fe_app.util.RetrofitResult
 import com.example.assu_fe_app.util.apiHandler
+import com.example.assu_fe_app.util.apiHandlerForUnit
 import com.squareup.moshi.Moshi
 import jakarta.inject.Inject
 import okhttp3.MediaType.Companion.toMediaType
@@ -73,8 +74,8 @@ class PartnershipRepositoryImpl @Inject constructor(
         )
 
     override suspend fun deletePartnership(paperId: Long): RetrofitResult<Unit> =
-        apiHandler(
+        apiHandlerForUnit(
             execute = { api.deletePartnership(paperId) },
-            mapper = { } // Unit
+            mapper  = { Unit }
         )
 }

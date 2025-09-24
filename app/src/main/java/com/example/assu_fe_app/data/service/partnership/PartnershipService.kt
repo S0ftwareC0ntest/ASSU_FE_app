@@ -6,6 +6,7 @@ import com.example.assu_fe_app.data.dto.partnership.response.GetProposalPartnerL
 import com.example.assu_fe_app.data.dto.partnership.response.ManualPartnershipResponseDto
 import com.example.assu_fe_app.data.dto.partnership.response.SuspendedPaperDto
 import com.example.assu_fe_app.data.dto.partnership.response.WritePartnershipResponseDto
+import com.squareup.moshi.JsonClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.DELETE
@@ -46,5 +47,5 @@ interface PartnershipService {
     @DELETE("partnership/proposal/delete/{paperId}")
     suspend fun deletePartnership(
         @Path("paperId") paperId: Long
-    ): BaseResponse<Unit>
+    ): BaseResponse<Any>
 }
