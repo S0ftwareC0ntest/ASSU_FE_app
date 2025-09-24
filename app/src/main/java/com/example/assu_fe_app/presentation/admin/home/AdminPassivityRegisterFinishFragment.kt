@@ -1,16 +1,14 @@
-package com.example.assu_fe_app
+package com.example.assu_fe_app.presentation.admin.home
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.assu_fe_app.R
 import com.example.assu_fe_app.databinding.FragmentAdminPassiveRegisterFinishBinding
 import com.example.assu_fe_app.presentation.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class AdminPassiveRegisterFinishFragment : BaseFragment<FragmentAdminPassiveRegisterFinishBinding>(R.layout.fragment_admin_passive_register_finish) {
+@AndroidEntryPoint
+class AdminPassivityRegisterFinishFragment : BaseFragment<FragmentAdminPassiveRegisterFinishBinding>(R.layout.fragment_admin_passive_register_finish) {
     override fun initObserver() {
     }
 
