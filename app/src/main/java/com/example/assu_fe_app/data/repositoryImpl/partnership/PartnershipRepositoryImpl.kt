@@ -10,6 +10,7 @@ import com.example.assu_fe_app.domain.model.admin.GetProposalAdminListModel
 import com.example.assu_fe_app.domain.model.admin.GetProposalPartnerListModel
 import com.example.assu_fe_app.domain.model.partnership.ManualPartnershipModel
 import com.example.assu_fe_app.domain.model.partnership.ProposalPartnerDetailsModel
+import com.example.assu_fe_app.domain.model.partnership.SuspendedPaperModel
 import com.example.assu_fe_app.util.RetrofitResult
 import com.example.assu_fe_app.util.apiHandler
 import com.squareup.moshi.Moshi
@@ -64,4 +65,16 @@ class PartnershipRepositoryImpl @Inject constructor(
         },
         mapper = { dto -> dto.toModel() }
     )
+
+    override suspend fun getSuspendedPapers(): RetrofitResult<List<SuspendedPaperModel>> =
+        apiHandler(
+            execute = { api.getSuspendedPapers() },
+            mapper = { dtoList -> dtoList.map { it.toModel() } }
+        )
+
+    override suspend fun deletePartnership(paperId: Long): RetrofitResult<Unit> =
+        apiHandler(
+            execute = { api.deletePartnership(paperId) },
+            mapper = { } // Unit
+        )
 }
