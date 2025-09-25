@@ -201,7 +201,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun provideAdminHomeApiService(@NoAuth retrofit: Retrofit): AdminHomeService =
+    fun provideAdminHomeApiService(@Auth retrofit: Retrofit): AdminHomeService =
         retrofit.create(AdminHomeService::class.java)
 
     @Provides
