@@ -206,7 +206,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providePartnerHomeService(@NoAuth retrofit: Retrofit): PartnerHomeService =
+    fun providePartnerHomeService(@Auth retrofit: Retrofit): PartnerHomeService =
         retrofit.create(PartnerHomeService::class.java)
 
 
