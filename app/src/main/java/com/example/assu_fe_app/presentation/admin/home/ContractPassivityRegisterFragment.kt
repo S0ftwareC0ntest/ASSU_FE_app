@@ -164,10 +164,27 @@ class ContractPassivityRegisterFragment : BaseFragment<FragmentContractPassiveRe
         viewModel.submit(req, pickedImage)
     }
 
-    private fun normalizeDateToIso(day: String): String {
-        return day.trim()
-            .replace(Regex("[^0-9]"), "-")
-            .replace(Regex("-+"), "-")
-            .trim('-')
+    private fun normalizeDateToIso(input: String): String {
+        // 숫자만 추출: "2025 - 2 - 3", "2025.2.3", "2025/02/03", "2025 2 3" 모두 OK
+        val nums = Regex("""\d+""").findAll(input).map { it.value }.toList()
+        if (nums.size < 3) return "" // 연-월-일 최소 3개 숫자 필요
+
+        var year  = nums[0]
+        var month = nums[1]
+        var day   = nums[2]
+
+        // 2자리 연도가 들어오면 20xx로 보정 (원치 않으면 이 블록 삭제)
+        if (year.length == 2) year = "20$year"
+
+        // 월/일 0 패딩
+        month = month.padStart(2, '0')
+        day   = day.padStart(2, '0')
+
+        // 간단 범위 체크 (원하면 더 엄격하게 검사 가능)
+        val m = month.toIntOrNull() ?: return ""
+        val d = day.toIntOrNull() ?: return ""
+        if (year.length != 4 || m !in 1..12 || d !in 1..31) return ""
+
+        return "$year-$month-$day"
     }
 }

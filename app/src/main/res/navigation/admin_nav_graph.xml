@@ -74,6 +74,12 @@
             app:destination="@id/customerServiceDialogFragment" />
     </fragment>
 
+
+    <dialog
+        android:id="@+id/adminMypagePendingPartnershipDialogFragment"
+        android:name="com.example.assu_fe_app.presentation.admin.mypage.AdminMypagePendingPartnershipDialogFragment"
+        android:label="AdminMypagePendingPartnershipDialogFragment"/>
+
     <fragment
         android:id="@+id/mypageAccountFragment"
         android:name="com.example.assu_fe_app.presentation.common.mypage.MypageAccountFragment"
@@ -119,6 +125,9 @@
         <action
             android:id="@+id/action_admin_passive_register_finish_to_admin_home"
             app:destination="@id/adminHomeFragment"/>
+        <action
+            android:id="@+id/action_finish_to_pending_partnership_dialog"
+            app:destination="@id/adminMypagePendingPartnershipDialogFragment" />
     </fragment>
 
     <fragment

@@ -57,6 +57,7 @@ class UserLocationFragment :
     private var myLocStyles: LabelStyles? = null
     private var myLocLabel: Label? = null
 
+    private val SEOUL_CITY_HALL = LatLng.from(37.4962,126.9571)
 
     // 마지막으로 성공한 현재 위치(재진입 / 되돌아가기용 캐시)
     private var lastMyLatLng: LatLng? = null
@@ -157,8 +158,9 @@ class UserLocationFragment :
                     }
 
                     // 카메라 이동 종료 시 재조회
-                    map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
-                    goToMyLocation()
+                    // map.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
+                    //goToMyLocation()
+                    moveCameraAndQuery(SEOUL_CITY_HALL.latitude, SEOUL_CITY_HALL.longitude)
                     requestLocationPermissionsIfNeeded()
                 }
             }

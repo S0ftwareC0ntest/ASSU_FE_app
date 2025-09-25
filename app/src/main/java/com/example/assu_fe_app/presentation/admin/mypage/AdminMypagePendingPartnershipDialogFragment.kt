@@ -35,7 +35,22 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
     private var pendingPartnershipId: Long? = null
     private var lastClickedItem: SuspendedPaperModel? = null
 
+    private var autoOpenTargetId: Long? = null
+    private var autoOpenConsumed = false
+
     @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
+
+    companion object {
+        private const val ARG_TARGET_ID = "arg_target_id"
+
+        fun newInstance(targetId: Long?): AdminMypagePendingPartnershipDialogFragment {
+            return AdminMypagePendingPartnershipDialogFragment().apply {
+                arguments = Bundle().apply {
+                    if (targetId != null) putLong(ARG_TARGET_ID, targetId)
+                }
+            }
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -64,6 +79,9 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnPendingBack.setOnClickListener { dismiss() }
+        autoOpenTargetId = if (arguments?.containsKey(ARG_TARGET_ID) == true)
+            arguments?.getLong(ARG_TARGET_ID)
+        else null
 
         setupRecyclerView()
         bindViewModel()
@@ -94,6 +112,7 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
                 pendingContractAdapter.submitList(list)
                 binding.tvPendingCount.text = list.size.toString()
                 updateUIForEmptyState(list.isEmpty())
+                maybeAutoOpen(list)
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -180,6 +199,22 @@ class AdminMypagePendingPartnershipDialogFragment : DialogFragment() {
                 }
             }
         }
+    }
+
+    private fun maybeAutoOpen(list: List<SuspendedPaperModel>) {
+        if (autoOpenConsumed) return
+        if (list.isEmpty()) return
+
+        val targetId = autoOpenTargetId ?: return
+
+        val target = list.firstOrNull { it.paperId == targetId } ?: return
+
+        autoOpenConsumed = true
+        lastClickedItem = target
+        pendingPartnershipId = target.paperId
+
+        pendingContractAdapter.selectById(target.paperId)
+        partnershipVm.getPartnershipDetail(target.paperId)
     }
 
 }
