@@ -112,13 +112,13 @@ class InquiryDetailDialogFragment : DialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.detailLoading.collectLatest { loading ->
-                    if (loading) showLoading("불러오는 중...") else hideLoading()
+                    if (loading) showLoading("로딩 중...") else hideLoading()
                 }
             }
         }
     }
 
-    private fun showLoading(message: String = "불러오는 중...") {
+    private fun showLoading(message: String = "로딩 중...") {
         binding.loadingOverlay.visibility = View.VISIBLE
         binding.tvLoadingText.text = message
     }

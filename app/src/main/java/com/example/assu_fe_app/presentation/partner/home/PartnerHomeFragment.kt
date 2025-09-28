@@ -196,11 +196,11 @@ class PartnerHomeFragment :
                         }
                         is AdminRecommendViewModel.RecommendUiState.Loading -> {
                             binding.clRecommendInquiry1.isEnabled = false
-                            binding.flRecommendInquiry2.isEnabled = false
+                            binding.clRecommendInquiry2.isEnabled = false
                         }
                         is AdminRecommendViewModel.RecommendUiState.Error -> {
                             binding.clRecommendInquiry1.isEnabled = false
-                            binding.flRecommendInquiry2.isEnabled = false
+                            binding.clRecommendInquiry2.isEnabled = false
                         }
                         else -> Unit
                     }
@@ -258,7 +258,7 @@ class PartnerHomeFragment :
         }
 
         // 두 번째 추천 카드 문의하기 버튼
-        binding.flRecommendInquiry2.setOnClickListener {
+        binding.clRecommendInquiry2.setOnClickListener {
             recommendedAdmins.getOrNull(1)?.let { admin ->
                 val req = CreateChatRoomRequestDto(
                     adminId = admin.adminId,
@@ -369,8 +369,8 @@ class PartnerHomeFragment :
             binding.tvPartnerHomeRecommendAdminName2.text = a.adminName
             binding.tvPartnerHomeRecommendAdminAddress2.text = a.fullAddress
 
-            binding.flRecommendInquiry2.isEnabled = true
-            binding.flRecommendInquiry2.setOnClickListener {
+            binding.clRecommendInquiry2.isEnabled = true
+            binding.clRecommendInquiry2.setOnClickListener {
                 val myPartnerId = authTokenLocalStore.getUserId()
                 if (myPartnerId == null) {
                     Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -383,7 +383,7 @@ class PartnerHomeFragment :
                 chattingViewModel.createRoom(req)
             }
         } ?: run {
-            binding.flRecommendInquiry2.isEnabled = false
+            binding.clRecommendInquiry2.isEnabled = false
         }
     }
 }
