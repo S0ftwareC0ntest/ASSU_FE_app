@@ -137,7 +137,7 @@ class CustomerServiceDialogFragment :
                         // "등록 중"일 땐 creating 수집기가 우선 처리하므로 여기선 등록 중이 아닐 때만 동작
                         if (!vm.creating.value) {
                             if (st.loading) {
-                                showLoading("불러오는 중...")
+                                showLoading("로딩 중...")
                             } else {
                                 hideLoading()
                             }
