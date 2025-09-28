@@ -41,6 +41,10 @@ class InquiryViewModel @Inject constructor(
     private val _detail = MutableStateFlow<InquiryModel?>(null)
     val detail: StateFlow<InquiryModel?> = _detail
 
+    private val _creating = MutableStateFlow(false)
+    val creating: StateFlow<Boolean> = _creating
+
+
     fun refresh(status: String = _list.value.status, size: Int = _list.value.size) =
         load(status, page = 1, size = size, reset = true)
 

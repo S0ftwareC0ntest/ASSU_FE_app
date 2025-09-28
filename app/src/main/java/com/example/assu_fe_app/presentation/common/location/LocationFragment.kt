@@ -86,7 +86,7 @@ class LocationFragment :
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
 
     // Test
-    //private val SEOUL_CITY_HALL = LatLng.from(37.4947, 126.9576)
+    private val SEOUL_CITY_HALL = LatLng.from(37.4947, 126.9576)
 
     @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
     private val role: UserRole by lazy {
@@ -154,11 +154,11 @@ class LocationFragment :
                         hideItem()
                     }
 
-                    goToMyLocation()
+                    //goToMyLocation()
                     requestLocationPermissionsIfNeeded()
 
                     //Test
-                    //moveCameraAndQuery(SEOUL_CITY_HALL.latitude, SEOUL_CITY_HALL.longitude)
+                    moveCameraAndQuery(SEOUL_CITY_HALL.latitude, SEOUL_CITY_HALL.longitude)
                 }
             }
         )
