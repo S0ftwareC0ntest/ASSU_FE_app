@@ -1,5 +1,6 @@
 package com.example.assu_fe_app.presentation.common.location
 
+import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
@@ -85,7 +86,7 @@ class LocationFragment :
     private val labelToAdmin   = mutableMapOf<Label, AdminOnMap>()
 
     // Test
-    // private val SEOUL_CITY_HALL = LatLng.from(37.5665, 126.9780)
+    //private val SEOUL_CITY_HALL = LatLng.from(37.4947, 126.9576)
 
     @Inject lateinit var authTokenLocalStore: AuthTokenLocalStore
     private val role: UserRole by lazy {
@@ -135,15 +136,6 @@ class LocationFragment :
                         )
                     )
 
-                    kakaoMap?.setOnMapClickListener { _: KakaoMap, _: LatLng, _: PointF, _: Poi? ->
-                        // 마커가 아닌 지도 임의 영역을 탭하면 아래 카드와 말풍선 숨김
-                        hideItem()
-                    }
-
-                    kakaoMap?.setOnCameraMoveStartListener { _, _ ->
-                        hideItem()
-                    }
-
                     // 마커 스타일 (벡터 → 비트맵, 크기 24dp)
                     val partnerBmp = vectorToBitmap(R.drawable.ic_marker, 24)
                     partnerStyles = kakaoMap.labelManager?.addLabelStyles(
@@ -158,23 +150,12 @@ class LocationFragment :
 
                     kakaoMap.setOnCameraMoveEndListener { _, _, _ -> requestNearbyFromCurrentViewport() }
 
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            vm.state.collect { s ->
-                                when (s) {
-                                    is AdminPartnerLocationViewModel.UiState.Idle -> Unit
-                                    is AdminPartnerLocationViewModel.UiState.Loading -> Log.d("UIState", "Loading…")
-                                    is AdminPartnerLocationViewModel.UiState.PartnerSuccess -> drawMarkersPartners(s.items)
-                                    is AdminPartnerLocationViewModel.UiState.AdminSuccess -> drawMarkersAdmins(s.items)
-                                    is AdminPartnerLocationViewModel.UiState.Fail ->
-                                        Log.e("UIState", "Fail: ${s.code}, ${s.message}")
-                                    is AdminPartnerLocationViewModel.UiState.Error ->
-                                        Log.e("UIState", "Error", s.t)
-                                }
-                            }
-                        }
+                    kakaoMap.setOnCameraMoveStartListener { _, _ ->
+                        hideItem()
                     }
+
                     goToMyLocation()
+                    requestLocationPermissionsIfNeeded()
 
                     //Test
                     //moveCameraAndQuery(SEOUL_CITY_HALL.latitude, SEOUL_CITY_HALL.longitude)
@@ -615,6 +596,17 @@ class LocationFragment :
         PartnershipContractDialogFragment
             .newInstance(data)
             .show(parentFragmentManager, "contractDialog")
+    }
+
+    // ===== Permission (요청만; 현재 위치 이동/표시는 하지 않음) =====
+    private fun requestLocationPermissionsIfNeeded() {
+        val fine = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarse = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (!fine && !coarse) {
+            permLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+        } else {
+            Log.d("Permission", "already granted (keeping City Hall view)")
+        }
     }
 
     private val searchLauncher =
