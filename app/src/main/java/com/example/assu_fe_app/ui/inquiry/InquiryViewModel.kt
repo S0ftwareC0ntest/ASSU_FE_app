@@ -44,6 +44,8 @@ class InquiryViewModel @Inject constructor(
     private val _creating = MutableStateFlow(false)
     val creating: StateFlow<Boolean> = _creating
 
+    private val _detailLoading = MutableStateFlow(false)
+    val detailLoading: StateFlow<Boolean> = _detailLoading
 
     fun refresh(status: String = _list.value.status, size: Int = _list.value.size) =
         load(status, page = 1, size = size, reset = true)
@@ -90,9 +92,11 @@ class InquiryViewModel @Inject constructor(
     }
 
     fun loadDetail(id: Long) = viewModelScope.launch {
+        _detailLoading.value = true
         when (val res = getInquiryDetail(id)) {
             is RetrofitResult.Success -> _detail.value = res.data
             else -> _detail.value = null
         }
+        _detailLoading.value = false
     }
 }
