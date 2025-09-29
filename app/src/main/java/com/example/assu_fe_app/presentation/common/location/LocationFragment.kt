@@ -493,6 +493,7 @@ class LocationFragment :
                         longitude = p.longitude,
                         paperId = null,
                         profileUrl = p.profileUrl,
+                        phoneNumber = p.phoneNum,
                         term = if (!p.partnershipStartDate.isNullOrBlank() && !p.partnershipEndDate.isNullOrBlank())
                             "${p.partnershipStartDate} ~ ${p.partnershipEndDate}"
                         else null
@@ -516,6 +517,7 @@ class LocationFragment :
                         longitude = a.longitude,
                         paperId = null,
                         profileUrl = a.profileUrl,
+                        phoneNumber = a.phoneNum,
                         term = if (!a.partnershipStartDate.isNullOrBlank() && !a.partnershipEndDate.isNullOrBlank())
                             "${a.partnershipStartDate} ~ ${a.partnershipEndDate}"
                         else null
@@ -619,7 +621,7 @@ class LocationFragment :
                     moveCameraAndQuery(args.latitude, args.longitude)
                 }
 
-                // ✅ fallback 저장 + 상세조회 호출
+                //  fallback 저장 + 상세조회 호출
                 contractFallback = args
                 pendingPartnershipId = args.partnershipId
                 partnershipVm.getPartnershipDetail(args.partnershipId)

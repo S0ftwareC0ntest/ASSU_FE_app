@@ -40,6 +40,7 @@ class LocationSearchSuccessFragment :
     private lateinit var adapter: AdminPartnerLocationAdapter
     private lateinit var role: UserRole
 
+    private var phoneNum: String? = null
 
     override fun initObserver() {
 
@@ -79,20 +80,21 @@ class LocationSearchSuccessFragment :
                                 else             -> state.data.adminViewName
                             }
 
-                            val intent = android.content.Intent(requireContext(), com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java).apply {
+                            val intent = Intent(requireContext(), com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java).apply {
                                 putExtra("roomId", roomId)
                                 putExtra("opponentName", displayName)
                                 putExtra("entryMessage", "'문의하기' 버튼을 통해 이동했습니다.")
+                                putExtra("phoneNum", phoneNum)
                             }
                             startActivity(intent)
 
                             chatVm.resetCreateState()
                         }
-                        is com.example.assu_fe_app.ui.chatting.ChattingViewModel.CreateRoomUiState.Fail -> {
+                        is ChattingViewModel.CreateRoomUiState.Fail -> {
                             android.widget.Toast.makeText(requireContext(), "채팅방 생성 실패(${state.code}) ${state.message ?: ""}", android.widget.Toast.LENGTH_SHORT).show()
                             chatVm.resetCreateState()
                         }
-                        is com.example.assu_fe_app.ui.chatting.ChattingViewModel.CreateRoomUiState.Error -> {
+                        is ChattingViewModel.CreateRoomUiState.Error -> {
                             android.widget.Toast.makeText(requireContext(), "오류: ${state.message}", android.widget.Toast.LENGTH_SHORT).show()
                             chatVm.resetCreateState()
                         }
@@ -119,7 +121,7 @@ class LocationSearchSuccessFragment :
             myName = myName,
             onOpenContract = { args ->
                 // 제휴 중: 계약서 보기 → 결과 반환해서 현재 검색 액티비티 종료
-                val data = android.content.Intent().apply {
+                val data = Intent().apply {
                     putExtra("open_contract_args", args) // Serializable/Parcelable
                 }
                 requireActivity().setResult(android.app.Activity.RESULT_OK, data)
@@ -133,6 +135,8 @@ class LocationSearchSuccessFragment :
                         .show()
                     return@AdminPartnerLocationAdapter
                 }
+
+                phoneNum = item.phoneNumber
 
                 val req = when (role) {
                     UserRole.ADMIN -> {
@@ -158,7 +162,7 @@ class LocationSearchSuccessFragment :
         )
 
         binding.rvLocationSearchSuccess.apply {
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = this@LocationSearchSuccessFragment.adapter
         }
 
