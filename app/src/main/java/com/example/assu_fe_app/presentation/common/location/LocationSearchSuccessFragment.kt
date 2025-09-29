@@ -91,11 +91,9 @@ class LocationSearchSuccessFragment :
                             chatVm.resetCreateState()
                         }
                         is ChattingViewModel.CreateRoomUiState.Fail -> {
-                            android.widget.Toast.makeText(requireContext(), "채팅방 생성 실패(${state.code}) ${state.message ?: ""}", android.widget.Toast.LENGTH_SHORT).show()
                             chatVm.resetCreateState()
                         }
                         is ChattingViewModel.CreateRoomUiState.Error -> {
-                            android.widget.Toast.makeText(requireContext(), "오류: ${state.message}", android.widget.Toast.LENGTH_SHORT).show()
                             chatVm.resetCreateState()
                         }
                     }
@@ -130,9 +128,6 @@ class LocationSearchSuccessFragment :
             onAskChat = { item ->
                 // 제휴 아님: 문의하기 → 채팅방 생성
                 val opponentId = item.id ?: run {
-                    android.widget.Toast
-                        .makeText(requireContext(), "상대 정보를 찾을 수 없어요.", android.widget.Toast.LENGTH_SHORT)
-                        .show()
                     return@AdminPartnerLocationAdapter
                 }
 
