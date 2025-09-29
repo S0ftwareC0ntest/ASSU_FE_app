@@ -109,7 +109,7 @@ class LocationItemFragment :
                             putExtra("roomId", roomId)
                             putExtra("opponentName", displayName)
                             putExtra("entryMessage", "'문의하기' 버튼을 통해 이동했습니다.")
-                            putExtra("F", phoneNum)
+                            putExtra("phoneNumber", phoneNum)
                         }
                         startActivity(intent)
 

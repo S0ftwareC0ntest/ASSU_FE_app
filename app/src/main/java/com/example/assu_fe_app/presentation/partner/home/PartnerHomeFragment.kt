@@ -49,6 +49,8 @@ class PartnerHomeFragment :
 
     private val adminRecommendViewModel: AdminRecommendViewModel by viewModels()
     private var recommendedAdmins: List<RecommendedAdminModel> = emptyList()
+    private var phoneNumber: String? = null
+
     @Inject
     lateinit var authTokenLocalStore: AuthTokenLocalStore
 
@@ -65,11 +67,14 @@ class PartnerHomeFragment :
                         is ChattingViewModel.CreateRoomUiState.Success -> {
                             binding.viewPartnerHomeCardBg.isEnabled = true
                             val roomId = state.data.roomId
+                            val opponentName = state.data.partnerViewName
 
-                            val intent =
-                                Intent(requireContext(), ChattingActivity::class.java).apply {
-                                    putExtra("roomId", roomId)
-                                }
+                            val intent = Intent(requireContext(), ChattingActivity::class.java).apply {
+                                putExtra("roomId", roomId)
+                                putExtra("opponentName", opponentName)
+                                putExtra("entryMessage", "추천 파트너 카드에서 이동했습니다.")
+                                putExtra("phoneNumber", phoneNumber)
+                            }
 
                             startActivity(intent)
                             Toast.makeText(
@@ -245,28 +250,6 @@ class PartnerHomeFragment :
                 }
             }
         }
-
-        // 첫 번째 추천 카드 문의하기 버튼
-        binding.clRecommendInquiry1.setOnClickListener {
-            recommendedAdmins.getOrNull(0)?.let { admin ->
-                val req = CreateChatRoomRequestDto(
-                    adminId = admin.adminId,
-                    partnerId = authTokenLocalStore.getUserId() ?: 5L
-                )
-                chattingViewModel.createRoom(req)
-            }
-        }
-
-        // 두 번째 추천 카드 문의하기 버튼
-        binding.clRecommendInquiry2.setOnClickListener {
-            recommendedAdmins.getOrNull(1)?.let { admin ->
-                val req = CreateChatRoomRequestDto(
-                    adminId = admin.adminId,
-                    partnerId = authTokenLocalStore.getUserId() ?: 5L
-                )
-                chattingViewModel.createRoom(req)
-            }
-        }
     }
 
     private fun bindAdminItem(
@@ -349,6 +332,7 @@ class PartnerHomeFragment :
             // 문의 버튼 활성화 & 클릭
             binding.clRecommendInquiry1.isEnabled = true
             binding.clRecommendInquiry1.setOnClickListener {
+                phoneNumber = a.adminPhone
                 val myPartnerId = authTokenLocalStore.getUserId()
                 if (myPartnerId == null) {
                     Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -371,6 +355,7 @@ class PartnerHomeFragment :
 
             binding.clRecommendInquiry2.isEnabled = true
             binding.clRecommendInquiry2.setOnClickListener {
+                phoneNumber = a.adminPhone
                 val myPartnerId = authTokenLocalStore.getUserId()
                 if (myPartnerId == null) {
                     Toast.makeText(requireContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
