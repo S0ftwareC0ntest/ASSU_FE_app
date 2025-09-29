@@ -163,41 +163,6 @@ class LocationFragment :
             }
         )
 
-        // 채팅 상태 수집
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                chatVm.createRoomState.collect { state ->
-                    when (state) {
-                        is ChattingViewModel.CreateRoomUiState.Idle -> setCreateLoading(false)
-                        is ChattingViewModel.CreateRoomUiState.Loading -> setCreateLoading(true)
-                        is ChattingViewModel.CreateRoomUiState.Success -> {
-                            setCreateLoading(false)
-                            val intent = android.content.Intent(requireContext(), com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java).apply {
-                                putExtra("roomId", state.data.roomId)
-                                (binding.root.tag as? String)?.let { putExtra("entryMessage", it) }
-                            }
-                            startActivity(intent)
-                            chatVm.resetCreateState()
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Fail -> {
-                            setCreateLoading(false)
-                            Log.e(
-                                "CreateRoom",
-                                "채팅방 생성 실패(code=${state.code}) message=${state.message ?: ""}"
-                            )
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Error -> {
-                            setCreateLoading(false)
-                            Log.e(
-                                "CreateRoom",
-                                "오류 발생: ${state.message}"
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
         // 목록 상태 수집 + 마커 표시 (지도 준비 안 됐으면 스킵)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -263,66 +228,6 @@ class LocationFragment :
             val fragment = childFragmentManager
                 .findFragmentById(R.id.fv_location_item) as? LocationItemFragment
             fragment?.showCapsuleInfo(item)
-        }
-
-        // 2) 채팅방 생성 상태 수집 → 성공 시 ChattingActivity 이동
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                chatVm.createRoomState.collect { state ->
-                    when (state) {
-                        is ChattingViewModel.CreateRoomUiState.Idle -> {
-                            setCreateLoading(false)
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Loading -> {
-                            setCreateLoading(true)
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Success -> {
-                            setCreateLoading(false)
-
-                            Log.d("CreateRoom", "roomId=${state.data.roomId}, adminView=${state.data.adminViewName}, partnerView=${state.data.partnerViewName}")
-
-                            // 서버 응답: roomId, adminViewName, partnerViewName 사용
-                            val roomId = state.data.roomId
-                            val displayName = when (role) {
-                                UserRole.ADMIN   -> state.data.adminViewName
-                                UserRole.PARTNER -> state.data.partnerViewName
-                                else             -> state.data.adminViewName
-                            }
-
-                            val intent = android.content.Intent(
-                                requireContext(),
-                                com.example.assu_fe_app.presentation.common.chatting.ChattingActivity::class.java
-                            ).apply {
-                                putExtra("roomId", roomId)
-                                putExtra("opponentName", displayName)
-                                // 캡슐 클릭 시 넣어둔 안내 메시지 (optional)
-                                (binding.root.tag as? String)?.let { putExtra("entryMessage", it) }
-                            }
-                            startActivity(intent)
-
-                            chatVm.resetCreateState()
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Fail -> {
-                            setCreateLoading(false)
-                            android.widget.Toast.makeText(
-                                requireContext(),
-                                "채팅방 생성 실패(${state.code}) ${state.message ?: ""}",
-                                android.widget.Toast.LENGTH_SHORT
-                            ).show()
-                            chatVm.resetCreateState()
-                        }
-                        is ChattingViewModel.CreateRoomUiState.Error -> {
-                            setCreateLoading(false)
-                            android.widget.Toast.makeText(
-                                requireContext(),
-                                "오류: ${state.message}",
-                                android.widget.Toast.LENGTH_SHORT
-                            ).show()
-                            chatVm.resetCreateState()
-                        }
-                    }
-                }
-            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -549,7 +454,7 @@ class LocationFragment :
         mapReady = false
         if (::mapView.isInitialized) mapView.removeAllViews()
     }
-    override fun onResume() { super.onResume(); if (::mapView.isInitialized) mapView.resume() }
+    override fun onResume() { super.onResume() ;if (::mapView.isInitialized) mapView.resume() }
     override fun onPause() { super.onPause(); if (::mapView.isInitialized) mapView.pause() }
 
     // ===== 벡터 → 비트맵 =====

@@ -101,6 +101,7 @@ class LocationItemFragment :
                             UserRole.PARTNER -> state.data.partnerViewName
                             else             -> state.data.adminViewName
                         }
+                        val opponentId = lastItem?.id ?: -1L
 
                         val intent = android.content.Intent(
                             requireContext(),
@@ -108,6 +109,7 @@ class LocationItemFragment :
                         ).apply {
                             putExtra("roomId", roomId)
                             putExtra("opponentName", displayName)
+                            putExtra("opponentId", opponentId)
                             putExtra("entryMessage", "'문의하기' 버튼을 통해 이동했습니다.")
                             putExtra("phoneNumber", phoneNum)
                         }
