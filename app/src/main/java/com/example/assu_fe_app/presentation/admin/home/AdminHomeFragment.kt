@@ -46,6 +46,7 @@ class AdminHomeFragment :
     private var currentRecommendedPartner: RecommendedPartnerModel? = null
 
     private var phoneNumber: String? = null
+    private var opponentId: Long? = null
 
     @Inject
     lateinit var authTokenLocalStore: AuthTokenLocalStore
@@ -72,6 +73,7 @@ class AdminHomeFragment :
                                 putExtra("opponentName", opponentName)
                                 putExtra("entryMessage", "추천 파트너 카드에서 이동했습니다.")
                                 putExtra("phoneNumber", phoneNumber)
+                                putExtra("opponentId", opponentId ?: -1L)
                             }
 
                             startActivity(intent)
@@ -252,6 +254,7 @@ class AdminHomeFragment :
         binding.btnRecommendInquiry.setOnClickListener {
             currentRecommendedPartner?.let { partner ->
                 phoneNumber = partner.partnerPhone
+                opponentId = partner.partnerId
 
                 val req = CreateChatRoomRequestDto(
                     adminId = authTokenLocalStore.getUserId() ?: 1L,
