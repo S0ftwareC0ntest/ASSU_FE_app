@@ -283,7 +283,6 @@ class LocationFragment :
 
                             // 서버 응답: roomId, adminViewName, partnerViewName 사용
                             val roomId = state.data.roomId
-                            // TODO: 거꾸로 되어있는 것 같음 
                             val displayName = when (role) {
                                 UserRole.ADMIN   -> state.data.adminViewName
                                 UserRole.PARTNER -> state.data.partnerViewName
