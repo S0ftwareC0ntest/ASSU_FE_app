@@ -16,7 +16,7 @@
             android:id="@+id/partner_noti_mg1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.0346"
+            app:layout_constraintHeight_percent="0.0546"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
