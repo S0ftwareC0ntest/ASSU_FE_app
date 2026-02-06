@@ -290,7 +290,8 @@ class UserLocationFragment :
         storeLabels.clear()
 
         items.forEach { s ->
-            val styles = if (isPartnerVisual(s)) pStyles else nStyles
+//            val styles = if (isPartnerVisual(s)) pStyles else nStyles
+            val styles = pStyles
             val label = layer.addLabel(
                 LabelOptions.from(LatLng.from(s.latitude, s.longitude))
                     .setStyles(styles)
