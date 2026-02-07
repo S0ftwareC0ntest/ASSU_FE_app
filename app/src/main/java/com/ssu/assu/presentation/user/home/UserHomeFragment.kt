@@ -85,28 +85,6 @@ class UserHomeFragment :
                 }
             }
         }
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.popularStoresState.collect { state ->
-//                when (state) {
-//                    is UserHomeViewModel.PopularStoresUiState.Idle -> {
-//                        // 초기 상태
-//                    }
-//                    is UserHomeViewModel.PopularStoresUiState.Loading -> {
-//                        showLoading()
-//                    }
-//                    is UserHomeViewModel.PopularStoresUiState.Success -> {
-//                        hideLoading()
-//                        setupRankingGrid(state.stores)
-//                    }
-//                    is UserHomeViewModel.PopularStoresUiState.Error -> {
-//                        hideLoading()
-//                        setupRankingGrid(emptyList())
-//                    }
-//                }
-//            }
-//        }
-
         // FCM 토큰 등록 상태 관찰
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -172,35 +150,6 @@ class UserHomeFragment :
 
         viewModel.getUsableProposalList(false)
     }
-
-//    private fun setupRankingGrid(popularStores: List<PopularStoreModel>) {
-//        val gridLayout = binding.gridRanking
-//        gridLayout.removeAllViews()
-//
-//        if (popularStores.isEmpty()) {
-//            val context = requireContext()
-//            val noDataTextView = TextView(context).apply {
-//                text = "아직 인기매장 데이터가 없어요"
-//                textSize = 14f
-//                setTextColor(ContextCompat.getColor(context, R.color.assu_font_sub))
-//                gravity = android.view.Gravity.CENTER
-//                layoutParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
-//                    width = ViewGroup.LayoutParams.MATCH_PARENT
-//                    height = (80 * resources.displayMetrics.density).toInt()
-//                    columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
-//                    rowSpec = androidx.gridlayout.widget.GridLayout.spec(0, 4)
-//                }
-//            }
-//            gridLayout.addView(noDataTextView)
-//            return
-//        }
-//
-//        // 순서대로 추가하면 GridLayout이 2열로 설정되어 있어서 자동으로 1-5, 2-6, 3-7, 4-8 배치
-//        popularStores.take(8).forEach { store ->
-//            val itemView = createRankingItem(store)
-//            gridLayout.addView(itemView)
-//        }
-//    }
 
     private fun createRankingItem(store: PopularStoreModel): LinearLayout {
         val context = requireContext()
@@ -310,36 +259,33 @@ class UserHomeFragment :
         binding.apply {
             when (proposals.size) {
                 0 -> {
-                    // 0개면 둘 다 숨김
                     clPartnership1.visibility = View.GONE
-                    viewUserHome3.visibility = View.GONE // 사이 공백
+                    viewUserHome3.visibility = View.GONE
                     clPartnership2.visibility = View.GONE
                 }
                 1 -> {
-                    // 1개면 첫 번째만 표시
                     val item1 = proposals[0]
                     clPartnership1.visibility = View.VISIBLE
                     tvPartnershipPartner1.text = item1.partnerName
-                    tvPartnershipAdmin1.text = item1.adminName
-                    tvPartnershipContent1.text = item1.note
+                    tvPartnershipContent1.text = item1.adminName
+                    tvPartnershipContent3.text = item1.note
 
                     viewUserHome3.visibility = View.GONE
                     clPartnership2.visibility = View.GONE
                 }
-                else -> { // 2개 이상 (API상 2개)
-                    // 2개면 둘 다 표시
+                else -> {
                     val item1 = proposals[0]
                     clPartnership1.visibility = View.VISIBLE
                     tvPartnershipPartner1.text = item1.partnerName
-                    tvPartnershipAdmin1.text = item1.adminName
-                    tvPartnershipContent1.text = item1.note
+                    tvPartnershipContent1.text = item1.adminName
+                    tvPartnershipContent3.text = item1.note
 
                     val item2 = proposals[1]
                     clPartnership2.visibility = View.VISIBLE
-                    viewUserHome3.visibility = View.VISIBLE // 사이 공백 표시
+                    viewUserHome3.visibility = View.VISIBLE
                     tvPartnershipPartner2.text = item2.partnerName
-                    tvPartnershipAdmin2.text = item2.adminName
-                    tvPartnershipContent2.text = item2.note
+                    tvPartnershipContent2.text = item2.adminName
+                    tvPartnershipContent4.text = item2.note
                 }
             }
         }
