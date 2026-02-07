@@ -6,5 +6,6 @@ enum class NotificationTypeModel(val path: String) {
     PARTNER_SUGGESTION("PARTNER_SUGGESTION"),
     PARTNER_PROPOSAL("PARTNER_PROPOSAL"),
     PARTNER_ALL("PARTNER_ALL"),
-    ADMIN_ALL("ADMIN_ALL")
+    ADMIN_ALL("ADMIN_ALL"),
+    STAMP("STAMP")
 }
