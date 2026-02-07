@@ -1,7 +1,8 @@
 package com.ssu.assu.data.service.user
 
 import com.ssu.assu.data.dto.BaseResponse
-import com.ssu.assu.data.dto.dashboard.response.TodayBestResponseDto
+import com.ssu.assu.data.dto.dashboard.response.StampRankingResultDto
+import com.ssu.assu.data.dto.dashboard.response.TodayBestDto
 import com.ssu.assu.data.dto.user.home.GetUsablePartnershipResponseDto
 import com.ssu.assu.data.dto.user.home.StampResponseDto
 import retrofit2.http.GET
@@ -13,7 +14,10 @@ interface UserHomeService {
     suspend fun getStampCount(): BaseResponse<StampResponseDto>
 
     @GET("/store/best")
-    suspend fun getTodayBestStores(): BaseResponse<TodayBestResponseDto>
+    suspend fun getTodayBestStores(): BaseResponse<TodayBestDto>
+
+    @GET("/store/stamp-ranking")
+    suspend fun getStampRanking(): BaseResponse<StampRankingResultDto>
 
     @GET("/students/usable")
     suspend fun getUsablePartnership(

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssu.assu.data.dto.location.LocationUserSearchResultItem
-import com.ssu.assu.domain.usecase.dashboard.GetTodayBestStoreUseCase
+import com.ssu.assu.domain.usecase.user.GetStampRankingUseCase
 import com.ssu.assu.domain.usecase.location.UserSearchStoreByKeywordUseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserLocationSearchViewModel @Inject constructor(
     private val searchUseCase: UserSearchStoreByKeywordUseCase,
-    private val bestUseCase : GetTodayBestStoreUseCase
+    private val stampRankingUseCase: GetStampRankingUseCase,
 ) : ViewModel(){
 
     private val _bestStores = MutableLiveData<List<String>>()
@@ -62,10 +62,9 @@ class UserLocationSearchViewModel @Inject constructor(
 
     fun getPopularSearch(){
         viewModelScope.launch {
-
-            when(val result = bestUseCase()){
+            when(val result = stampRankingUseCase()){
                 is RetrofitResult.Success -> {
-                    _bestStores.value = result.data.bestStores
+                    _bestStores.value = result.data.map { it.storeName }
                 }
                 is RetrofitResult.Error -> {}
                 is RetrofitResult.Fail -> {}

@@ -5,17 +5,18 @@ import com.ssu.assu.domain.model.dashboard.PopularStoreModel
 import com.ssu.assu.domain.model.dashboard.StoreInfoModel
 import com.ssu.assu.domain.model.dashboard.WeeklyRankModel
 import com.squareup.moshi.JsonClass
+import com.ssu.assu.domain.model.dashboard.StampRankingModel
 
 @JsonClass(generateAdapter = true)
 data class PartnerDashboardResponseDto(
     val storeInfo: StoreInfoDto,
     val weeklyRanks: List<WeeklyRankResponseDto>,
-    val todayBest: TodayBestResponseDto
+    val stampRankings: List<StampRankingResponseDto>
 ) {
     fun toModel() = PartnerDashboardModel(
         storeInfo = storeInfo.toModel(),
         weeklyRanks = weeklyRanks.map { it.toModel() },
-        todayBest = todayBest.toPopularStoreModels()
+        stampRankings = stampRankings.map { it.toModel() }
     )
 }
 
@@ -55,3 +56,21 @@ data class TodayBestResponseDto(
         }
     }
 }
+
+@JsonClass(generateAdapter = true)
+data class StampRankingResponseDto(
+    val storeId: Long,
+    val storeName: String,
+    val stampCount: Long
+) {
+    fun toModel() = StampRankingModel(
+        storeId = storeId,
+        storeName = storeName,
+        stampCount = stampCount
+    )
+}
+
+@JsonClass(generateAdapter = true)
+data class StampRankingResultDto(
+    val rankings: List<StampRankingResponseDto>
+)
