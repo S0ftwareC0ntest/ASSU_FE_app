@@ -55,7 +55,9 @@ class UserMypageFragment
 
     private fun initClick() {
         binding.clAccountComponent1.setOnClickListener {
-            startActivity(Intent(requireContext(), UserMyReviewActivity::class.java))
+            findNavController().navigate(
+                R.id.action_user_mypage_to_alarm
+            )
         }
 
         // 계정관리 페이지 이동
