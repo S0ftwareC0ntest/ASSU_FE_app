@@ -7,6 +7,7 @@ import com.ssu.assu.domain.model.dashboard.PartnerDashboardModel
 import com.ssu.assu.domain.model.dashboard.StoreInfoModel
 import com.ssu.assu.domain.usecase.dashboard.GetPartnerWeeklyRankListUseCase
 import com.ssu.assu.domain.usecase.dashboard.GetPartnerWeeklyRankUseCase
+import com.ssu.assu.domain.usecase.dashboard.GetStampRankingUseCase
 import com.ssu.assu.domain.usecase.dashboard.GetTodayBestStoreUseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PartnerDashboardViewModel @Inject constructor(
-    private val getTodayBestStoreUseCase: GetTodayBestStoreUseCase,
+    private val getStampRankingUseCase: GetStampRankingUseCase,
     private val getPartnerWeeklyRankUseCase: GetPartnerWeeklyRankUseCase,
     private val getPartnerWeeklyRankListUseCase: GetPartnerWeeklyRankListUseCase
 ) : ViewModel() {
@@ -48,16 +49,16 @@ class PartnerDashboardViewModel @Inject constructor(
 
             try {
                 coroutineScope {
-                    val todayBestDeferred = async { getTodayBestStoreUseCase() }
+                    val stampRankingDeferred = async { getStampRankingUseCase() }
                     val weeklyRankDeferred = async { getPartnerWeeklyRankUseCase() }
                     val weeklyRankListDeferred = async { getPartnerWeeklyRankListUseCase() }
 
-                    val todayBestResult = todayBestDeferred.await()
+                    val stampRankingResult = stampRankingDeferred.await()
                     val weeklyRankResult = weeklyRankDeferred.await()
                     val weeklyRankListResult = weeklyRankListDeferred.await()
 
                     // 모든 결과가 성공인지 확인
-                    if (todayBestResult is RetrofitResult.Success &&
+                    if (stampRankingResult is RetrofitResult.Success &&
                         weeklyRankResult is RetrofitResult.Success &&
                         weeklyRankListResult is RetrofitResult.Success) {
 
@@ -67,7 +68,7 @@ class PartnerDashboardViewModel @Inject constructor(
                                 storeName = getCurrentStoreName()
                             ),
                             weeklyRanks = weeklyRankListResult.data.map { it.toModel() },
-                            todayBest = todayBestResult.data.toPopularStoreModels(),
+                            stampRankings = stampRankingResult.data,
                             adminStats = null // Partner는 Admin 통계 없음
                         )
 
@@ -77,8 +78,11 @@ class PartnerDashboardViewModel @Inject constructor(
                         _dashboardState.value = DashboardUiState.Success(partnerDashboardModel)
                     } else {
                         // 첫 번째 실패 결과 처리
-                        val failResult = listOf(todayBestResult, weeklyRankResult, weeklyRankListResult)
-                            .firstOrNull { it is RetrofitResult.Fail } as? RetrofitResult.Fail
+                        val failResult = listOf(
+                            stampRankingResult,
+                            weeklyRankResult,
+                            weeklyRankListResult
+                        ).firstOrNull { it is RetrofitResult.Fail } as? RetrofitResult.Fail
 
                         if (failResult != null) {
                             _dashboardState.value = DashboardUiState.Fail(failResult.statusCode, failResult.message)
