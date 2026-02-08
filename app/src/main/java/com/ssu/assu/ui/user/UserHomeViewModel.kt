@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssu.assu.domain.model.dashboard.PopularStoreModel
 import com.ssu.assu.domain.model.user.GetUsablePartnershipModel
 import com.ssu.assu.domain.usecase.user.GetStampUseCase
-import com.ssu.assu.domain.usecase.user.GetTodayBestStoresUseCase
+import com.ssu.assu.domain.usecase.user.GetStampRankingUseCase
 import com.ssu.assu.domain.usecase.user.GetUsablePartnershipUseCase
 import com.ssu.assu.util.RetrofitResult
 import com.ssu.assu.util.onError
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserHomeViewModel @Inject constructor(
     private val getStampCountUseCase: GetStampUseCase,
-    private val getTodayBestStoresUseCase: GetTodayBestStoresUseCase,
+    private val getStampRankingUseCase: GetStampRankingUseCase,
     private val getUsablePartnershipUseCase: GetUsablePartnershipUseCase
 ) : ViewModel() {
 
@@ -82,9 +82,16 @@ class UserHomeViewModel @Inject constructor(
     suspend fun loadPopularStores() {
         _popularStoresState.value = PopularStoresUiState.Loading
 
-        when (val result = getTodayBestStoresUseCase()) {
+        when (val result = getStampRankingUseCase()) {
             is RetrofitResult.Success -> {
-                _popularStoresState.value = PopularStoresUiState.Success(result.data)
+                val stores = result.data.mapIndexed { index, ranking ->
+                    PopularStoreModel(
+                        rank = index + 1,
+                        storeName = ranking.storeName,
+                        isHighlight = index < 3
+                    )
+                }
+                _popularStoresState.value = PopularStoresUiState.Success(stores)
             }
             is RetrofitResult.Fail -> {
                 _popularStoresState.value = PopularStoresUiState.Error("서버 오류: ${result.message}")

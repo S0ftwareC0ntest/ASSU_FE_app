@@ -25,10 +25,10 @@ class UserPartnershipSelectFragment :
     override fun initView() {
         // 버튼 리스트 초기화
         partnershipButtons = listOf(
-            binding.btnPartnership1,
-            binding.btnPartnership2,
-            binding.btnPartnership3,
-            binding.btnPartnership4
+            binding.btnPartnershipSelect1,
+            binding.btnPartnershipSelect2,
+            binding.btnPartnershipSelect3,
+            binding.btnPartnershipSelect4
         )
 
         // 선택 완료 버튼 초기 상태
@@ -47,7 +47,7 @@ class UserPartnershipSelectFragment :
             }
         }
 
-        binding.tvGroupMarketName.text = viewModel.storeName.value
+        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value
 
 
     }
@@ -86,10 +86,22 @@ class UserPartnershipSelectFragment :
     private fun bindSingleContent(button: View, content: PaperContent, index: Int) {
         // 각 버튼의 TextView들을 찾아서 데이터 바인딩
         val titleTextView = button.findViewById<TextView>(
-            resources.getIdentifier("tv_partnership_${index + 1}_title", "id", requireContext().packageName)
+            when(index) {
+                0 -> R.id.tv_partnership_1_title
+                1 -> R.id.tv_partnership_select_2_title
+                2 -> R.id.tv_partnership_select_3_title
+                3 -> R.id.tv_partnership_select_4_title
+                else -> return
+            }
         )
         val descTextView = button.findViewById<TextView>(
-            resources.getIdentifier("tv_partnership_${index + 1}_desc", "id", requireContext().packageName)
+            when(index) {
+                0 -> R.id.tv_partnership_select_1_desc
+                1 -> R.id.tv_partnership_select_2_desc
+                2 -> R.id.tv_partnership_select_3_desc
+                3 -> R.id.tv_partnership_select_4_desc
+                else -> return
+            }
         )
 
         // PaperContent의 데이터를 UI에 반영
@@ -123,10 +135,22 @@ class UserPartnershipSelectFragment :
 
         // 텍스트 색상 변경
         val titleText = layout.findViewById<TextView>(
-            resources.getIdentifier("tv_partnership_${index + 1}_title", "id", requireContext().packageName)
+            when(index) {
+                0 -> R.id.tv_partnership_1_title
+                1 -> R.id.tv_partnership_select_2_title
+                2 -> R.id.tv_partnership_select_3_title
+                3 -> R.id.tv_partnership_select_4_title
+                else -> return
+            }
         )
         val descText = layout.findViewById<TextView>(
-            resources.getIdentifier("tv_partnership_${index + 1}_desc", "id", requireContext().packageName)
+            when(index) {
+                0 -> R.id.tv_partnership_select_1_desc
+                1 -> R.id.tv_partnership_select_2_desc
+                2 -> R.id.tv_partnership_select_3_desc
+                3 -> R.id.tv_partnership_select_4_desc
+                else -> return
+            }
         )
 
         val color = if (isSelected) R.color.assu_main else R.color.assu_font_main

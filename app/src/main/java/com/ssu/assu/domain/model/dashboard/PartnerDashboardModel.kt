@@ -4,7 +4,7 @@ package com.ssu.assu.domain.model.dashboard
 data class PartnerDashboardModel(
     val storeInfo: StoreInfoModel,
     val weeklyRanks: List<WeeklyRankModel>,
-    val todayBest: List<PopularStoreModel>,
+    val stampRankings: List<StampRankingModel>,
     val adminStats: AdminDashboardModel? = null
 ) {
     fun getCurrentWeekRank(): Long = weeklyRanks.lastOrNull()?.rank ?: 0L

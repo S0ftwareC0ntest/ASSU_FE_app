@@ -3,6 +3,7 @@ package com.ssu.assu.data.repositoryImpl.user
 import com.ssu.assu.data.repository.user.UserHomeRepository
 import com.ssu.assu.data.service.user.UserHomeService
 import com.ssu.assu.domain.model.dashboard.PopularStoreModel
+import com.ssu.assu.domain.model.dashboard.StampRankingModel
 import com.ssu.assu.domain.model.user.GetUsablePartnershipModel
 import com.ssu.assu.util.RetrofitResult
 import com.ssu.assu.util.apiHandler
@@ -22,6 +23,13 @@ class UserHomeRepositoryImpl @Inject constructor(
         return apiHandler(
             execute = { api.getTodayBestStores() },
             mapper = { dto -> dto.toPopularStoreModels() }
+        )
+    }
+
+    override suspend fun getStampRanking(): RetrofitResult<List<StampRankingModel>> {
+        return apiHandler(
+            execute = { api.getStampRanking() },
+            mapper = { dto -> dto.rankings.map { it.toModel() } }
         )
     }
 

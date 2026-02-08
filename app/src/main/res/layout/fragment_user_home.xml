@@ -374,7 +374,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="스탬프 10개 적립 시 기프티콘이 지급됩니다!"
+                        android:text="스탬프 10개를 모으면 추첨을 통해 기프티콘을 드려요."
                         android:textColor="@color/assu_font_sub"
                         android:textSize="11sp"
                         android:fontFamily="@font/pretendard_regular"
@@ -461,6 +461,7 @@
                         android:paddingBottom="20dp"
                         android:paddingStart="14dp"
                         android:paddingEnd="14dp">
+
                         <TextView
                             android:id="@+id/tv_partnership_partner1"
                             android:layout_width="wrap_content"
@@ -479,6 +480,14 @@
                             app:layout_constraintTop_toBottomOf="@id/tv_partnership_partner1"
                             app:layout_constraintStart_toStartOf="parent"/>
 
+                        <LinearLayout
+                            android:id="@+id/ll_partner_home_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/view_user_home2">
+
                         <TextView
                             android:id="@+id/tv_partnership_admin1"
                             android:layout_width="wrap_content"
@@ -486,10 +495,10 @@
                             android:background="@drawable/bg_home_list_label"
                             app:layout_constraintTop_toBottomOf="@+id/view_user_home2"
                             app:layout_constraintStart_toStartOf="parent"
-                            android:text="컴퓨터학부 학생회"
+                            android:text="제휴 제공"
                             android:fontFamily="@font/pretendard_regular"
                             android:textSize="11sp"
-                            android:textColor="@color/white"
+                            android:textColor="@color/assu_font_main"
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:paddingTop="6dp"
@@ -497,20 +506,58 @@
 
                         <TextView
                             android:id="@+id/tv_partnership_content1"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="2"
                             android:ellipsize="end"
-                            android:text="2인이하 식사 시, 음료 1개 제공w제공제공제공제공제공"
-                            app:layout_constraintTop_toTopOf="@id/tv_partnership_admin1"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_partnership_admin1"
-                            app:layout_constraintStart_toEndOf="@id/tv_partnership_admin1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:fontFamily="@font/pretendard_regular"
+                            android:text="IT대학 학생회"
+                            android:layout_marginLeft="6dp"
+                            android:fontFamily="@font/pretendard_medium"
                             android:textSize="12sp"
                             android:textColor="@color/assu_font_sub"
-                            android:layout_marginStart="6dp"
-                            />
+                            android:layout_marginStart="6dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_partner_home_content2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="10dp"
+                            app:layout_constraintTop_toBottomOf="@id/ll_partner_home_content">
+
+                            <TextView
+                                android:id="@+id/tv_partnership_admin3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_home_list_label"
+                                app:layout_constraintTop_toBottomOf="@+id/view_user_home2"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:text="제휴 내용"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:textSize="11sp"
+                                android:textColor="@color/assu_font_main"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="6dp"
+                                android:paddingBottom="6dp"/>
+
+                            <TextView
+                                android:id="@+id/tv_partnership_content3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:text="2인 이상 구매시, 돼지고기 제공"
+                                android:layout_marginLeft="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:textSize="12sp"
+                                android:textColor="@color/assu_font_sub"
+                                android:layout_marginStart="6dp" />
+
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
@@ -528,7 +575,8 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="20dp"
                         android:paddingStart="14dp"
-                        android:layout_marginBottom="10dp">
+                        android:paddingEnd="14dp">
+
                         <TextView
                             android:id="@+id/tv_partnership_partner2"
                             android:layout_width="wrap_content"
@@ -547,35 +595,84 @@
                             app:layout_constraintTop_toBottomOf="@id/tv_partnership_partner2"
                             app:layout_constraintStart_toStartOf="parent"/>
 
-                        <TextView
-                            android:id="@+id/tv_partnership_admin2"
+                        <LinearLayout
+                            android:id="@+id/ll_partner_home_content3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_home_list_label"
-                            app:layout_constraintTop_toBottomOf="@+id/view_user_home4"
+                            android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
-                            android:text="컴퓨터학부 학생회"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:textSize="11sp"
-                            android:textColor="@color/white"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="6dp"
-                            android:paddingBottom="6dp"/>
+                            app:layout_constraintTop_toBottomOf="@id/view_user_home4">
 
-                        <TextView
-                            android:id="@+id/tv_partnership_content2"
+                            <TextView
+                                android:id="@+id/tv_partnership_admin2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_home_list_label"
+                                app:layout_constraintTop_toBottomOf="@+id/view_user_home4"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:text="제휴 제공"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:textSize="11sp"
+                                android:textColor="@color/assu_font_main"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="6dp"
+                                android:paddingBottom="6dp"/>
+
+                            <TextView
+                                android:id="@+id/tv_partnership_content2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:text="IT대학 학생회"
+                                android:layout_marginLeft="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:textSize="12sp"
+                                android:textColor="@color/assu_font_sub"
+                                android:layout_marginStart="6dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_partner_home_content4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2인이하 식사 시, 음료 1개 제공"
-                            app:layout_constraintTop_toTopOf="@id/tv_partnership_admin2"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_partnership_admin2"
-                            app:layout_constraintStart_toEndOf="@id/tv_partnership_admin2"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:textSize="12sp"
-                            android:textColor="@color/assu_font_sub"
-                            android:layout_marginStart="6dp"/>
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="10dp"
+                            app:layout_constraintTop_toBottomOf="@id/ll_partner_home_content3">
 
+                            <TextView
+                                android:id="@+id/tv_partnership_admin4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_home_list_label"
+                                app:layout_constraintTop_toBottomOf="@+id/view_user_home4"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:text="제휴 내용"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:textSize="11sp"
+                                android:textColor="@color/assu_font_main"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:paddingTop="6dp"
+                                android:paddingBottom="6dp"/>
+
+                            <TextView
+                                android:id="@+id/tv_partnership_content4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:text="2인 이상 구매시, 돼지고기 제공"
+                                android:layout_marginLeft="6dp"
+                                android:fontFamily="@font/pretendard_medium"
+                                android:textSize="12sp"
+                                android:textColor="@color/assu_font_sub"
+                                android:layout_marginStart="6dp" />
+
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
