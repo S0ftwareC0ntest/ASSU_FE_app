@@ -93,7 +93,13 @@ class PartnerDashboardFragment :
 
         setupPartnershipLineChart(data.getRankingTrend())
         setupClientBarChart(data.getUsageTrend())
-        setupRankingGrid(data.todayBest)
+        setupRankingGrid(data.stampRankings.mapIndexed { index, ranking ->
+            PopularStoreModel(
+                rank = index + 1,
+                storeName = ranking.storeName,
+                isHighlight = index < 3
+            )
+        })
 
         updateAnalysisText()
     }

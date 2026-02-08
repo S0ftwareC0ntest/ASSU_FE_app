@@ -4,14 +4,16 @@ data class NotificationSettingsModel(
     val chat: Boolean,
     val order: Boolean,
     val suggestion: Boolean,
-    val proposal: Boolean
+    val proposal: Boolean,
+    val stamp: Boolean? = null
 ) {
     companion object {
         fun from(map: Map<String, Boolean>) = NotificationSettingsModel(
             chat       = map["CHAT"] ?: true,
             order      = map["ORDER"] ?: true,
             suggestion = map["PARTNER_SUGGESTION"] ?: true,
-            proposal   = map["PARTNER_PROPOSAL"] ?: true
+            proposal   = map["PARTNER_PROPOSAL"] ?: true,
+            stamp      = map["STAMP"]
         )
     }
 }
