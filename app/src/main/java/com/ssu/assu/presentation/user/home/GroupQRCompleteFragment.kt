@@ -7,7 +7,7 @@ import com.ssu.assu.R
 
 class GroupQRCompleteFragment : BaseFragment<FragmentGroupQrCompleteBinding>(R.layout.fragment_group_qr_complete){
     override fun initView() {
-        binding.ivCross.setOnClickListener {
+        binding.ivQrCompleteCross.setOnClickListener {
             // Activity 종료 후 HomeFragment가 있는 이전 화면으로 돌아감
             requireActivity().finish()
         }
