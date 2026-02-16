@@ -7,22 +7,29 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewModelScope
 import com.ssu.assu.R
+import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.databinding.FragmentUserEventSelectBinding
 import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.presentation.user.dashboard.UserServiceSuggestActivity
+import com.ssu.assu.presentation.user.home.UserVerifyViewModel
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class UserEventSelectFragment : BaseFragment<FragmentUserEventSelectBinding>(R.layout.fragment_user_event_select) {
 private val startActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-    Log.d("FragmentB", "결과 코드: ${result.resultCode}") // -1이 찍히면 정상!
+
     if (result.resultCode == Activity.RESULT_OK) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, UserTemporaryCompleteFragment())
             .addToBackStack(null)
-            .commitAllowingStateLoss() // 상태 손실을 허용하며 즉시 반영
+            .commitAllowingStateLoss()
     }
 }
     private var selectedIndex: Int? = null
+    private val viewModel: UserVerifyViewModel by activityViewModels()
     private lateinit var eventButtons: List<View>
     override fun initObserver() {
 
@@ -108,7 +115,7 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
     }
 
     private fun toAssuReviewWrite(){
-
+        viewModel.insertTemporaryQrData("REVIEW")
     }
 
     private fun toSuggestPartnership(){
@@ -124,5 +131,7 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
             .replace(R.id.fragment_container_view, UserNextTimeFragment()).commit()
 
     }
+
+
 
 }
