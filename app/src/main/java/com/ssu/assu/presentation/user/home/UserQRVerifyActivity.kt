@@ -81,7 +81,7 @@ class UserQRVerifyActivity :
     }
 
     private fun onEmulatorScanSuccess() {
-        qrCodeData = "https://assu.com/verify?storeId=7" // TODO 여기 ...
+        qrCodeData = "https://assu.com/verify?storeId=2" // TODO 여기 ...
         Log.d("QR 인식 성공", "에뮬레이터 테스트용 데이터 사용: $qrCodeData")
         binding.tvQrInstruction.text = "QR 코드를 성공적으로 인식했습니다."
         setConfirmButtonState(true)

@@ -2,9 +2,11 @@ package com.ssu.assu.ui.suggestion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.data.dto.suggestion.request.WriteSuggestionRequestDto
 import com.ssu.assu.domain.model.suggestion.SuggestionTargetModel
 import com.ssu.assu.domain.model.suggestion.WriteSuggestionModel
+import com.ssu.assu.domain.usecase.certification.PostTemporaryQrDataUseCase
 import com.ssu.assu.domain.usecase.suggestion.GetSuggestionAdminsUseCase
 import com.ssu.assu.domain.usecase.suggestion.WriteSuggestionUseCase
 import com.ssu.assu.util.onError
@@ -20,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SuggestionViewModel @Inject constructor(
     private val writeSuggestionUseCase: WriteSuggestionUseCase,
-    private val getSuggestionAdminsUseCase: GetSuggestionAdminsUseCase
+    private val getSuggestionAdminsUseCase: GetSuggestionAdminsUseCase,
+    private val temporaryQrDataUseCase: PostTemporaryQrDataUseCase
 ) : ViewModel() {
     sealed interface GetAdminsUiState {
         data object Idle: GetAdminsUiState
@@ -83,6 +86,16 @@ class SuggestionViewModel @Inject constructor(
                 .onSuccess { model -> _writeSuggestionState.value = WriteSuggestionUiState.Success(model) }
                 .onFail { code -> _writeSuggestionState.value = WriteSuggestionUiState.Fail(code, "건의 등록 실패") }
                 .onError { e -> _writeSuggestionState.value = WriteSuggestionUiState.Error(e.message ?: "Unknown Error") }
+        }
+    }
+
+    fun insertTemporaryQrData(sort: String) {
+        val request = TemporaryQrDataRequestDto(
+            adminName = _selectedTarget.value?.name ?: "",
+            sort = sort
+        )
+        viewModelScope.launch {
+            temporaryQrDataUseCase(request)
         }
     }
 

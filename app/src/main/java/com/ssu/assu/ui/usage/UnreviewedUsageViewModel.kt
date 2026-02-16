@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssu.assu.data.dto.certification.response.TemporaryQrResponseDto
 import com.ssu.assu.data.dto.usage.ServiceRecord
+import com.ssu.assu.domain.usecase.certification.GetMyTemporaryQrDataUseCase
 import com.ssu.assu.domain.usecase.usage.GetUnreviewedUsageUseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,11 +16,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UnreviewedUsageViewModel @Inject constructor(
-    private val getUnreviewedUsageUseCase: GetUnreviewedUsageUseCase
+    private val getUnreviewedUsageUseCase: GetUnreviewedUsageUseCase,
+    private val getMyTemporarDataUseCase : GetMyTemporaryQrDataUseCase
 ) : ViewModel() {
 
-    private val _usageList = MutableLiveData<List<ServiceRecord>>() // 🚨 리뷰 목록을 담을 LiveData
+    private val _usageList = MutableLiveData<List<ServiceRecord>>()
     val usageList: LiveData<List<ServiceRecord>> = _usageList
+
+    val _qrDataList = MutableLiveData<List<TemporaryQrResponseDto>>()
+    val qrDataList : LiveData<List<TemporaryQrResponseDto>> = _qrDataList
+
+
 
     // 무한 스크롤을 위한 상태 변수
     private var currentPage = 1
@@ -59,6 +67,24 @@ class UnreviewedUsageViewModel @Inject constructor(
 
             }
             isFetchingReviews = false
+        }
+    }
+
+    fun getMyTemporaryData() {
+        viewModelScope.launch {
+
+            when (val result = getMyTemporarDataUseCase()) {
+                is RetrofitResult.Success -> {
+                    // 서버에서 받은 리스트를 LiveData에 업데이트
+                    _qrDataList.value = result.data
+                }
+                is RetrofitResult.Error -> {
+                    Log.e("❌", "QR Data Error: ${result.exception.message}")
+                }
+                is RetrofitResult.Fail -> {
+                    Log.e("❌", "QR Data Fail: ${result.message}")
+                }
+            }
         }
     }
 

@@ -21,7 +21,7 @@
         android:id="@+id/suggest_mg1"
         android:layout_width="10dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.0163"
+        app:layout_constraintHeight_percent="0.0487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -29,7 +29,7 @@
         android:id="@+id/suggest_mg2"
         android:layout_width="0dp"
         android:layout_height="10dp"
-        app:layout_constraintWidth_percent="0.0763"
+        app:layout_constraintWidth_percent="0.0447"
         app:layout_constraintTop_toBottomOf="@id/suggest_mg1"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -41,30 +41,97 @@
         app:layout_constraintTop_toBottomOf="@id/suggest_mg1"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/btn_suggest_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_back"
-        app:layout_constraintTop_toBottomOf="@id/suggest_mg1"
-        app:layout_constraintStart_toEndOf="@id/suggest_mg2"/>
 
     <View
         android:id="@+id/suggest_mg3"
         android:layout_width="0dp"
-        android:layout_height="5dp"
-        app:layout_constraintWidth_percent="0.033"
-        app:layout_constraintStart_toEndOf="@id/btn_suggest_back"
-        app:layout_constraintTop_toBottomOf="@id/suggest_mg1"/>
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.0197"
+        app:layout_constraintTop_toBottomOf="@id/tv_suggest_service"
+        app:layout_constraintStart_toStartOf="parent"/>
+    
+    <TextView
+        android:id="@+id/tv_suggest_service_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제휴건의함에서 받고 싶은 제휴를 건의할수 있어요!"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/assu_font_sub"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@id/tv_suggest_service"
+        app:layout_constraintTop_toBottomOf="@id/suggest_mg3"/>
+
+    <View
+        android:id="@+id/suggest_mg8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.0329"
+        app:layout_constraintTop_toBottomOf="@id/tv_suggest_service_explain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iv_service_suggest_text_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1119"
+        android:background="@color/assu_sub3"
+        app:layout_constraintTop_toBottomOf="@id/suggest_mg8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <View
+        android:id="@+id/suggest_mg9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_service_suggest_text_background"
+        app:layout_constraintHeight_percent="0.0158"/>
+
+    <View
+        android:id="@+id/suggest_mg10"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_service_suggest_text_background"
+        app:layout_constraintWidth_percent="0.0316"/>
+
+    <TextView
+        android:id="@+id/tv_service_suggest_want"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="받고싶은 제휴 혜택이 없나요?"
+        android:fontFamily="@font/pretendard_regular"
+        android:textSize="13sp"
+        android:textColor="@color/assu_main"
+        app:layout_constraintTop_toBottomOf="@id/suggest_mg9"
+        app:layout_constraintStart_toEndOf="@id/suggest_mg10"/>
+
+    <TextView
+        android:id="@+id/tv_service_suggest_want_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• 받고싶은 제휴 가게가 있다면 어디든!\n• 제휴 건의 대상을 선택해주세요!"
+        android:textColor="@color/assu_font_sub"
+        android:textSize="13sp"
+        android:lineSpacingExtra="3dp"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintStart_toStartOf="@id/tv_service_suggest_want"
+        app:layout_constraintTop_toBottomOf="@id/tv_service_suggest_want"/>
+
 
     <TextView
         android:id="@+id/tv_suggest_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/assu_font_main"
-        app:layout_constraintTop_toTopOf="@id/btn_suggest_back"
-        app:layout_constraintBottom_toBottomOf="@id/btn_suggest_back"
-        app:layout_constraintStart_toEndOf="@id/suggest_mg3"
+        app:layout_constraintTop_toBottomOf="@id/suggest_mg1"
+        app:layout_constraintStart_toEndOf="@id/suggest_mg2"
         android:text="제휴 건의함"
         android:fontFamily="@font/pretendard_semibold"
         android:textSize="20sp"/>
@@ -77,12 +144,21 @@
         app:layout_constraintTop_toBottomOf="@id/tv_suggest_service"
         app:layout_constraintStart_toStartOf="parent"/>
 
+
+    <View
+        android:id="@+id/suggest_mg12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_service_suggest_text_background"
+        app:layout_constraintHeight_percent="0.0447"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_suggest"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/suggest_mg4"
+        app:layout_constraintTop_toBottomOf="@id/suggest_mg12"
         app:layout_constraintStart_toEndOf="@id/suggest_mg2"
         app:layout_constraintEnd_toStartOf="@id/suggest_mg2_2">
 
@@ -127,6 +203,9 @@
             app:layout_constraintTop_toTopOf="@id/spinner_target"
             app:layout_constraintBottom_toBottomOf="@id/spinner_target"
             app:layout_constraintStart_toStartOf="@id/cl_suggest"/>
+
+
+
 
         <ImageView
             android:id="@+id/btn_service_drop_down"

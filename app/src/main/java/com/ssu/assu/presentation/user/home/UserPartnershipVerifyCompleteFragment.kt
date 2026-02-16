@@ -29,9 +29,6 @@ class UserPartnershipVerifyCompleteFragment :
                 callback as OnBackPressedCallback
             )
 
-            binding
-
-            binding
 
             // (선택적으로 리뷰 작성하기 버튼 처리 등)
             binding.btnCheckContract.setOnClickListener {

@@ -57,7 +57,7 @@ class UserVerifyViewModel @Inject constructor(
                 is RetrofitResult.Success -> {
                     _storeName.value = result.data.storeName
                     storeId = result.data.storeId
-                    _contentList.value = result.data.contents
+                    _contentList.value = result.data.partnershipContents
                     Log.d("조회된 storeName", "${storeName}")
                     Log.d("조회된 contentList" , contentList.value.toString())
                 }

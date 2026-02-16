@@ -61,9 +61,9 @@ class MyApplication : Application() {
         super.onCreate()
         appContext = applicationContext
 
-        // 카카오맵 초기화
-        KakaoMapSdk.init(this, BuildConfig.KAKAO_MAP_KEY)
-        Log.d("KakaoInit", "len=${BuildConfig.KAKAO_MAP_KEY.length}")
+//         카카오맵 초기화
+//        KakaoMapSdk.init(this, BuildConfig.KAKAO_MAP_KEY)
+//        Log.d("KakaoInit", "len=${BuildConfig.KAKAO_MAP_KEY.length}")
 
         // 앱 시작 시 토큰 상태 확인 및 필요시 갱신
         applicationScope.launch {

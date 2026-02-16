@@ -1,6 +1,7 @@
 package com.ssu.assu.presentation.user.dashboard
 
 import android.R.attr.elevation
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -23,12 +24,14 @@ import com.ssu.assu.databinding.ActivityUserServiceSuggestBinding
 import com.ssu.assu.databinding.FragmentServiceSuggestDropDownBinding
 import com.ssu.assu.domain.model.suggestion.SuggestionTargetModel
 import com.ssu.assu.presentation.base.BaseActivity
+import com.ssu.assu.presentation.common.report.OnServiceSuggestListener
+import com.ssu.assu.presentation.user.home.temporary.UserServiceSuggestDialogFragment
 import com.ssu.assu.ui.suggestion.SuggestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBinding>(R.layout.activity_user_service_suggest){
+class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBinding>(R.layout.activity_user_service_suggest), OnServiceSuggestListener{
 
     private val viewModel: SuggestionViewModel by viewModels()
     private var suggestionTargets: List<SuggestionTargetModel> = emptyList()
@@ -68,17 +71,24 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
         }
 
         // 뒤로가기 버튼
-        binding.btnSuggestBack.setOnClickListener {
-            finish()
-        }
+//        binding.btnSuggestBack.setOnClickListener {
+//            finish()
+//        }
 
         // 그냥 애초에 이 액티비티를 닫아서 UserSugesstCompleteActivity의 backStack을 UserMainActivity로 만듦.
         binding.btnSuggestComplete.setOnClickListener {
-            viewModel.writeSuggestion()
-            val intent = Intent(this, UserSuggestCompleteActivity::class.java)
-            startActivity(intent)
-            finish()
+            // toCompleteActivity()
+
+            // TODO : 1학기 임시 운영버전
+            temporaryPopUpDialog()
         }
+    }
+
+    private fun toCompleteActivity(){
+        viewModel.writeSuggestion()
+        val intent = Intent(this, UserSuggestCompleteActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun initObserver() {
@@ -192,5 +202,20 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
         popupWindow.showAsDropDown(anchor, -5, -155)
 
         this.dropdownWindow = popupWindow
+    }
+
+    private fun temporaryPopUpDialog(){
+        UserServiceSuggestDialogFragment().show(supportFragmentManager, null)
+
+    }
+
+    override fun onServiceSuggest() {
+        viewModel.writeSuggestion()
+        viewModel.insertTemporaryQrData("SUGGEST")
+        val resultIntent = Intent()
+        setResult(Activity.RESULT_OK, resultIntent)
+
+        Log.d("ActivityResult", "RESULT_OK 설정 완료 및 finish 호출")
+        finish()
     }
 }

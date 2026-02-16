@@ -1,13 +1,16 @@
 package com.ssu.assu.data.repositoryImpl.certification
 
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
+import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
 import com.ssu.assu.data.dto.certification.response.NoneDataResponseDto
+import com.ssu.assu.data.dto.certification.response.TemporaryQrResponseDto
 import com.ssu.assu.data.dto.certification.response.UserSessionResponseDto
 import com.ssu.assu.data.repository.certification.CertificationRepository
 import com.ssu.assu.data.service.certification.CertificationService
 import com.ssu.assu.util.RetrofitResult
 import com.ssu.assu.util.apiHandler
+import com.ssu.assu.util.apiHandlerForUnit
 import javax.inject.Inject
 
 class CertificationRepositoryImpl @Inject constructor(
@@ -35,6 +38,28 @@ class CertificationRepositoryImpl @Inject constructor(
                 {dto -> dto}
             )
         } catch(e: Exception){
+            RetrofitResult.Error(e)
+        }
+    }
+
+    override suspend fun insertTemporaryQrData(
+        request: TemporaryQrDataRequestDto)
+    : RetrofitResult<Unit> {
+        return apiHandlerForUnit(
+            execute = { api.postTemporaryQrData(request) },
+            mapper = { Unit }
+        )
+
+    }
+
+    override suspend fun getMyTemporaryData()
+    : RetrofitResult<List<TemporaryQrResponseDto>>{
+        return try{
+            apiHandler(
+                {api.getMyTemporaryData()},
+                {dto -> dto}
+            )
+        } catch (e: Exception){
             RetrofitResult.Error(e)
         }
     }

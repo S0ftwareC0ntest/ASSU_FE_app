@@ -75,7 +75,7 @@ class UserStoreGetReviewViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getMyPartnershipUseCase(storeId)){
                 is RetrofitResult.Success -> {
-                    _partnershipContentList.value = toReviewStoreItem(result.data.contents)
+                    _partnershipContentList.value = toReviewStoreItem(result.data.partnershipContents)
                 }
                 is RetrofitResult.Error -> {
                     Log.d("getPartnershipForMe", "${result.exception}")

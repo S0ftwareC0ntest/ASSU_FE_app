@@ -11,6 +11,7 @@ import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
 import com.ssu.assu.databinding.FragmentUserPartnershipSelectBinding
 import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.data.dto.store.PaperContent
+import com.ssu.assu.presentation.user.home.temporary.UserEventSelectFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +41,8 @@ class UserPartnershipSelectFragment :
                 if (index < contentList.size) {
                     // 선택된 제휴사 정보를 ViewModel에 저장
                     viewModel.selectPartnership(contentList[index])
-                    navigateToComplete()
+//                    navigateToComplete() TODO: 운영 버전
+                    temporaryNavigateFragment() // TODO : 임시 버전
 
 
                 }
@@ -58,6 +60,13 @@ class UserPartnershipSelectFragment :
             contentList = contents
             bindContentToButtons(contents)
         }
+    }
+
+    private fun temporaryNavigateFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, UserEventSelectFragment())
+            .addToBackStack(null) // 뒤로가기 버튼 유지하려면 추가, 아니면 제거
+            .commit()
     }
 
     private fun bindContentToButtons(contents: List<PaperContent>) {

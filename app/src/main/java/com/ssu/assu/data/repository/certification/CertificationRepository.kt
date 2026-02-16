@@ -1,8 +1,10 @@
 package com.ssu.assu.data.repository.certification
 
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
+import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
 import com.ssu.assu.data.dto.certification.response.NoneDataResponseDto
+import com.ssu.assu.data.dto.certification.response.TemporaryQrResponseDto
 import com.ssu.assu.data.dto.certification.response.UserSessionResponseDto
 import com.ssu.assu.util.RetrofitResult
 
@@ -17,4 +19,11 @@ interface CertificationRepository {
     )
     : RetrofitResult<NoneDataResponseDto>
 
+    suspend fun insertTemporaryQrData(
+        request : TemporaryQrDataRequestDto
+    )
+    : RetrofitResult<Unit>
+
+    suspend fun getMyTemporaryData()
+    : RetrofitResult<List<TemporaryQrResponseDto>>
 }
