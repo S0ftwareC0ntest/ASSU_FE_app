@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:padding="15dp"
+    android:background="@drawable/bg_review_delete_dialog">
+
+    <TextView
+        android:id="@+id/tv_question_target_review"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="건의 내용을 확인해주세요!"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textColor="@color/assu_font_main"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    <ImageView
+        android:id="@+id/btn_service_suggest_target_cross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cross"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_question_target_review"
+        app:layout_constraintBottom_toBottomOf="@id/tv_question_target_review"/>
+
+
+    <TextView
+        android:id="@+id/tv_service_suggest_item_organization"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="건의대상"
+        android:textColor="@color/assu_main"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toBottomOf="@id/tv_question_target_review"
+        app:layout_constraintStart_toStartOf="@id/tv_service_suggest_item_want"
+        app:layout_constraintEnd_toEndOf="@id/tv_service_suggest_item_want"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_review_store_round"/>
+
+    <TextView
+        android:id="@+id/tv_service_suggest_org"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="총학생회"
+        android:textColor="@color/assu_font_sub"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="@id/tv_service_suggest_item_organization"
+        app:layout_constraintBottom_toBottomOf="@id/tv_service_suggest_item_organization"
+        app:layout_constraintStart_toEndOf="@id/tv_service_suggest_item_organization"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginStart="6dp" />
+
+    <TextView
+        android:id="@+id/tv_service_suggest_item_want"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제휴 희망 가게"
+        android:textColor="@color/assu_main"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toBottomOf="@id/tv_service_suggest_item_organization"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/bg_review_store_round"/>
+
+    <TextView
+        android:id="@+id/tv_service_suggest_want"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="역전할머니맥주"
+        android:textColor="@color/assu_font_sub"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="@id/tv_service_suggest_item_want"
+        app:layout_constraintBottom_toBottomOf="@id/tv_service_suggest_item_want"
+        app:layout_constraintStart_toEndOf="@id/tv_service_suggest_item_want"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginStart="6dp" />
+
+
+    <TextView
+        android:id="@+id/tv_service_suggest_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_service_suggest_item_want"
+        android:layout_marginTop="7dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintStart_toStartOf="@id/tv_service_suggest_item_want"
+        android:text="20,000원 이상 주문 시 파인애플샤베트 제공!!!dddddddddddddddddddddddddddddddddddddddddddddddddddddd"/>
+
+
+    <TextView
+        android:id="@+id/btn_service_suggest_target_cancel"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_btn_dialog_cancel"
+        android:text="취소"
+        android:gravity="center"
+        android:textColor="@color/assu_main"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintTop_toBottomOf="@id/tv_service_suggest_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_service_suggest_submit"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <TextView
+        android:id="@+id/btn_service_suggest_submit"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_btn_dialog_select"
+        android:text="제출하기"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:fontFamily="@font/pretendard_semibold"
+        app:layout_constraintTop_toTopOf="@id/btn_service_suggest_target_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/btn_service_suggest_target_cancel"
+        app:layout_constraintStart_toEndOf="@id/btn_service_suggest_target_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1.5" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

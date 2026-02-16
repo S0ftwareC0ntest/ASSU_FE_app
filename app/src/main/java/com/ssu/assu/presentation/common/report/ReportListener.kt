@@ -15,3 +15,7 @@ interface OnReviewReportConfirmedListener {
 interface OnReviewReportCompleteListener{
     fun onReviewReportComplete(position: Int)
 }
+
+interface OnServiceSuggestListener{
+    fun onServiceSuggest()
+}

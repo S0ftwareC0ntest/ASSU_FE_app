@@ -62,7 +62,7 @@ class ServiceRecordAdapter : RecyclerView.Adapter<ServiceRecordAdapter.ServiceRe
                 binding.btnServiceWriteReview.setOnClickListener {
                     val intent = Intent(itemView.context, UserStarReviewActivity::class.java).apply {
                         putExtra("storeName", serviceRecord.marketName)
-                        putExtra("partnershipUsageId", serviceRecord.id) // storeId도 넘겨주는 것이 좋습니다.
+                        putExtra("partnershipUsageId", serviceRecord.id)
                         putExtra("adminName", serviceRecord.adminName)
                         putExtra("content", serviceRecord.serviceContent)
                         putExtra("storeId", serviceRecord.storeId)
