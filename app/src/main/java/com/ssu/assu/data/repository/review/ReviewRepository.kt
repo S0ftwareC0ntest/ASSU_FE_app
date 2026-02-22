@@ -1,6 +1,7 @@
 package com.ssu.assu.data.repository.review
 
 import com.ssu.assu.data.dto.review.response.PageReviewList
+import com.ssu.assu.data.dto.review.request.AppReviewRequestDto
 import com.ssu.assu.data.dto.review.request.ReviewWriteRequestDto
 import com.ssu.assu.data.dto.review.response.DeleteReviewResponseDto
 import com.ssu.assu.data.dto.review.response.ReviewAverageResponseDto
@@ -40,4 +41,6 @@ interface ReviewRepository {
 
     suspend fun getMyStoreAverage() : RetrofitResult<ReviewAverageResponseDto>
     suspend fun getUserStoreAverage(storeId: Long) : RetrofitResult<ReviewAverageResponseDto>
+
+    suspend fun postAppReview(request: AppReviewRequestDto): RetrofitResult<Unit>
 }

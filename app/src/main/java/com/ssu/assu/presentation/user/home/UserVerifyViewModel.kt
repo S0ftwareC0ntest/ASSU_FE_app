@@ -8,15 +8,20 @@ import androidx.lifecycle.viewModelScope
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
 import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
+import com.ssu.assu.data.dto.review.request.AppReviewRequestDto
 import com.ssu.assu.data.dto.store.PaperContent
 import com.ssu.assu.data.dto.usage.SaveUsageRequestDto
 import com.ssu.assu.domain.usecase.certification.GetSessionIdUseCase
 import com.ssu.assu.domain.usecase.certification.PostPersonalDataUseCase
 import com.ssu.assu.domain.usecase.certification.PostTemporaryQrDataUseCase
+import com.ssu.assu.domain.usecase.review.PostAppReviewUseCase
 import com.ssu.assu.domain.usecase.store.GetStorePartnershipUseCase
 import com.ssu.assu.domain.usecase.usage.SaveUsageUseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +31,8 @@ class UserVerifyViewModel @Inject constructor(
     private val certificationUseCase: GetSessionIdUseCase,
     private val saveUsageUseCase: SaveUsageUseCase,
     private val personalCertifyUseCase: PostPersonalDataUseCase,
-    private val temporaryQrDataUseCase: PostTemporaryQrDataUseCase
+    private val temporaryQrDataUseCase: PostTemporaryQrDataUseCase,
+    private val postAppReviewUseCase: PostAppReviewUseCase
 ): ViewModel(){
 
     // 기본 정보
@@ -161,6 +167,30 @@ class UserVerifyViewModel @Inject constructor(
         viewModelScope.launch {
             temporaryQrDataUseCase(request)
         }
+    }
+
+    private val _appReviewSubmitResult = MutableStateFlow<RetrofitResult<Unit>?>(null)
+    val appReviewSubmitResult: StateFlow<RetrofitResult<Unit>?> = _appReviewSubmitResult.asStateFlow()
+
+    fun submitAppReview(rate: Int, content: String) {
+        viewModelScope.launch {
+            when (val result = postAppReviewUseCase(AppReviewRequestDto(rate = rate, content = content))) {
+                is RetrofitResult.Success -> {
+                    insertTemporaryQrData("REVIEW")
+                    _appReviewSubmitResult.value = result
+                }
+                is RetrofitResult.Error -> {
+                    _appReviewSubmitResult.value = result
+                }
+                is RetrofitResult.Fail -> {
+                    _appReviewSubmitResult.value = result
+                }
+            }
+        }
+    }
+
+    fun clearAppReviewResult() {
+        _appReviewSubmitResult.value = null
     }
 
     fun selectService(service: String) {
