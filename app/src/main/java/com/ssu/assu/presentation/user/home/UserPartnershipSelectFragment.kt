@@ -22,6 +22,7 @@ class UserPartnershipSelectFragment :
     private val viewModel: UserVerifyViewModel by activityViewModels()
     private var selectedIndex: Int? = null
     private var contentList: List<PaperContent> = emptyList()
+    private var storeId: Long = 0L // TODO : 임시 운영 버전
 
     override fun initView() {
         // 버튼 리스트 초기화
@@ -31,6 +32,18 @@ class UserPartnershipSelectFragment :
             binding.btnPartnershipSelect3,
             binding.btnPartnershipSelect4
         )
+
+        // TODO : 임시 운영 버전
+        arguments?.let {
+            storeId = it.getLong("storeId")
+            if (storeId != null) {
+                // storeId를 성공적으로 받았는지 로그로 확인
+                Log.d("전달된 데이터!!!!!!!", "프래그먼트에서 받은 storeId: $storeId")
+            }
+        }
+        viewModel.storeId = storeId
+        viewModel.getStorePartnership()
+        // -------------------------------------
 
         // 선택 완료 버튼 초기 상태
         updateCompleteButtonState(false)
@@ -49,7 +62,7 @@ class UserPartnershipSelectFragment :
             }
         }
 
-        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value
+//        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value TODO : 임시버전을 위해 주석 처리
 
 
     }
@@ -60,6 +73,13 @@ class UserPartnershipSelectFragment :
             contentList = contents
             bindContentToButtons(contents)
         }
+        // TODO : 임시 버전
+        viewModel.storeName.observe(viewLifecycleOwner) { storeName ->
+            binding.tvPartnershipSelectMarketName.text = storeName
+            // UI가 업데이트될 때 로그를 추가하여 확인
+            Log.d("프래그먼트 UI 업데이트", "storeName: $storeName")
+        }
+        // ---------------
     }
 
     private fun temporaryNavigateFragment() {
