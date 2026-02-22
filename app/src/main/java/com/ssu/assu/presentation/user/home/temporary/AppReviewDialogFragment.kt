@@ -8,14 +8,16 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.ssu.assu.R
 import com.ssu.assu.databinding.DialogAppReviewBinding
 import com.ssu.assu.presentation.user.home.UserVerifyViewModel
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+
+fun interface OnAppReviewSuccessListener {
+    fun onAppReviewSuccess()
+}
 
 @AndroidEntryPoint
 class AppReviewDialogFragment : DialogFragment() {
@@ -70,28 +72,29 @@ class AppReviewDialogFragment : DialogFragment() {
             viewModel.submitAppReview(selectedRate, content)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.appReviewSubmitResult.collectLatest { result ->
-                when (result) {
-                    is RetrofitResult.Success -> dismiss()
-                    is RetrofitResult.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "리뷰 작성에 실패했습니다. ${result.exception.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    is RetrofitResult.Fail -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "리뷰 작성에 실패했습니다. ${result.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    null -> { }
+        viewModel.appReviewSubmitResult.observe(viewLifecycleOwner, Observer { result ->
+            when (result) {
+                is RetrofitResult.Success -> {
+                    dismiss()
+                    (targetFragment as? OnAppReviewSuccessListener)?.onAppReviewSuccess()
                 }
+                is RetrofitResult.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "리뷰 작성에 실패했습니다. ${result.exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is RetrofitResult.Fail -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "리뷰 작성에 실패했습니다. ${result.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                null -> { }
             }
-        }
+        })
     }
 
     private fun updateStarAppearance(rating: Int) {

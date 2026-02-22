@@ -19,9 +19,6 @@ import com.ssu.assu.domain.usecase.store.GetStorePartnershipUseCase
 import com.ssu.assu.domain.usecase.usage.SaveUsageUseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -169,21 +166,21 @@ class UserVerifyViewModel @Inject constructor(
         }
     }
 
-    private val _appReviewSubmitResult = MutableStateFlow<RetrofitResult<Unit>?>(null)
-    val appReviewSubmitResult: StateFlow<RetrofitResult<Unit>?> = _appReviewSubmitResult.asStateFlow()
+    private val _appReviewSubmitResult = MutableLiveData<RetrofitResult<Unit>?>()
+    val appReviewSubmitResult: LiveData<RetrofitResult<Unit>?> = _appReviewSubmitResult
 
     fun submitAppReview(rate: Int, content: String) {
         viewModelScope.launch {
             when (val result = postAppReviewUseCase(AppReviewRequestDto(rate = rate, content = content))) {
                 is RetrofitResult.Success -> {
                     insertTemporaryQrData("REVIEW")
-                    _appReviewSubmitResult.value = result
+                    _appReviewSubmitResult.postValue(result)
                 }
                 is RetrofitResult.Error -> {
-                    _appReviewSubmitResult.value = result
+                    _appReviewSubmitResult.postValue(result)
                 }
                 is RetrofitResult.Fail -> {
-                    _appReviewSubmitResult.value = result
+                    _appReviewSubmitResult.postValue(result)
                 }
             }
         }
