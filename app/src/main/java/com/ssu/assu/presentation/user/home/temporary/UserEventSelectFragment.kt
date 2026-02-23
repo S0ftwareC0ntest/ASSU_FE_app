@@ -2,23 +2,19 @@ package com.ssu.assu.presentation.user.home.temporary
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.viewModelScope
 import com.ssu.assu.R
-import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.databinding.FragmentUserEventSelectBinding
 import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.presentation.user.dashboard.UserServiceSuggestActivity
 import com.ssu.assu.presentation.user.home.UserVerifyViewModel
-import kotlinx.coroutines.launch
-import kotlin.getValue
 
-class UserEventSelectFragment : BaseFragment<FragmentUserEventSelectBinding>(R.layout.fragment_user_event_select) {
+class UserEventSelectFragment : BaseFragment<FragmentUserEventSelectBinding>(R.layout.fragment_user_event_select),
+    OnAppReviewSuccessListener {
 private val startActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
     if (result.resultCode == Activity.RESULT_OK) {
@@ -31,8 +27,14 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
     private var selectedIndex: Int? = null
     private val viewModel: UserVerifyViewModel by activityViewModels()
     private lateinit var eventButtons: List<View>
-    override fun initObserver() {
+    override fun initObserver() {}
 
+    override fun onAppReviewSuccess() {
+        viewModel.clearAppReviewResult()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, UserTemporaryCompleteFragment())
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 
     override fun initView() {
@@ -114,8 +116,9 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
         }
     }
 
-    private fun toAssuReviewWrite(){
-        viewModel.insertTemporaryQrData("REVIEW")
+    private fun toAssuReviewWrite() {
+        AppReviewDialogFragment().apply { setTargetFragment(this@UserEventSelectFragment, 0) }
+            .show(parentFragmentManager, "AppReviewDialog")
     }
 
     private fun toSuggestPartnership(){

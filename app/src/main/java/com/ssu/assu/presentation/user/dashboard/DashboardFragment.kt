@@ -25,6 +25,12 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     private val today = LocalDate.now()
     private val currentYear = today.year
     private val currentMonth = today.monthValue
+    override fun onStart() {
+        super.onStart()
+        // 하단 탭을 눌러 이 프래그먼트에 진입하자마자 제휴 건의 화면으로 이동
+        val intent = Intent(requireContext(), UserServiceSuggestActivity::class.java)
+        startActivity(intent)
+        }
 
     override fun initView() {
         binding.btnSuggestService.setOnClickListener {
