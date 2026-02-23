@@ -256,11 +256,17 @@ class UserQRVerifyActivity :
     // 대표자 플로우: 매장 정보로 이동 (수정 없음)
     private fun handleStoreOwnerFlow(storeId: Long) {
         Log.d("UserQRVerifyActivity", "곧 테이블 화면으로 전환됩니다. ")
-        val fragment = UserTableNumberSelectFragment().apply {
+//        val fragment = UserTableNumberSelectFragment().apply {//TODO : 테이블 번호 선택으로 넘어가는 코드
+//            arguments = Bundle().apply {
+//                putLong("storeId", storeId)
+//            }
+//        }
+        val fragment = UserPartnershipSelectFragment().apply {  // TODO : partnershipSelect로 바로 가는 코드
             arguments = Bundle().apply {
                 putLong("storeId", storeId)
             }
         }
+        // -------------
         binding.fragmentContainerView.visibility = View.VISIBLE
 
         supportFragmentManager.beginTransaction()
