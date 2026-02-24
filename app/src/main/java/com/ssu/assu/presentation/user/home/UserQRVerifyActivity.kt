@@ -68,7 +68,7 @@ class UserQRVerifyActivity :
         }
 
 
-        binding.tvUniversity.text = infoManager.getBasicInfoUniversity() +"학생"
+        binding.tvUniversity.text = infoManager.getBasicInfoUniversity() +" 학생"
         binding.tvDepartment.text = infoManager.getBasicInfoDepartment()
 // TODO 나중에 주석해제
         cameraExecutor = Executors.newSingleThreadExecutor()
