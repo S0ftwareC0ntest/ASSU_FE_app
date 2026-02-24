@@ -2,8 +2,12 @@ package com.ssu.assu.presentation.user.home
 
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import com.ssu.assu.R
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
@@ -80,6 +84,19 @@ class UserPartnershipSelectFragment :
             Log.d("프래그먼트 UI 업데이트", "storeName: $storeName")
         }
         // ---------------
+
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                // 로딩 중일 때
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.clPartnershipSelectFragment.visibility = View.INVISIBLE
+            } else {
+                // 로딩 완료 시
+                binding.loadingOverlay.visibility = View.GONE
+                binding.clPartnershipSelectFragment.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun temporaryNavigateFragment() {
