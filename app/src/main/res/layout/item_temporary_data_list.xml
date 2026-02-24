@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="99dp">
+    android:layout_height="89dp">
 
     <TextView
         android:id="@+id/tv_stamp_sort"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="19dp"
         android:text="A:SSU 앱 리뷰 작성"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -42,7 +42,7 @@
         android:textColor="@color/assu_font_sub"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="19dp"
         app:layout_constraintStart_toEndOf="@id/tv_stamp_sort"/>
 
 
