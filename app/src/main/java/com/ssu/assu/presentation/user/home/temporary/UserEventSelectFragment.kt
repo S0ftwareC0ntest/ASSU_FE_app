@@ -2,6 +2,7 @@ package com.ssu.assu.presentation.user.home.temporary
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.ssu.assu.R
 import com.ssu.assu.databinding.FragmentUserEventSelectBinding
 import com.ssu.assu.presentation.base.BaseFragment
-import com.ssu.assu.presentation.user.dashboard.UserServiceSuggestActivity
+import com.ssu.assu.presentation.user.dashboard.UserServiceSuggestFragment
 import com.ssu.assu.presentation.user.home.UserVerifyViewModel
 
 class UserEventSelectFragment : BaseFragment<FragmentUserEventSelectBinding>(R.layout.fragment_user_event_select),
@@ -122,11 +123,15 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
     }
 
     private fun toSuggestPartnership(){
-        val intent = Intent(requireContext(), UserServiceSuggestActivity::class.java)
-        intent.apply {
-            putExtra("demo" , "EventSelectFragment")
+        val fragment = UserServiceSuggestFragment()
+
+// 2. 넘길 데이터를 담은 Bundle 생성 및 설정
+        val bundle = Bundle().apply {
+            putString("entry_point", "QR_FLOW") // QR 경로일 경우 "QR_FLOW", 일반은 "DIRECT"
         }
-        startActivity.launch(intent)
+        fragment.arguments = bundle
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, fragment).commit()
     }
 
     private fun toComplete(){

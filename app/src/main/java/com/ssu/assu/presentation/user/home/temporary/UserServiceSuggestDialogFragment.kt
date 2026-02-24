@@ -14,12 +14,23 @@ import com.ssu.assu.ui.suggestion.SuggestionViewModel
 
 class UserServiceSuggestDialogFragment : DialogFragment() {
 
-    private val viewModel : SuggestionViewModel by activityViewModels()
-    private var _binding : FragmentUserServiceSuggestDialogBinding? = null
+    private val viewModel: SuggestionViewModel by activityViewModels()
+    private var _binding: FragmentUserServiceSuggestDialogBinding? = null
     private val binding get() = _binding!!
 
     private var listener: OnServiceSuggestListener? = null
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = when {
+            parentFragment is OnServiceSuggestListener -> parentFragment as OnServiceSuggestListener
+            context is OnServiceSuggestListener -> context
+            else -> {
+                // 필요하다면 예외를 던지거나 로그를 남깁니다.
+                null
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,30 +41,14 @@ class UserServiceSuggestDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnServiceSuggestListener) {
-            listener = context
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
 
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        // X 버튼 → 닫기
-        binding.btnServiceSuggestTargetCross.setOnClickListener {
-            dismiss()
-        }
-
-
-        // 취소 버튼
-        binding.btnServiceSuggestTargetCancel.setOnClickListener {
-            dismiss()
-        }
-
+        binding.btnServiceSuggestTargetCross.setOnClickListener { dismiss() }
+        binding.btnServiceSuggestTargetCancel.setOnClickListener { dismiss() }
 
         binding.btnServiceSuggestSubmit.setOnClickListener {
             listener?.onServiceSuggest()
@@ -61,17 +56,19 @@ class UserServiceSuggestDialogFragment : DialogFragment() {
         }
     }
 
-    private fun initView(){
+    private fun initView() {
+        // ViewModel 관찰 중이라면 value로 직접 접근하거나
+        // 바인딩 시점에서 처리 가능합니다.
         binding.tvServiceSuggestOrg.text = viewModel.selectedTarget.value?.name
         binding.tvServiceSuggestWant.text = viewModel.storeName.value
-        binding.tvServiceSuggestContent.text=viewModel.benefit.value
+        binding.tvServiceSuggestContent.text = viewModel.benefit.value
     }
 
     override fun onResume() {
         super.onResume()
+        // 화면 너비 비율 조정
         val displayMetrics = resources.displayMetrics
-        val width = displayMetrics.widthPixels
-        val dialogWidth = (width * 0.8396f).toInt()
+        val dialogWidth = (displayMetrics.widthPixels * 0.8396f).toInt()
         dialog?.window?.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
@@ -84,6 +81,4 @@ class UserServiceSuggestDialogFragment : DialogFragment() {
         super.onDetach()
         listener = null
     }
-
-
 }

@@ -34,6 +34,11 @@
         android:label="UserServiceRecord"/>
 
     <fragment
+        android:id="@+id/serviceSuggestFragment"
+        android:name="com.ssu.assu.presentation.user.dashboard.UserServiceSuggestFragment"
+        android:label="Suggest"/>
+
+    <fragment
         android:id="@+id/mypageFragment"
         android:name="com.ssu.assu.presentation.user.mypage.UserMypageFragment"
         android:label="Mypage">

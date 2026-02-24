@@ -107,4 +107,11 @@ class SuggestionViewModel @Inject constructor(
         _writeSuggestionState.value = WriteSuggestionUiState.Idle
     }
 
+    fun clearInputs() {
+        _selectedTarget.value = null
+        storeName.value = ""
+        benefit.value = ""
+        _writeSuggestionState.value = WriteSuggestionUiState.Idle
+    }
+
 }
