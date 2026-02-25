@@ -1,6 +1,5 @@
 package com.ssu.assu.presentation.user.dashboard
 
-import android.R.attr.elevation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -13,35 +12,40 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.PopupWindow
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.ssu.assu.R
-import com.ssu.assu.databinding.ActivityUserServiceSuggestBinding
 import com.ssu.assu.databinding.FragmentServiceSuggestDropDownBinding
+import com.ssu.assu.databinding.FragmentUserServiceSuggestBinding
 import com.ssu.assu.domain.model.suggestion.SuggestionTargetModel
-import com.ssu.assu.presentation.base.BaseActivity
+import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.presentation.common.report.OnServiceSuggestListener
 import com.ssu.assu.presentation.user.home.temporary.UserServiceSuggestDialogFragment
+import com.ssu.assu.presentation.user.home.temporary.UserTemporaryCompleteFragment
 import com.ssu.assu.ui.suggestion.SuggestionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBinding>(R.layout.activity_user_service_suggest), OnServiceSuggestListener{
+class UserServiceSuggestFragment : BaseFragment<FragmentUserServiceSuggestBinding>(R.layout.fragment_user_service_suggest), OnServiceSuggestListener {
 
-    private val viewModel: SuggestionViewModel by viewModels()
+    private val viewModel: SuggestionViewModel by activityViewModels()
     private var suggestionTargets: List<SuggestionTargetModel> = emptyList()
-
     private var dropdownWindow: PopupWindow? = null
 
-    override fun initView() {
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+    private val ARG_ENTRY_POINT = "entry_point"
+    private val ENTRY_QR = "QR_FLOW"
 
+    override fun initView() {
+        // 1. Data Binding 설정
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner // Fragment에서는 viewLifecycleOwner 권장
+
+        // 2. Window Insets 설정 (Fragment의 root view 사용)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val extraPaddingTop = 3
@@ -53,13 +57,12 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
             )
             insets
         }
-//        val targetList = resources.getStringArray(R.array.suggest_target).toList()
 
         activateCompleteButton()
 
         binding.spinnerTarget.setOnClickListener {
             if (suggestionTargets.isEmpty()) {
-                Toast.makeText(this, "건의 가능한 대상이 없습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "건의 가능한 대상이 없습니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -70,46 +73,29 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
             }
         }
 
-        // 뒤로가기 버튼
-//        binding.btnSuggestBack.setOnClickListener {
-//            finish()
-//        }
-
-        // 그냥 애초에 이 액티비티를 닫아서 UserSugesstCompleteActivity의 backStack을 UserMainActivity로 만듦.
         binding.btnSuggestComplete.setOnClickListener {
-            // toCompleteActivity()
-
             // TODO : 1학기 임시 운영버전
             temporaryPopUpDialog()
         }
     }
 
-    private fun toCompleteActivity(){
-        viewModel.writeSuggestion()
-        val intent = Intent(this, UserSuggestCompleteActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
     override fun initObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.getAdminsState.collect { state ->
-                        Log.d("SuggestActivity", "getAdminsState changed: $state")
-
-                        when (state) {
-                            is SuggestionViewModel.GetAdminsUiState.Success -> {
-                                suggestionTargets = state.data
-                            }
-                            is SuggestionViewModel.GetAdminsUiState.Fail -> {
-                                Toast.makeText(this@UserServiceSuggestActivity, state.message, Toast.LENGTH_SHORT).show()
-                            }
-                            is SuggestionViewModel.GetAdminsUiState.Error -> {
-                                Toast.makeText(this@UserServiceSuggestActivity, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                            else -> {}
+        // Fragment에서는 viewLifecycleOwner.lifecycleScope를 사용해야 안전합니다.
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAdminsState.collect { state ->
+                    Log.d("SuggestFragment", "getAdminsState changed: $state")
+                    when (state) {
+                        is SuggestionViewModel.GetAdminsUiState.Success -> {
+                            suggestionTargets = state.data
                         }
+                        is SuggestionViewModel.GetAdminsUiState.Fail -> {
+                            Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                        }
+                        is SuggestionViewModel.GetAdminsUiState.Error -> {
+                            Toast.makeText(requireContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {}
                     }
                 }
             }
@@ -123,41 +109,27 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
     private fun activateCompleteButton() {
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val input1 = binding.etSuggestMarket.text.toString().trim()
                 val input2 = binding.etSuggestWantBenefit.text.toString().trim()
-
                 val isFilled = input1.isNotEmpty() && input2.isNotEmpty()
 
                 binding.btnSuggestComplete.isEnabled = isFilled
-
-                if (isFilled) {
-                    binding.btnSuggestComplete.setBackgroundResource(R.drawable.btn_basic_selected)
-                } else {
-                    binding.btnSuggestComplete.setBackgroundResource(R.drawable.btn_basic_unselected)
-                }
+                binding.btnSuggestComplete.setBackgroundResource(
+                    if (isFilled) R.drawable.btn_basic_selected else R.drawable.btn_basic_unselected
+                )
             }
-
             override fun afterTextChanged(s: Editable?) {}
         }
 
         binding.etSuggestMarket.addTextChangedListener(textWatcher)
         binding.etSuggestWantBenefit.addTextChangedListener(textWatcher)
 
-        // 초기 상태
         binding.btnSuggestComplete.isEnabled = false
         binding.btnSuggestComplete.setBackgroundResource(R.drawable.btn_basic_unselected)
     }
 
-
-    private fun showDropdownMenu(anchor : View, targets: List<SuggestionTargetModel>) {
-
-        if (targets.isEmpty()) {
-            Toast.makeText(this, "건의 가능한 대상이 없습니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
+    private fun showDropdownMenu(anchor: View, targets: List<SuggestionTargetModel>) {
         val popupBinding = FragmentServiceSuggestDropDownBinding.inflate(layoutInflater)
         val popupWindow = PopupWindow(
             popupBinding.root,
@@ -169,9 +141,7 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        popupWindow.setOnDismissListener {
-            dropdownWindow = null
-        }
+        popupWindow.setOnDismissListener { dropdownWindow = null }
 
         val textViews = listOf(
             popupBinding.tvSuggestDropTarget1,
@@ -185,13 +155,13 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
 
         targets.forEachIndexed { index, target ->
             if (index < textViews.size) {
-                val textView = textViews[index]
-                textView.visibility = View.VISIBLE
-                textView.text = target.name
-
-                textView.setOnClickListener {
-                    viewModel.selectTarget(target)
-                    popupWindow.dismiss()
+                textViews[index].apply {
+                    visibility = View.VISIBLE
+                    text = target.name
+                    setOnClickListener {
+                        viewModel.selectTarget(target)
+                        popupWindow.dismiss()
+                    }
                 }
                 if (index < targets.size - 1 && index < dividers.size) {
                     dividers[index].visibility = View.VISIBLE
@@ -200,22 +170,38 @@ class UserServiceSuggestActivity : BaseActivity<ActivityUserServiceSuggestBindin
         }
 
         popupWindow.showAsDropDown(anchor, -5, -155)
-
         this.dropdownWindow = popupWindow
     }
 
-    private fun temporaryPopUpDialog(){
-        UserServiceSuggestDialogFragment().show(supportFragmentManager, null)
-
+    private fun temporaryPopUpDialog() {
+        // childFragmentManager를 사용하는 것이 Fragment 내의 Dialog 관리에 적합합니다.
+        UserServiceSuggestDialogFragment().show(childFragmentManager, "SuggestDialog")
     }
 
     override fun onServiceSuggest() {
+        val entryPoint = arguments?.getString(ARG_ENTRY_POINT)
         viewModel.writeSuggestion()
         viewModel.insertTemporaryQrData("SUGGEST")
-        val resultIntent = Intent()
-        setResult(Activity.RESULT_OK, resultIntent)
 
-        Log.d("ActivityResult", "RESULT_OK 설정 완료 및 finish 호출")
-        finish()
+        // Activity의 setResult 및 finish 호출
+        if (entryPoint == ENTRY_QR) {
+            // 1. QR 인증을 통해 들어온 경우: 결과 전달 후 액티비티 종료 (완료 화면으로 이동)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, UserTemporaryCompleteFragment())
+                .commit()
+        } else {
+            Toast.makeText(requireContext(), "건의가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            resetInputs()
+            Log.d("SuggestFragment", "일반 진입 플로우 - 화면 유지")
+        }
+    }
+
+    private fun resetInputs() {
+        viewModel.clearInputs()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        dropdownWindow?.dismiss() // 메모리 누수 방지
     }
 }

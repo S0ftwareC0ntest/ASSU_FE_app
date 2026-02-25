@@ -33,9 +33,9 @@ class MyPartnershipDetailsFragment :
 
     override fun initObserver() {
         // 리뷰 목록 관찰 (ServiceRecord)
-        viewModel.usageList.observe(viewLifecycleOwner) { records ->
-            serviceRecordAdapter?.setData(records)
-        }
+//        viewModel.usageList.observe(viewLifecycleOwner) { records ->
+//            serviceRecordAdapter?.setData(records)
+//        }
 
         // 임시 QR 데이터 관찰 (스탬프 적립 내역)
         viewModel.qrDataList.observe(viewLifecycleOwner) { qrList ->

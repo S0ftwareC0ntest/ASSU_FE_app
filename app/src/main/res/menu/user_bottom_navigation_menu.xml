@@ -11,7 +11,7 @@
         android:icon="@drawable/ic_bottom_nav_location"
         android:title="@string/location"/>
     <item
-        android:id="@+id/dashboardFragment"
+        android:id="@+id/serviceSuggestFragment"
         android:icon="@drawable/ic_bottom_nav_chatting"
         android:title="제휴 건의함"/>
     <item

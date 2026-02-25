@@ -57,8 +57,12 @@ class UserVerifyViewModel @Inject constructor(
     private val _selectedContent = MutableLiveData<PaperContent?>()
     val selectedContent: LiveData<PaperContent?> = _selectedContent
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun getStorePartnership(){
         viewModelScope.launch{
+            _isLoading.value = true
             when (val result = useCase(storeId)) {
                 is RetrofitResult.Success -> {
                     _storeName.value = result.data.storeName
@@ -75,6 +79,7 @@ class UserVerifyViewModel @Inject constructor(
                     // 실패 처리
                 }
             }
+            _isLoading.value = false
         }
     }
 
