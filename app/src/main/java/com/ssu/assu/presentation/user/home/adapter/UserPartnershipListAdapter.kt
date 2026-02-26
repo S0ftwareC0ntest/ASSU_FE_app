@@ -24,7 +24,7 @@ class UserPartnershipListAdapter :
                 }
             }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPartnershipListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType:  Int): UserPartnershipListViewHolder {
         val binding =
             ItemUserPartnershipListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserPartnershipListViewHolder(binding)
