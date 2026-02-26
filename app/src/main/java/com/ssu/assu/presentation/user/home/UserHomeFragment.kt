@@ -225,11 +225,13 @@ class UserHomeFragment :
     }
 
     private fun showLoading() {
-        // 로딩 UI 표시
+        binding.skeletonHomePartnership.root.visibility = View.VISIBLE
+        binding.llPartnershipContent.visibility = View.GONE
     }
 
     private fun hideLoading() {
-        // 로딩 UI 숨김
+        binding.skeletonHomePartnership.root.visibility = View.GONE
+        binding.llPartnershipContent.visibility = View.VISIBLE
     }
 
     // 서버 등록까지 한 번에
