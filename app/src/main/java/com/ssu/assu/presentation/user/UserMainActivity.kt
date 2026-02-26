@@ -74,6 +74,13 @@ class UserMainActivity : BaseActivity<ActivityUserMainBinding>(R.layout.activity
         val navController = navHostFragment.navController
 
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigationView.visibility = when (destination.id) {
+                R.id.customerServiceDialogFragment -> android.view.View.GONE
+                else -> android.view.View.VISIBLE
+            }
+        }
     }
 
     private fun Int.dpToPx(context: Context): Int {
