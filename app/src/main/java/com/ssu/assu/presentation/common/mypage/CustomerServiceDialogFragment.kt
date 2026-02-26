@@ -120,7 +120,7 @@ class CustomerServiceDialogFragment :
                     etInquiryContent.setText("")
                     etInquiryEmail.setText("")
                     showHistoryTab()
-                    vm.refresh(status = "all")
+                    vm.refresh(status = "ALL")
                 }
             }
         }
@@ -159,7 +159,7 @@ class CustomerServiceDialogFragment :
         tabInquiry.setOnClickListener { showInquiryTab() }
         tabHistory.setOnClickListener {
             showHistoryTab()
-            if (vm.list.value.items.isEmpty()) vm.refresh(status = "all")
+            if (vm.list.value.items.isEmpty()) vm.refresh(status = "ALL")
         }
         btnCsBack.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
     }

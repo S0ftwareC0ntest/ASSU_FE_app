@@ -59,13 +59,14 @@ class UserMyPartnershipListActivity :
                 vm.getUsableProposalState.collect { state ->
                     when (state) {
                         is UserHomeViewModel.GetUsableProposalUiState.Loading -> {
-                            // TODO: 로딩 인디케이터 표시
+                            binding.rvPartnerList.visibility = android.view.View.GONE
+                            binding.root.findViewById<android.view.View>(R.id.skeleton_container)?.visibility = android.view.View.VISIBLE
                         }
 
                         is UserHomeViewModel.GetUsableProposalUiState.Success -> {
-                            // 5. 어댑터에 데이터 리스트 제출
+                            binding.root.findViewById<android.view.View>(R.id.skeleton_container)?.visibility = android.view.View.GONE
+                            binding.rvPartnerList.visibility = android.view.View.VISIBLE
                             partnershipAdapter.submitList(state.data)
-                            // 6. 상단 제휴 개수 텍스트 업데이트
                             binding.tvAdminCount.text = state.data.size.toString()
                         }
 
