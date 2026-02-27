@@ -28,17 +28,8 @@ class UserMainActivity : BaseActivity<ActivityUserMainBinding>(R.layout.activity
                 0
             )
 
-            // 바텀 네비게이션 높이 퍼센트 동적 계산
-            val screenHeight = resources.displayMetrics.heightPixels / resources.displayMetrics.density
-            val baseBottomNavHeight = 69f // 기본 높이
-            val systemNavHeightDp = navigationBars.bottom / resources.displayMetrics.density
-            val totalBottomNavHeight = baseBottomNavHeight + systemNavHeightDp
-            val newHeightPercent = totalBottomNavHeight / screenHeight
-
-            // 바텀 네비게이션 높이 퍼센트 적용
-            val layoutParams = binding.bottomNavigationView.layoutParams as ConstraintLayout.LayoutParams
-            layoutParams.matchConstraintPercentHeight = newHeightPercent
-            binding.bottomNavigationView.layoutParams = layoutParams
+            // 바텀 네비게이션에 패딩 적용
+            binding.bottomNavigationView.setPadding(0, 0, 0, navigationBars.bottom)
 
             insets
         }
