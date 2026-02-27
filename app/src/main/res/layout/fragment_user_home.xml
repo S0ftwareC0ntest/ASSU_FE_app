@@ -59,7 +59,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/tv_home_1"
@@ -107,10 +107,9 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_qr_box"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="90dp"
                     android:clickable="true"
                     app:layout_constraintWidth_percent="0.8778625954"
-                    app:layout_constraintHeight_percent="0.1285714286"
                     android:background="@drawable/ic_home_basic_box"
                     app:layout_constraintTop_toBottomOf="@id/view_partner_home_mg4"
                     app:layout_constraintStart_toStartOf="parent"
@@ -231,9 +230,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_home_stamp_box"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="120dp"
                     app:layout_constraintWidth_percent="0.8778625954"
-                    app:layout_constraintHeight_percent="0.1714285714"
                     app:layout_constraintTop_toBottomOf="@id/view_home_mg6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
