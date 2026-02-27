@@ -30,8 +30,9 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_view"
             android:layout_width="0dp"
-            android:layout_height="67dp"
-            android:fitsSystemWindows="true"
+            android:layout_height="wrap_content"
+            app:itemIconSize="24dp"
+            app:itemPaddingBottom="23dp"
             android:background="@color/assu_background"
             android:backgroundTint="@color/assu_background"
             app:itemActiveIndicatorStyle="@style/BottomNavBackgorundStyle"
