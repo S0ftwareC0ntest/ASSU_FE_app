@@ -130,6 +130,8 @@ class UserServiceSuggestFragment : BaseFragment<FragmentUserServiceSuggestBindin
     }
 
     private fun showDropdownMenu(anchor: View, targets: List<SuggestionTargetModel>) {
+        dropdownWindow?.dismiss()
+
         val popupBinding = FragmentServiceSuggestDropDownBinding.inflate(layoutInflater)
         val popupWindow = PopupWindow(
             popupBinding.root,

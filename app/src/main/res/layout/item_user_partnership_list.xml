@@ -2,17 +2,34 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_partnership_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_home_list_item"
-        android:paddingVertical="20dp"
+        android:background="@drawable/bg_review_box_radius_8"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:layout_marginBottom="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- 스켈레톤 UI -->
+        <include
+            android:id="@+id/skeleton_layout"
+            layout="@layout/skeleton_item_partnership"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,6 +57,7 @@
                 android:paddingVertical="4dp"
                 android:background="@drawable/bg_home_list_label"
                 android:text="제휴제공"
+                android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="13sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -67,11 +85,12 @@
                 android:id="@+id/tv_label_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
                 android:background="@drawable/bg_home_list_label"
                 android:text="제휴내용"
+                android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="13sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -84,7 +103,7 @@
                 android:id="@+id/tv_partnership_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2인 이상 식사 시 음료 1개 제공"
+                android:text="2인 이상 식사 시 음료 1개 제공 2인 이상 식사 시 음료 1개 제공 2인 이상 식사 시 음료 1개 제공 2인 이상 식사 시 음료 1개 제공 2인 이상 식사 시 음료 1개 제공"
                 android:textColor="@color/assu_font_sub"
                 android:textSize="13sp"
                 android:layout_marginStart="8dp"
