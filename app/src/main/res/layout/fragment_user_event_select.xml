@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/assu_background"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".presentation.user.home.temporary.UserEventSelectFragment">
+
+        <View
+            android:id="@+id/event_select_h1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.0158"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <View
+            android:id="@+id/event_select_w1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.0763"
+            app:layout_constraintTop_toBottomOf="@id/event_select_h1"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintTop_toBottomOf="@id/event_select_h1"
+            app:layout_constraintStart_toEndOf="@id/event_select_w1"/>
+
+        <View
+            android:id="@+id/event_select_h2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.0563"
+            app:layout_constraintTop_toBottomOf="@id/btn_back"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_event_select_market_name"
+            android:fontFamily="@font/pretendard_semibold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/assu_main"
+            android:text="스탬프 1개가 지급돼요!"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:includeFontPadding="false"
+            app:layout_constraintTop_toBottomOf="@id/event_select_h2"/>
+
+        <View
+            android:id="@+id/event_select_h3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.0158"
+            app:layout_constraintTop_toBottomOf="@id/tv_event_select_market_name"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- TODO : 제휴 혜택을 선택해주세요-->
+        <TextView
+            android:id="@+id/tv_event_select_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이벤트에 참여하시겠어요?"
+            android:textSize="25sp"
+            android:textColor="@color/assu_font_main"
+            android:fontFamily="@font/pretendard_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/event_select_h3"
+            android:includeFontPadding="false"/>
+
+        <View
+            android:id="@+id/event_select_h4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.0657"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_event_select_guide"/>
+
+        <View
+            android:id="@+id/event_select_w3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.061"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <View
+            android:id="@+id/event_select_w4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_percent="0.061"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <LinearLayout
+            android:id="@+id/ll_event_select_buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toEndOf="@id/event_select_w3"
+            app:layout_constraintTop_toBottomOf="@id/event_select_h4"
+            app:layout_constraintEnd_toStartOf="@id/event_select_w4">
+
+            <!-- 버튼 1 -->
+            <LinearLayout
+                android:id="@+id/btn_event_select_1"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_partnership_unselected"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/tv_event_1_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A:SSU 어플 리뷰 쓰기"
+                    android:textColor="@color/assu_font_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <!-- 간격 -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="18dp" />
+
+            <!-- 버튼 2 -->
+            <LinearLayout
+                android:id="@+id/btn_event_select_2"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_partnership_unselected"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/tv_event_select_2_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="제휴 건의하기"
+                    android:textColor="@color/assu_font_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- 간격 -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="18dp" />
+
+            <!-- 버튼 3 -->
+            <LinearLayout
+                android:id="@+id/btn_event_select_3"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:orientation="vertical"
+                android:background="@drawable/bg_partnership_unselected"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/tv_event_select_3_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="다음에 참여할게요"
+                    android:textColor="@color/assu_font_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <!-- 간격 -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="18dp" />
+
+
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/event_select_h6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.0606"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/btn_select_event_complete"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/btn_basic_unselected"
+            android:text="선택 완료"
+            android:textColor="@color/assu_font_white"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.879"
+            app:layout_constraintHeight_percent="0.0657"
+            app:layout_constraintBottom_toTopOf="@id/event_select_h6"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

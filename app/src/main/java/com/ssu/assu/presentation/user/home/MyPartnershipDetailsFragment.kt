@@ -13,28 +13,36 @@ import com.ssu.assu.R
 import com.ssu.assu.databinding.FragmentMyPartnershipDetailsBinding
 import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.presentation.user.dashboard.adapter.ServiceRecordAdapter
+import com.ssu.assu.presentation.user.home.adapter.TemporaryQrDataAdapter
 import com.ssu.assu.ui.usage.UnreviewedUsageViewModel
 import com.ssu.assu.ui.user.UserHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class MyPartnershipDetailsFragment :
     BaseFragment<FragmentMyPartnershipDetailsBinding>(R.layout.fragment_my_partnership_details) {
 
-    private lateinit var serviceRecordAdapter: ServiceRecordAdapter
+    private var serviceRecordAdapter: ServiceRecordAdapter? = null
+    private var qrDataAdapter: TemporaryQrDataAdapter? = null
+
     private val viewModel : UnreviewedUsageViewModel by viewModels()
     private val stampViewModel: UserHomeViewModel by activityViewModels()
-
 
     private lateinit var stampViews: List<ImageView>
 
     override fun initObserver() {
-        viewModel.usageList.observe(viewLifecycleOwner) { records ->
-            serviceRecordAdapter.setData(records)
+        // 리뷰 목록 관찰 (ServiceRecord)
+//        viewModel.usageList.observe(viewLifecycleOwner) { records ->
+//            serviceRecordAdapter?.setData(records)
+//        }
+
+        // 임시 QR 데이터 관찰 (스탬프 적립 내역)
+        viewModel.qrDataList.observe(viewLifecycleOwner) { qrList ->
+            qrDataAdapter?.submitList(qrList)
         }
 
+        // 스탬프 UI 상태 관찰
         viewLifecycleOwner.lifecycleScope.launch {
             stampViewModel.stampState.collect { state ->
                 when (state) {
@@ -42,14 +50,12 @@ class MyPartnershipDetailsFragment :
                         updateStampDisplay(state.stampCount)
                     }
                     is UserHomeViewModel.StampUiState.Error -> {
-                        updateStampDisplay(0) // 에러 시 0개로 표시
+                        updateStampDisplay(0)
                     }
-                    // Loading, Idle 상태는 필요에 따라 처리
                     else -> {}
                 }
             }
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -57,13 +63,15 @@ class MyPartnershipDetailsFragment :
         binding.ivMyPartnershipBackArrow.setOnClickListener {
             navigateToHome()
         }
-        initAdapter()
+
+        setupRecyclerViewAdapter()
         initScrollListener()
         initializeStampViews()
+
+        // 데이터 로드
         viewModel.getUnreviewedUsage()
+        viewModel.getMyTemporaryData()
         stampViewModel.loadStampCount()
-
-
     }
 
     private fun initializeStampViews() {
@@ -76,16 +84,20 @@ class MyPartnershipDetailsFragment :
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initAdapter() {
-        serviceRecordAdapter = ServiceRecordAdapter()
-        binding.rvHomeMyPartnershipDetailsList.apply {
-            adapter = serviceRecordAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    private fun setupRecyclerViewAdapter() {
+        binding.rvHomeMyPartnershipDetailsList.layoutManager = LinearLayoutManager(requireContext())
+
+        // --- [현재 활성화] TemporaryQrDataAdapter 사용 ---
+        qrDataAdapter = TemporaryQrDataAdapter()
+        binding.rvHomeMyPartnershipDetailsList.adapter = qrDataAdapter
+
+
+        // TODO : 기존에 리뷰되지 않은 제휴 사용내역 조회 시 이부분 다시 주석 해제 후 윗 부분 주석처리
+        // serviceRecordAdapter = ServiceRecordAdapter()
+        // binding.rvHomeMyPartnershipDetailsList.adapter = serviceRecordAdapter
     }
 
     private fun updateStampDisplay(stampCount: Int) {
-        // 이 로직은 의도에 따라 선택하세요. (10개 넘으면 2개로 보이는 로직)
         var realCount = stampCount % 10
         if (realCount == 0 && stampCount != 0) {
             realCount = 10
@@ -93,10 +105,8 @@ class MyPartnershipDetailsFragment :
 
         stampViews.forEachIndexed { index, imageView ->
             if (index < realCount) {
-                // 채워진 스탬프 이미지
                 imageView.setImageResource(R.drawable.ic_home_stamp_filled)
             } else {
-                // 비어있는 스탬프 이미지 (ic_home_stamp가 비어있는 것이 맞는지 확인 필요)
                 imageView.setImageResource(R.drawable.ic_home_stamp)
             }
         }
@@ -107,19 +117,20 @@ class MyPartnershipDetailsFragment :
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
+                // QR 데이터 모드일 때는 무한 스크롤 방지
+                if (qrDataAdapter != null) return
+
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val lastVisibleItemPosition =
-                    layoutManager.findLastCompletelyVisibleItemPosition()
+                val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                 val totalItemCount = layoutManager.itemCount
 
-                // 스크롤이 마지막 아이템에 도달했고, 현재 로딩 중이 아니라면
                 if (lastVisibleItemPosition == totalItemCount - 1 && !viewModel.isFetchingReviews) {
-                    // 다음 페이지 로드
                     viewModel.getUnreviewedUsage()
                 }
             }
         })
     }
+
     private fun navigateToHome() {
         findNavController().navigate(R.id.action_myPartnershipFragment_to_homeFragment)
     }

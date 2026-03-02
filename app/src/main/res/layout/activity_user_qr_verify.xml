@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- 카메라 미리보기 -->
+<!--         카메라 미리보기 -->
         <androidx.camera.view.PreviewView
             android:id="@+id/previewView"
             android:layout_width="match_parent"
@@ -46,7 +46,7 @@
 
                 <TextView
                     android:layout_marginStart="5dp"
-                    android:text="제휴 사용자 인증"
+                    android:text="제휴 QR 스캔"
                     android:textSize="20sp"
                     android:textColor="@android:color/white"
                     android:fontFamily="@font/pretendard_semibold"
@@ -60,6 +60,7 @@
                 android:layout_width="240dp"
                 android:layout_height="240dp"
                 android:layout_marginTop="136dp"
+                android:visibility="visible"
                 android:src="@drawable/iv_qr_border_blue"
                 android:contentDescription="QR 가이드"
                 app:layout_constraintTop_toBottomOf="@id/ll_top_bar"
@@ -72,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="29dp"
-                android:text="키오스크의 QR 코드를 스캔해주세요"
+                android:text="제휴 QR 코드를 스캔해주세요"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/qr_guide_box"
@@ -149,7 +150,7 @@
                         android:id="@+id/tv_inform_qr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="제휴 인증조건이 있는 경우 모든 사용자가 인증해야합니다"
+                        android:text="추후 간편인증 서비스로 전환될 예정이에요."
                         android:textSize="11sp"
                         android:textColor="@color/assu_font_sub"
                         android:fontFamily="@font/pretendard_medium" />

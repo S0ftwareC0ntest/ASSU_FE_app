@@ -6,9 +6,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
-import com.ssu.assu.data.service.TokenManagementService
-import com.ssu.assu.data.service.PeriodicLoginPromptService
 import com.kakao.vectormap.KakaoMapSdk
+import com.ssu.assu.data.service.PeriodicLoginPromptService
+import com.ssu.assu.data.service.TokenManagementService
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

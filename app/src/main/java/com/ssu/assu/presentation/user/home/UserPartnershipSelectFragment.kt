@@ -2,8 +2,12 @@ package com.ssu.assu.presentation.user.home
 
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import com.ssu.assu.R
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
@@ -11,6 +15,7 @@ import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
 import com.ssu.assu.databinding.FragmentUserPartnershipSelectBinding
 import com.ssu.assu.presentation.base.BaseFragment
 import com.ssu.assu.data.dto.store.PaperContent
+import com.ssu.assu.presentation.user.home.temporary.UserEventSelectFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +26,7 @@ class UserPartnershipSelectFragment :
     private val viewModel: UserVerifyViewModel by activityViewModels()
     private var selectedIndex: Int? = null
     private var contentList: List<PaperContent> = emptyList()
+    private var storeId: Long = 0L // TODO : 임시 운영 버전
 
     override fun initView() {
         // 버튼 리스트 초기화
@@ -31,6 +37,18 @@ class UserPartnershipSelectFragment :
             binding.btnPartnershipSelect4
         )
 
+        // TODO : 임시 운영 버전
+        arguments?.let {
+            storeId = it.getLong("storeId")
+            if (storeId != null) {
+                // storeId를 성공적으로 받았는지 로그로 확인
+                Log.d("전달된 데이터!!!!!!!", "프래그먼트에서 받은 storeId: $storeId")
+            }
+        }
+        viewModel.storeId = storeId
+        viewModel.getStorePartnership()
+        // -------------------------------------
+
         // 선택 완료 버튼 초기 상태
         updateCompleteButtonState(false)
 
@@ -40,14 +58,15 @@ class UserPartnershipSelectFragment :
                 if (index < contentList.size) {
                     // 선택된 제휴사 정보를 ViewModel에 저장
                     viewModel.selectPartnership(contentList[index])
-                    navigateToComplete()
+//                    navigateToComplete() TODO: 운영 버전
+                    temporaryNavigateFragment() // TODO : 임시 버전
 
 
                 }
             }
         }
 
-        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value
+//        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value TODO : 임시버전을 위해 주석 처리
 
 
     }
@@ -58,6 +77,33 @@ class UserPartnershipSelectFragment :
             contentList = contents
             bindContentToButtons(contents)
         }
+        // TODO : 임시 버전
+        viewModel.storeName.observe(viewLifecycleOwner) { storeName ->
+            binding.tvPartnershipSelectMarketName.text = storeName
+            // UI가 업데이트될 때 로그를 추가하여 확인
+            Log.d("프래그먼트 UI 업데이트", "storeName: $storeName")
+        }
+        // ---------------
+
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                // 로딩 중일 때
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.clPartnershipSelectFragment.visibility = View.INVISIBLE
+            } else {
+                // 로딩 완료 시
+                binding.loadingOverlay.visibility = View.GONE
+                binding.clPartnershipSelectFragment.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun temporaryNavigateFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, UserEventSelectFragment())
+            .addToBackStack(null) // 뒤로가기 버튼 유지하려면 추가, 아니면 제거
+            .commit()
     }
 
     private fun bindContentToButtons(contents: List<PaperContent>) {

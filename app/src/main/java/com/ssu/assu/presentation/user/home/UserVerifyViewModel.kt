@@ -6,11 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssu.assu.data.dto.certification.request.PersonalCertificationRequestDto
+import com.ssu.assu.data.dto.certification.request.TemporaryQrDataRequestDto
 import com.ssu.assu.data.dto.certification.request.UserSessionRequestDto
+import com.ssu.assu.data.dto.review.request.AppReviewRequestDto
 import com.ssu.assu.data.dto.store.PaperContent
 import com.ssu.assu.data.dto.usage.SaveUsageRequestDto
 import com.ssu.assu.domain.usecase.certification.GetSessionIdUseCase
 import com.ssu.assu.domain.usecase.certification.PostPersonalDataUseCase
+import com.ssu.assu.domain.usecase.certification.PostTemporaryQrDataUseCase
+import com.ssu.assu.domain.usecase.review.PostAppReviewUseCase
 import com.ssu.assu.domain.usecase.store.GetStorePartnershipUseCase
 import com.ssu.assu.domain.usecase.usage.SaveUsageUseCase
 import com.ssu.assu.util.RetrofitResult
@@ -23,7 +27,9 @@ class UserVerifyViewModel @Inject constructor(
     private val useCase : GetStorePartnershipUseCase,
     private val certificationUseCase: GetSessionIdUseCase,
     private val saveUsageUseCase: SaveUsageUseCase,
-    private val personalCertifyUseCase: PostPersonalDataUseCase
+    private val personalCertifyUseCase: PostPersonalDataUseCase,
+    private val temporaryQrDataUseCase: PostTemporaryQrDataUseCase,
+    private val postAppReviewUseCase: PostAppReviewUseCase
 ): ViewModel(){
 
     // 기본 정보
@@ -51,13 +57,17 @@ class UserVerifyViewModel @Inject constructor(
     private val _selectedContent = MutableLiveData<PaperContent?>()
     val selectedContent: LiveData<PaperContent?> = _selectedContent
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun getStorePartnership(){
         viewModelScope.launch{
+            _isLoading.value = true
             when (val result = useCase(storeId)) {
                 is RetrofitResult.Success -> {
                     _storeName.value = result.data.storeName
                     storeId = result.data.storeId
-                    _contentList.value = result.data.contents
+                    _contentList.value = result.data.partnershipContents
                     Log.d("조회된 storeName", "${storeName}")
                     Log.d("조회된 contentList" , contentList.value.toString())
                 }
@@ -69,6 +79,7 @@ class UserVerifyViewModel @Inject constructor(
                     // 실패 처리
                 }
             }
+            _isLoading.value = false
         }
     }
 
@@ -148,6 +159,40 @@ class UserVerifyViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun insertTemporaryQrData(sort: String) {
+        val request = TemporaryQrDataRequestDto(
+            adminName = "",
+            sort = sort
+        )
+        viewModelScope.launch {
+            temporaryQrDataUseCase(request)
+        }
+    }
+
+    private val _appReviewSubmitResult = MutableLiveData<RetrofitResult<Unit>?>()
+    val appReviewSubmitResult: LiveData<RetrofitResult<Unit>?> = _appReviewSubmitResult
+
+    fun submitAppReview(rate: Int, content: String) {
+        viewModelScope.launch {
+            when (val result = postAppReviewUseCase(AppReviewRequestDto(rate = rate, content = content))) {
+                is RetrofitResult.Success -> {
+                    insertTemporaryQrData("REVIEW")
+                    _appReviewSubmitResult.postValue(result)
+                }
+                is RetrofitResult.Error -> {
+                    _appReviewSubmitResult.postValue(result)
+                }
+                is RetrofitResult.Fail -> {
+                    _appReviewSubmitResult.postValue(result)
+                }
+            }
+        }
+    }
+
+    fun clearAppReviewResult() {
+        _appReviewSubmitResult.value = null
     }
 
     fun selectService(service: String) {

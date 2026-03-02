@@ -20,18 +20,27 @@ data class GetUsablePartnershipResponseDto(
     val note: String?,
     val paperId: Long?
 ) {
-    fun toModel() = GetUsablePartnershipModel(
-        partnershipId = this.partnershipId,
-        adminName = this.adminName,
-        partnerName = this.partnerName,
-        criterionType = this.criterionType?: CriterionType.PRICE,
-        optionType = this.optionType?: OptionType.DISCOUNT,
-        people = this.people?:0,
-        cost = this.cost?:0,
-        category = this.category?:"",
-        description = this.description?:"",
-        discountRate = this.discountRate?:0,
-        note = this.note?:"아직 준비되지 않았어요!",
-        paperId = this.paperId?:-1
-    )
+    fun toModel(): GetUsablePartnershipModel {
+        val generatedNote = when {
+            note != null -> note
+            criterionType == CriterionType.HEADCOUNT && people != null -> "${people}인 이상 방문 시 혜택 제공"
+            criterionType == CriterionType.PRICE && cost != null -> "${cost}원 이상 주문 시 혜택 제공"
+            else -> "아직 준비되지 않았어요!"
+        }
+
+        return GetUsablePartnershipModel(
+            partnershipId = this.partnershipId,
+            adminName = this.adminName,
+            partnerName = this.partnerName,
+            criterionType = this.criterionType ?: CriterionType.PRICE,
+            optionType = this.optionType ?: OptionType.DISCOUNT,
+            people = this.people ?: 0,
+            cost = this.cost ?: 0,
+            category = this.category ?: "",
+            description = this.description ?: "",
+            discountRate = this.discountRate ?: 0,
+            note = generatedNote,
+            paperId = this.paperId ?: -1
+        )
+    }
 }

@@ -68,7 +68,7 @@ class UserQRVerifyActivity :
         }
 
 
-        binding.tvUniversity.text = infoManager.getBasicInfoUniversity()
+        binding.tvUniversity.text = infoManager.getBasicInfoUniversity() +" 학생"
         binding.tvDepartment.text = infoManager.getBasicInfoDepartment()
 // TODO 나중에 주석해제
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -81,7 +81,7 @@ class UserQRVerifyActivity :
     }
 
     private fun onEmulatorScanSuccess() {
-        qrCodeData = "https://assu.com/verify?storeId=7" // TODO 여기 ...
+        qrCodeData = "https://assu.com/verify?storeId=2" // TODO 여기 ...
         Log.d("QR 인식 성공", "에뮬레이터 테스트용 데이터 사용: $qrCodeData")
         binding.tvQrInstruction.text = "QR 코드를 성공적으로 인식했습니다."
         setConfirmButtonState(true)
@@ -256,11 +256,17 @@ class UserQRVerifyActivity :
     // 대표자 플로우: 매장 정보로 이동 (수정 없음)
     private fun handleStoreOwnerFlow(storeId: Long) {
         Log.d("UserQRVerifyActivity", "곧 테이블 화면으로 전환됩니다. ")
-        val fragment = UserTableNumberSelectFragment().apply {
+//        val fragment = UserTableNumberSelectFragment().apply {//TODO : 테이블 번호 선택으로 넘어가는 코드
+//            arguments = Bundle().apply {
+//                putLong("storeId", storeId)
+//            }
+//        }
+        val fragment = UserPartnershipSelectFragment().apply {  // TODO : partnershipSelect로 바로 가는 코드
             arguments = Bundle().apply {
                 putLong("storeId", storeId)
             }
         }
+        // -------------
         binding.fragmentContainerView.visibility = View.VISIBLE
 
         supportFragmentManager.beginTransaction()

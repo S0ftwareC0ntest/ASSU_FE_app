@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id = "@+id/homeFragment"
         android:icon="@drawable/ic_bottom_nav_home"
@@ -10,9 +11,9 @@
         android:icon="@drawable/ic_bottom_nav_location"
         android:title="@string/location"/>
     <item
-        android:id="@+id/dashboardFragment"
-        android:icon="@drawable/ic_bottom_nav_dashboard"
-        android:title="@string/dashboard"/>
+        android:id="@+id/serviceSuggestFragment"
+        android:icon="@drawable/ic_bottom_nav_chatting"
+        android:title="제휴 건의함"/>
     <item
         android:id="@+id/mypageFragment"
         android:icon="@drawable/ic_bottom_nav_mypage"

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ssu.assu.data.dto.review.response.PageReviewList
 import com.ssu.assu.data.dto.review.Review
+import com.ssu.assu.data.dto.review.request.AppReviewRequestDto
 import com.ssu.assu.data.dto.review.request.ReviewWriteRequestDto
 import com.ssu.assu.data.dto.review.response.DeleteReviewResponseDto
 import com.ssu.assu.data.dto.review.response.ReviewAverageResponseDto
@@ -14,6 +15,7 @@ import com.ssu.assu.data.repository.review.ReviewRepository
 import com.ssu.assu.data.service.review.ReviewService
 import com.ssu.assu.util.RetrofitResult
 import com.ssu.assu.util.apiHandler
+import com.ssu.assu.util.apiHandlerForUnit
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -180,6 +182,17 @@ class ReviewRepositoryImpl @Inject constructor(
             RetrofitResult.Error(e)
         }
 
+    }
+
+    override suspend fun postAppReview(request: AppReviewRequestDto): RetrofitResult<Unit> {
+        return try {
+            apiHandlerForUnit(
+                execute = { api.postAppReview(request) },
+                mapper = { Unit }
+            )
+        } catch (e: Exception) {
+            RetrofitResult.Error(e)
+        }
     }
 
 }

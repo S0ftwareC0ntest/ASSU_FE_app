@@ -1,12 +1,14 @@
 package com.ssu.assu.data.service.review
 
 import com.ssu.assu.data.dto.BaseResponse
+import com.ssu.assu.data.dto.review.request.AppReviewRequestDto
 import com.ssu.assu.data.dto.review.response.DeleteReviewResponseDto
 import com.ssu.assu.data.dto.review.response.GetReviewResponseDto
 import com.ssu.assu.data.dto.review.response.ReviewAverageResponseDto
 import com.ssu.assu.data.dto.review.response.ReviewWriteResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -60,4 +62,9 @@ interface ReviewService {
     suspend fun getUserStoreAverageScore(
         @Path("storeId") storeId: Long
     ): BaseResponse<ReviewAverageResponseDto>
+
+    @POST("/app-reviews")
+    suspend fun postAppReview(
+        @Body request: AppReviewRequestDto
+    ): BaseResponse<Any>
 }

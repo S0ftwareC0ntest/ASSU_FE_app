@@ -81,10 +81,11 @@
             android:exported="false" />
         <activity
             android:name=".presentation.user.UserMainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity android:name=".presentation.user.home.UserQRVerifyActivity" />
         <activity android:name=".presentation.user.dashboard.UserSuggestCompleteActivity" />
-        <activity android:name=".presentation.user.dashboard.UserServiceSuggestActivity" />
+<!--        <activity android:name=".presentation.user.dashboard.UserServiceSuggestActivity" />-->
         <activity android:name=".presentation.user.review.mypage.UserMyReviewActivity" />
         <activity android:name=".presentation.user.review.writing.UserFinishReviewActivity" />
         <activity android:name=".presentation.user.review.writing.UserPhotoReviewActivity" />
@@ -95,11 +96,13 @@
         <activity android:name=".presentation.user.location.UserLocationSearchActivity" />
         <activity
             android:name=".presentation.admin.AdminMainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity android:name=".presentation.admin.home.AdminHomeViewPartnerListActivity" />
         <activity android:name=".presentation.admin.dashboard.AdminDashboardSuggestionsActivity" />
         <activity
             android:name=".presentation.partner.PartnerMainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity android:name=".presentation.partner.home.PartnerHomeViewAdminListActivity" />
         <activity

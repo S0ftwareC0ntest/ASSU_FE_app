@@ -1,6 +1,7 @@
 package com.ssu.assu.presentation.user.home.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,13 +16,15 @@ class UserPartnershipListAdapter :
     class UserPartnershipListViewHolder(private val binding: ItemUserPartnershipListBinding):
             RecyclerView.ViewHolder(binding.root) {
                 fun bind(item: GetUsablePartnershipModel) {
+                    binding.skeletonLayout.root.visibility = View.GONE
+                    binding.contentLayout.visibility = View.VISIBLE
                     binding.tvPartnershipPartner.text = item.partnerName
                     binding.tvAdmin.text = item.adminName
                     binding.tvPartnershipContent.text = item.note
                 }
             }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPartnershipListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType:  Int): UserPartnershipListViewHolder {
         val binding =
             ItemUserPartnershipListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserPartnershipListViewHolder(binding)
