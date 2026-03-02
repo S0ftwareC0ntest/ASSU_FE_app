@@ -32,13 +32,13 @@ class UserLocationSearchSuccessAdapter :
             binding.viewLocationSearchResultItemLine.visibility =
                 if (isLastItem) View.GONE else View.VISIBLE
 
-            binding.root.setOnClickListener {
-                val context = it.context
-                val intent = Intent(context, UserReviewStoreActivity::class.java)
-                intent.putExtra("storeId", item.storeId)
-                intent.putExtra("storeName", item.shopName)
-                context.startActivity(intent)
-            }
+//            binding.root.setOnClickListener {
+//                val context = it.context
+//                val intent = Intent(context, UserReviewStoreActivity::class.java)
+//                intent.putExtra("storeId", item.storeId)
+//                intent.putExtra("storeName", item.shopName)
+//                context.startActivity(intent)
+//            }
         }
     }
 

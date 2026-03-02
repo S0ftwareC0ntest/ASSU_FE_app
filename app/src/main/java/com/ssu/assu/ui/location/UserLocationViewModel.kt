@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssu.assu.data.dto.location.ViewportQuery
 import com.ssu.assu.domain.model.location.StoreOnMap
-import com.ssu.assu.domain.usecase.location.GetNearbyStoresUseCase
+import com.ssu.assu.domain.usecase.location.GetNearbyStoresV2UseCase
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class UserLocationViewModel @Inject constructor(
-    private val getNearbyStores: GetNearbyStoresUseCase
+    private val getNearbyStoresV2: GetNearbyStoresV2UseCase
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -31,8 +31,13 @@ class UserLocationViewModel @Inject constructor(
     fun load(v: ViewportQuery) {
         viewModelScope.launch {
             _state.value = UiState.Loading
-            when (val res = getNearbyStores(v)) {
-                is RetrofitResult.Success -> _state.value = UiState.Success(res.data)
+            when (val res = getNearbyStoresV2(v)) {
+                is RetrofitResult.Success -> {
+                    res.data.forEach { item ->
+                        android.util.Log.d("UserLocationVM", "Success: ${item.name}")
+                    }
+                    _state.value = UiState.Success(res.data)
+                }
                 is RetrofitResult.Fail -> _state.value = UiState.Fail(res.statusCode.toString(), res.message)
                 is RetrofitResult.Error -> _state.value = UiState.Error(res.exception)
             }

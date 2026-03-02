@@ -5,6 +5,7 @@ import com.ssu.assu.data.dto.BaseResponse
 import com.ssu.assu.data.dto.location.response.AdminMapResponseDto
 import com.ssu.assu.data.dto.location.response.PartnerMapResponseDto
 import com.ssu.assu.data.dto.location.response.StoreMapResponseDto
+import com.ssu.assu.data.dto.location.response.StoreMapResponseV2Dto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -64,4 +65,16 @@ interface LocationService {
     suspend fun searchAdmins(
         @Query("searchKeyword") keyword: String
     ): BaseResponse<List<AdminMapResponseDto>>
+
+    @GET("/map/nearby/v2")
+    suspend fun getStoresV2(
+        @Query("lng1") lng1: Double,
+        @Query("lat1") lat1: Double,
+        @Query("lng2") lng2: Double,
+        @Query("lat2") lat2: Double,
+        @Query("lng3") lng3: Double,
+        @Query("lat3") lat3: Double,
+        @Query("lng4") lng4: Double,
+        @Query("lat4") lat4: Double
+    ): BaseResponse<List<StoreMapResponseV2Dto>>
 }
