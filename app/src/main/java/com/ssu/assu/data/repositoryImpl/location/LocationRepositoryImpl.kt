@@ -7,6 +7,7 @@ import com.ssu.assu.data.dto.location.ViewportQuery
 import com.ssu.assu.data.dto.location.response.AdminMapResponseDto
 import com.ssu.assu.data.dto.location.response.PartnerMapResponseDto
 import com.ssu.assu.data.dto.location.response.StoreMapResponseDto
+import com.ssu.assu.data.dto.location.response.StoreMapResponseV2Dto
 import com.ssu.assu.data.repository.location.LocationRepository
 import com.ssu.assu.data.service.location.LocationService
 import com.ssu.assu.domain.model.location.AdminOnMap
@@ -37,6 +38,12 @@ class LocationRepositoryImpl @Inject constructor(
     override suspend fun getNearbyStores(v: ViewportQuery): RetrofitResult<List<StoreOnMap>> =
         apiHandler(
             execute = { api.getStores(v.lng1, v.lat1, v.lng2, v.lat2, v.lng3, v.lat3, v.lng4, v.lat4) },
+            mapper  = { list -> list.map { it.toModel() } }
+        )
+
+    override suspend fun getNearbyStoresV2(v: ViewportQuery): RetrofitResult<List<StoreOnMap>> =
+        apiHandler(
+            execute = { api.getStoresV2(v.lng1, v.lat1, v.lng2, v.lat2, v.lng3, v.lat3, v.lng4, v.lat4) },
             mapper  = { list -> list.map { it.toModel() } }
         )
 

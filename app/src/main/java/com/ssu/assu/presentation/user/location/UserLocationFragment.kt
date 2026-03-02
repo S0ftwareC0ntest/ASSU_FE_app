@@ -93,9 +93,9 @@ class UserLocationFragment :
             binding.fvUserLocationItem.visibility = View.VISIBLE
         }
 
-        binding.fvUserLocationItem.setOnClickListener {
-            startActivity(Intent(requireContext(), UserReviewStoreActivity::class.java))
-        }
+//        binding.fvUserLocationItem.setOnClickListener {
+//            startActivity(Intent(requireContext(), UserReviewStoreActivity::class.java))
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: android.os.Bundle?) {
@@ -132,25 +132,20 @@ class UserLocationFragment :
 
                     poiLayer = map.labelManager?.layer
 
-                    // 마커 클릭 → 캡슐 표시 + 처음 한 번 말풍선 표시
+                    // 마커 클릭 → 바텀시트 표시
                     map.setOnLabelClickListener(object : KakaoMap.OnLabelClickListener {
                         override fun onLabelClicked(map: KakaoMap, layer: LabelLayer, label: Label): Boolean {
                             val item = labelToStore[label] ?: return true
-                            showCapsule(item)
-
-                            // 버블은 "컨텐츠 있고 아직 한 번도 안 보여줬을 때만" 1회 노출
-                            if (!shownPartnerBubbleOnce && isPartnerVisual(item)) {
-                                shownPartnerBubbleOnce = true
-                                showSpeechBubbleOver(item.latitude, item.longitude, item.name ?: "")
-                            }
-                            else hideBubble()
-
+                            showLocationDetailBottomSheet(item)
                             return true
                         }
                     })
 
                     kakaoMap?.setOnMapClickListener { _, _, _, _ ->
-                        hideCapsuleAndBubble()
+                        // 맵 클릭 시 바텀시트 닫기
+                        childFragmentManager.findFragmentByTag("LocationDetailBottomSheet")?.let {
+                            (it as? LocationDetailBottomSheet)?.dismiss()
+                        }
                     }
 
                     // 카메라 이동 종료 시 재조회
@@ -302,36 +297,6 @@ class UserLocationFragment :
         }
     }
 
-    // 하단 캡슐(아이템 프래그먼트)에 바인딩
-    private fun showCapsule(item: StoreOnMap) {
-        val frag = childFragmentManager.findFragmentById(R.id.fv_user_location_item) as? UserLocationItemFragment
-            ?: UserLocationItemFragment().also {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.fv_user_location_item, it)
-                    .commitNowAllowingStateLoss()
-            }
-
-        // criterionType/optionType → 설명 문자열로 포매팅
-        val description = formatCriterion(item)
-        frag.bind(
-            UserLocationItemFragment.UserStoreItem(
-                shopName = item.name ?: "-",
-                criterionType = description,
-                rating = (item.rate ?: 0).toFloat()
-            )
-        )
-
-        binding.includeSpeechBubble.visibility = View.VISIBLE
-        binding.fvUserLocationItem.visibility = View.VISIBLE
-
-        // 카드 클릭 시 상세로 이동(기존 동작 유지)
-        binding.fvUserLocationItem.setOnClickListener {
-            startActivity(Intent(requireContext(), UserReviewStoreActivity::class.java)
-                .putExtra("storeId", item.storeId)
-                .putExtra("storeName", item.name))
-        }
-    }
-
     // 서버 응답을 사람이 읽기 쉬운 문구로
     private fun formatCriterion(s: StoreOnMap): String {
         return when (s.optionType) {
@@ -373,9 +338,18 @@ class UserLocationFragment :
     private fun hideCapsule() {
         binding.fvUserLocationItem.visibility = View.GONE
     }
-    private fun hideCapsuleAndBubble() {
-        hideCapsule()
-        hideBubble()
+
+    private fun showLocationDetailBottomSheet(item: StoreOnMap) {
+        val bottomSheet = LocationDetailBottomSheet(
+            item = item,
+            onReviewClick = { store ->
+                val intent = Intent(requireContext(), UserReviewStoreActivity::class.java)
+                intent.putExtra("storeId", store.storeId)
+                intent.putExtra("storeName", store.name)
+                startActivity(intent)
+            }
+        )
+        bottomSheet.show(childFragmentManager, "LocationDetailBottomSheet")
     }
 
     private fun showSpeechBubbleOver(lat: Double, lng: Double, title: String) {

@@ -17,5 +17,12 @@ data class StoreOnMap(
     val latitude: Double,
     val longitude: Double,
     val profileUrl: String?,
-    val phoneNum: String?
-)
+    val phoneNumber: String?,
+    val partnerships: List<Partnership>?
+) {
+    data class Partnership(
+        val adminId: Long,
+        val adminName: String,
+        val benefit: String
+    )
+}

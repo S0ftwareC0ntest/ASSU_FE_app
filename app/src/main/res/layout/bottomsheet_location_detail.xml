@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="20dp">
+    
+    <ImageView
+        android:id="@+id/iv_bottom_sheet_bar"
+        android:layout_width="36dp"
+        android:layout_height="5dp"
+        android:src="@drawable/bg_assu_font_sub_radius_999"
+        android:layout_gravity="center"/>
+
+    <View
+        android:id="@+id/view_mg1"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="12dp"
+            app:cardCornerRadius="8dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <ImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_location_beer" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="면식당 숭실대점"
+                android:textSize="22sp"
+                android:fontFamily="@font/pretendard_bold"
+                android:textColor="@color/assu_font_main"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info_circle_main_color"/>
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"/>
+
+                <TextView
+                    android:id="@+id/tv_guide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="내가 받을수 있는 제휴 혜택이 2개 있어요!"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:textColor="@color/assu_main" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="28dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        tools:listitem="@layout/item_benefit"
+        android:id="@+id/rv_benefits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+</LinearLayout>

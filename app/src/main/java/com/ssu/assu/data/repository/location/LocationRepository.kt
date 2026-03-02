@@ -10,6 +10,7 @@ import com.ssu.assu.util.RetrofitResult
 
 interface LocationRepository {
     suspend fun getNearbyStores(v: ViewportQuery): RetrofitResult<List<StoreOnMap>>
+    suspend fun getNearbyStoresV2(v: ViewportQuery): RetrofitResult<List<StoreOnMap>>
     suspend fun getNearbyPartners(v: ViewportQuery): RetrofitResult<List<PartnerOnMap>>
     suspend fun getNearbyAdmins(v: ViewportQuery): RetrofitResult<List<AdminOnMap>>
 
