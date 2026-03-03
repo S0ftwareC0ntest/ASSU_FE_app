@@ -12,13 +12,22 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.ssu.assu.R
+import com.ssu.assu.data.local.AuthTokenLocalStore
 import com.ssu.assu.presentation.admin.AdminMainActivity
+import com.ssu.assu.presentation.partner.PartnerMainActivity
+import com.ssu.assu.presentation.user.UserMainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 private const val CHANNEL_ID = "fcm_default"
 
+@AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var authTokenLocalStore: AuthTokenLocalStore
 
     override fun onNewToken(token: String) {
         android.util.Log.d("FCM", "새 FCM 토큰: $token")
@@ -44,8 +53,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        // 원래 알림도 그대로 표시
-        val intent = Intent(this, AdminMainActivity::class.java).apply {
+        // 로그인한 사용자 타입에 맞는 메인 액티비티로 이동
+        val userRole = authTokenLocalStore.getUserRole()?.uppercase() ?: "STUDENT"
+        val targetActivity = when (userRole) {
+            "ADMIN" -> AdminMainActivity::class.java
+            "PARTNER" -> PartnerMainActivity::class.java
+            else -> UserMainActivity::class.java
+        }
+        
+        val intent = Intent(this, targetActivity).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
         val pi = PendingIntent.getActivity(
