@@ -21,10 +21,16 @@ data class GetUsablePartnershipResponseDto(
     val paperId: Long?
 ) {
     fun toModel(): GetUsablePartnershipModel {
+        val benefit = when (optionType) {
+            OptionType.SERVICE -> "${category ?: "서비스"} 제공"
+            OptionType.DISCOUNT -> "${discountRate ?: 0}% 할인 제공"
+            else -> "혜택 제공"
+        }
+        
         val generatedNote = when {
             note != null -> note
-            criterionType == CriterionType.HEADCOUNT && people != null -> "${people}인 이상 방문 시 혜택 제공"
-            criterionType == CriterionType.PRICE && cost != null -> "${cost}원 이상 주문 시 혜택 제공"
+            criterionType == CriterionType.HEADCOUNT && people != null -> "${people}인 이상 방문 시 $benefit"
+            criterionType == CriterionType.PRICE && cost != null -> "${cost}원 이상 주문 시 $benefit"
             else -> "아직 준비되지 않았어요!"
         }
 
