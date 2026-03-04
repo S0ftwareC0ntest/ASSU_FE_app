@@ -22,8 +22,15 @@ data class StoreMapResponseDto(
     val longitude: Double,
     val profileUrl: String? = null,
     val phoneNumber: String? = null,
-    val partnership: List<StoreOnMap.Partnership>? = null,
+    val partnerships: List<PartnershipDto>? = null,
 ) {
+    @JsonClass(generateAdapter = true)
+    data class PartnershipDto(
+        val adminId: Long,
+        val adminName: String,
+        val benefits: List<String>
+    )
+
     fun toModel() = StoreOnMap(
         storeId = this.storeId,
         adminId = this.adminId,
@@ -42,6 +49,12 @@ data class StoreMapResponseDto(
         longitude = this.longitude,
         profileUrl = this.profileUrl,
         phoneNumber = this.phoneNumber,
-        partnerships = this.partnership
+        partnerships = this.partnerships?.map {
+            StoreOnMap.Partnership(
+                adminId = it.adminId,
+                adminName = it.adminName,
+                benefits = it.benefits
+            )
+        }
     )
 }

@@ -33,8 +33,8 @@ class LocationDetailBottomSheet(
 
         binding.tvShopName.text = item.name ?: "-"
         
-        val partnershipCount = item.partnerships?.size ?: 0
-        binding.tvGuide.text = "내가 받을 수 있는 제휴 혜택이 ${partnershipCount}개 있어요!"
+        val benefitCount = item.partnerships?.sumOf { it.benefits.size } ?: 0
+        binding.tvGuide.text = "내가 받을 수 있는 제휴 혜택이 ${benefitCount}개 있어요!"
         
         item.profileUrl?.let {
             Glide.with(binding.ivProfile)
@@ -77,9 +77,9 @@ class LocationDetailBottomSheet(
                 tvAdminName.text = partnership.adminName
                 llItems.removeAllViews()
                 
-                partnership.benefit.split(",").forEach { detail ->
+                partnership.benefits.forEach { benefit ->
                     val tv = TextView(itemView.context).apply {
-                        text = detail.trim()
+                        text = benefit
                         textSize = 13f
                         setTextColor(itemView.context.getColor(R.color.assu_font_sub))
                         typeface = tvTemplate.typeface
