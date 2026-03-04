@@ -23,6 +23,6 @@ data class StoreOnMap(
     data class Partnership(
         val adminId: Long,
         val adminName: String,
-        val benefit: String
+        val benefits: List<String>
     )
 }

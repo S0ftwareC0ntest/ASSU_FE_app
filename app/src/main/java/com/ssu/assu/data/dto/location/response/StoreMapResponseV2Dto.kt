@@ -20,7 +20,7 @@ data class StoreMapResponseV2Dto(
     data class PartnershipInfo(
         val adminId: Long,
         val adminName: String,
-        val benefit: String
+        val benefits: List<String>
     )
 
     fun toModel() = StoreOnMap(
@@ -45,7 +45,7 @@ data class StoreMapResponseV2Dto(
             StoreOnMap.Partnership(
                 adminId = it.adminId,
                 adminName = it.adminName,
-                benefit = it.benefit
+                benefits = it.benefits
             )
         }
     )
