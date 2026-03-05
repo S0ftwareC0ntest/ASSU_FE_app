@@ -3,9 +3,17 @@
         <item name="android:statusBarColor">@color/assu_background</item>
     </style>
 
+<!--    <style name="Theme.ASSU_FE_app" parent="Base.Theme.ASSU_FE_app">-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/img_app_full_logo</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/assu_background</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="31">@android:color/transparent</item>&ndash;&gt;-->
+<!--    </style>-->
+
     <style name="Theme.ASSU_FE_app" parent="Base.Theme.ASSU_FE_app">
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/assu_splash_logo</item>
-        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/assu_background</item>
-        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="31">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@android:color/transparent</item>
+
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">#FFFFFF</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.ASSU_FE_app</item>
     </style>
 </resources>

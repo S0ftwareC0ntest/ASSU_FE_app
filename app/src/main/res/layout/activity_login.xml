@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/assu_background">
+        <ImageView
+            android:id="@+id/bg_login_gradation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_login_gradation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <!-- 로고 -->
         <ImageView
             android:id="@+id/iv_logo"
-            android:layout_width="89dp"
-            android:layout_height="24dp"
+            android:layout_width="122dp"
+            android:layout_height="40dp"
             android:layout_marginTop="94dp"
-            android:src="@drawable/ic_assu_main_logo"
+            android:src="@drawable/img_app_full_logo"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
