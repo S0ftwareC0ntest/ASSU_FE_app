@@ -46,13 +46,4 @@
         app:layout_constraintStart_toEndOf="@id/tv_stamp_sort"/>
 
 
-    <View
-        android:id="@+id/view_location_search_result_item_line"
-        android:layout_width="353dp"
-        android:layout_height="1dp"
-        android:background="#DCDFDF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

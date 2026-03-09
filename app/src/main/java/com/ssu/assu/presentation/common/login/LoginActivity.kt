@@ -1,9 +1,15 @@
 package com.ssu.assu.presentation.common.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -36,12 +42,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     private var isAutoLoginChecked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { false }
     }
 
 
     override fun initView() {
+        setupInitialAnimationState()
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val extraPaddingTop = 3
@@ -79,6 +88,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         binding.btnLmsLogin.setOnClickListener {
             startActivity(Intent(this, LmsLoginActivity::class.java))
         }
+        startLoginAnimation()
     }
 
     override fun initObserver() {
@@ -155,12 +165,101 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
     private fun checkAutoLogin() {
         Log.d("LoginActivity", "=== 자동 로그인 체크 시작 ===")
-        // 토큰 리프레시를 포함한 자동 로그인 체크
-        // LoginState.Success가 발생하면 Observer에서 자동으로 메인 화면으로 이동
         loginViewModel.checkAutoLoginWithRefresh()
     }
 
     private fun Int.dpToPx(context: Context): Int =
         (this * context.resources.displayMetrics.density).toInt()
 
+
+    private fun startLoginAnimation() {
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels.toFloat()
+
+        binding.ivLogo.translationY = screenHeight / 3
+
+        // 나머지 폼 구성요소 리스트 (애니메이션 적용 대상)
+        val loginForms = listOf(
+            binding.tvLoginEmail, binding.etLoginId,
+            binding.tvLoginPassword, binding.etLoginPassword,
+            binding.btnLogin, binding.tvLogin, binding.viewLine,
+            binding.btnLmsLogin, binding.tvLmsLogin,
+            binding.tvSignupGuide, binding.btnSignup
+        )
+
+        loginForms.forEach { it.alpha = 0f}
+
+        // 2. 애니메이션 시작
+        binding.ivLogo.animate()
+            .translationY(0f)
+            .setStartDelay(800)
+            .setDuration(1000)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withEndAction {
+                // 로고 이동이 끝나면 나머지 폼들이 순차적으로 스르륵 등장
+                loginForms.forEachIndexed { index, view ->
+                    view.animate()
+                        .alpha(1f)
+                        .translationYBy(0f)
+                        .setDuration(1000)
+                        .setStartDelay(index * 30L)
+                        .setInterpolator(DecelerateInterpolator())
+                        .start()
+                }
+            }
+            .start()
+    }
+
+    private fun setupInitialAnimationState() {
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels.toFloat()
+
+        binding.ivLogo.translationY = screenHeight / 2
+
+        val loginForms = listOf(
+            binding.tvLoginEmail, binding.etLoginId,
+            binding.tvLoginPassword, binding.etLoginPassword,
+            binding.btnLogin, binding.tvLogin, binding.viewLine,
+            binding.btnLmsLogin, binding.tvLmsLogin,
+            binding.tvSignupGuide, binding.btnSignup
+        )
+
+        loginForms.forEach {
+            it.alpha = 0f
+            it.translationY = 90f
+        }
+        startBackgroundSubtleAnimation()
+    }
+
+    private fun startBackgroundSubtleAnimation() {
+        val scaleX = ObjectAnimator.ofFloat(binding.bgLoginGradation, "scaleX", 1.0f, 1.1f).apply {
+            duration = 5000
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+        val scaleY = ObjectAnimator.ofFloat(binding.bgLoginGradation, "scaleY", 1.0f, 1.1f).apply {
+            duration = 5000
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        // 2. 위치 애니메이션 (미세하게 좌우로 이동)
+        val translateX = ObjectAnimator.ofFloat(binding.bgLoginGradation, "translationX", -20f, 20f).apply {
+            duration = 7000
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        // 동시에 실행
+        AnimatorSet().apply {
+            playTogether(scaleX, scaleY, translateX)
+            start()
+        }
+    }
+
 }
+
