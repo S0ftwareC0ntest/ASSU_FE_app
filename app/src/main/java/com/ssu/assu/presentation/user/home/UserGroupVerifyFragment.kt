@@ -230,7 +230,7 @@ class UserGroupVerifyFragment : BaseFragment<FragmentUserGroupVerifyBinding>(R.l
 
 
     private fun generateQrCode(sessionId: Long, adminId: Long) {
-        val qrData = "https://assu.com/verify?sessionId=$sessionId&adminId=$adminId"
+        val qrData = "https://assu.shop/verify?sessionId=$sessionId&adminId=$adminId"
         Log.d("QR 생성", "생성된 QR 데이터: $qrData")
 
         try {
