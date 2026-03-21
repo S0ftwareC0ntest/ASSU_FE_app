@@ -142,7 +142,7 @@ class QrSaveFragment : Fragment() {
     }
 
     private fun buildQrContent(storeId: Long): String {
-        return "https://assu.com/verify?storeId=$storeId"
+        return "https://assu.shop/verify?storeId=$storeId"
     }
 
     private fun createQrBitmap(
