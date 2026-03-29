@@ -92,7 +92,9 @@ class LocationRepositoryImpl @Inject constructor(
             LocationUserSearchResultItem(
                 storeId = storeDto.storeId,
                 shopName = storeDto.name,
-                organization = storeDto.adminName,
+                organization = storeDto.adminName
+                    ?: storeDto.partnerships?.firstOrNull()?.adminName
+                    ?: "",
                 content = toContent(storeDto),
                 address = storeDto.address
             )
