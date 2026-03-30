@@ -130,7 +130,7 @@ private val startActivity = registerForActivityResult(ActivityResultContracts.St
             putString("entry_point", "QR_FLOW") // QR 경로일 경우 "QR_FLOW", 일반은 "DIRECT"
         }
         fragment.arguments = bundle
-        requireActivity().supportFragmentManager.beginTransaction()
+        requireActivity().supportFragmentManager.beginTransaction().addToBackStack(null)
             .replace(R.id.fragment_container_view, fragment).commit()
     }
 

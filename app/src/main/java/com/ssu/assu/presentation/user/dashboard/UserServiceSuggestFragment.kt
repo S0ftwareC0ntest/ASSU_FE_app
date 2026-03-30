@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.view.ViewCompat
@@ -45,17 +47,48 @@ class UserServiceSuggestFragment : BaseFragment<FragmentUserServiceSuggestBindin
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner // Fragment에서는 viewLifecycleOwner 권장
 
-        // 2. Window Insets 설정 (Fragment의 root view 사용)
+        val entryPoint = arguments?.getString(ARG_ENTRY_POINT)
+        if(entryPoint==ENTRY_QR){
+            binding.tvSuggestService.visibility = View.GONE
+            binding.onlyQaBackArrow.visibility = View.VISIBLE
+            binding.tvOnlyQaSuggest.visibility = View.VISIBLE
+            binding.onlyQaBackArrow.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+        } else{
+            binding.tvSuggestService.visibility = View.VISIBLE
+            binding.onlyQaBackArrow.visibility = View.GONE
+            binding.tvOnlyQaSuggest.visibility = View.GONE
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val extraPaddingTop = 3
-            v.setPadding(
-                systemBars.left,
-                systemBars.top + extraPaddingTop.dpToPx(v.context),
-                systemBars.right,
-                systemBars.bottom
-            )
+            val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+
+            // 바텀 네비게이션 뷰가 현재 화면에 보이는지 확인 (Activity에서 가시성 체크)
+            val bottomNav = requireActivity().findViewById<View>(R.id.bottom_navigation_view)
+            val isBottomNavVisible = bottomNav?.visibility == View.VISIBLE
+
+            // 1. 바텀 네비가 보이면? -> 버튼 아래 마진을 0이나 아주 작게 (이미 네비가 공간을 차지함)
+            // 2. 바텀 네비가 안 보이면? -> 버튼 아래에 시스템 네비게이션 바(소프트키)만큼 패딩 추가
+            if (isBottomNavVisible) {
+                binding.suggestMg5.layoutParams.height = 10.dpToPx(v.context) // 살짝만 띄우기
+            } else {
+                // 소프트키(navigationBars.bottom) 높이만큼 여백용 뷰의 높이를 조절!
+                binding.suggestMg5.layoutParams.height = navigationBars.bottom + 16.dpToPx(v.context)
+            }
+
             insets
+        }
+
+        binding.etSuggestWantBenefit.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                // 키보드가 완전히 올라온 후 스크롤되도록 약간의 딜레이를 주거나
+                // 뷰의 위치를 계산해서 스크롤합니다.
+                binding.nsvSuggest.postDelayed({
+                    binding.nsvSuggest.smoothScrollTo(0, view.top) // 입력창 상단이 보이게 하거나
+                    // binding.nsvSuggest.fullScroll(View.FOCUS_DOWN) // 혹은 맨 아래로
+                }, 200)
+            }
         }
 
         activateCompleteButton()
@@ -127,6 +160,12 @@ class UserServiceSuggestFragment : BaseFragment<FragmentUserServiceSuggestBindin
 
         binding.btnSuggestComplete.isEnabled = false
         binding.btnSuggestComplete.setBackgroundResource(R.drawable.btn_basic_unselected)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        dropdownWindow?.dismiss()
     }
 
     private fun showDropdownMenu(anchor: View, targets: List<SuggestionTargetModel>) {
@@ -202,8 +241,4 @@ class UserServiceSuggestFragment : BaseFragment<FragmentUserServiceSuggestBindin
         viewModel.clearInputs()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        dropdownWindow?.dismiss() // 메모리 누수 방지
-    }
 }
