@@ -141,11 +141,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             "PARTNER" -> Intent(this, PartnerMainActivity::class.java)
             else -> Intent(this, UserMainActivity::class.java)
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         
         // 로그인 액티비티 종료하여 매끄러운 전환
-        finish()
+        finishAffinity()
     }
 
     private fun checkLoginInputValidity() {

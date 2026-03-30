@@ -6,17 +6,19 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class StoreMapResponseDto(
     val storeId: Long? = null,
+    // 아래 필드들은 JSON 루트에 없으므로 ?를 붙이고 기본값 null 설정
     val adminId: Long? = null,
-    val adminName: String,
+    val adminName: String? = null,
+    val criterionType: String? = null,
+    val optionType: String? = null,
+    val people: Int? = null,
+    val cost: Int? = null,
+    val category: String? = null,
+    val discountRate: Int? = null,
+
     val name: String,
     val address: String?,
     val rate: Double?,
-    val criterionType: String?,
-    val optionType: String?,
-    val people: Int?,
-    val cost: Int?,
-    val category: String?,
-    val discountRate: Int?,
     val hasPartner: Boolean,
     val latitude: Double,
     val longitude: Double,
@@ -24,6 +26,7 @@ data class StoreMapResponseDto(
     val phoneNumber: String? = null,
     val partnerships: List<PartnershipDto>? = null,
 ) {
+    // PartnershipDto 내부는 지금처럼 유지 (여기에 adminName이 있는 건 맞음)
     @JsonClass(generateAdapter = true)
     data class PartnershipDto(
         val adminId: Long,
@@ -34,8 +37,7 @@ data class StoreMapResponseDto(
     fun toModel() = StoreOnMap(
         storeId = this.storeId,
         adminId = this.adminId,
-        adminName = this.adminName,
-        name = this.name,
+        adminName = this.adminName ?: this.partnerships?.firstOrNull()?.adminName ?: "",        name = this.name,
         address = this.address,
         rate = this.rate,
         criterionType = this.criterionType,

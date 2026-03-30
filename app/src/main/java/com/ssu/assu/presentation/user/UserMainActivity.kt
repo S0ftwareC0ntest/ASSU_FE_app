@@ -2,6 +2,7 @@ package com.ssu.assu.presentation.user
 
 import android.content.Context
 import android.content.Intent
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +28,15 @@ class UserMainActivity : BaseActivity<ActivityUserMainBinding>(R.layout.activity
                 systemBars.right,
                 0
             )
+
+            onBackPressedDispatcher.addCallback(this, object :
+                OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // 메인 화면에서 뒤로가기 시 모든 액티비티를 닫고 앱 종료
+                    finishAffinity()
+                }
+            })
+
 
             // 바텀 네비게이션에 패딩 적용
             binding.bottomNavigationView.setPadding(0, 0, 0, navigationBars.bottom)

@@ -66,7 +66,7 @@ interface LocationService {
         @Query("searchKeyword") keyword: String
     ): BaseResponse<List<AdminMapResponseDto>>
 
-    @GET("/map/nearby/v2")
+    @GET("/map/nearby")
     suspend fun getStoresV2(
         @Query("lng1") lng1: Double,
         @Query("lat1") lat1: Double,
