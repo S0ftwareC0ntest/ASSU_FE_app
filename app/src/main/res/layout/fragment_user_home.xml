@@ -401,7 +401,7 @@
                         android:id="@+id/tv_my_partnership_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="나의 제휴 매장"
+                        android:text="제휴 혜택 목록"
                         android:fontFamily="@font/pretendard_medium"
                         android:textSize="16sp"
                         android:textColor="@color/assu_font_main"
