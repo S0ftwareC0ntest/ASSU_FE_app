@@ -2,6 +2,7 @@ package com.ssu.assu.presentation.common.signup
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,7 +16,6 @@ import com.ssu.assu.presentation.user.UserMainActivity
 import com.ssu.assu.presentation.admin.AdminMainActivity
 import com.ssu.assu.presentation.partner.PartnerMainActivity
 import com.ssu.assu.ui.auth.SignUpViewModel
-import com.ssu.assu.util.showErrorToast
 import kotlinx.coroutines.launch
 
 class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>(R.layout.fragment_sign_up_complete){
@@ -23,59 +23,49 @@ class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>(R.lay
     private val signUpViewModel: SignUpViewModel by activityViewModels()
 
     override fun initObserver() {
-        // 회원가입 결과 관찰 (로딩 완료 후 이름 표시를 위해 로딩 상태 관찰에서 처리)
-
-        // 로딩 상태 관찰
+        // isLoading 초기값이 false라서, 로딩이 한 번이라도 true가 된 뒤 false로 돌아올 때만 결과를 판별한다.
+        // 에러 토스트·로그인 복귀도 여기서만 처리해 errorMessage collect와의 레이스를 막는다.
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                var wasLoading = false
                 signUpViewModel.isLoading.collect { isLoading ->
                     Log.d("SignUpCompleteFragment", "로딩 상태 변경: $isLoading")
-                    if (!isLoading) {
-                        // 로딩이 끝났을 때 회원가입 결과 확인
+                    binding.loadingOverlay.visibility =
+                        if (isLoading) View.VISIBLE else View.GONE
+                    if (isLoading) {
+                        binding.tvLoadingText.setText(R.string.signup_loading_message)
+                        wasLoading = true
+                    } else if (wasLoading) {
                         val result = signUpViewModel.signUpResult.value
                         val errorMessage = signUpViewModel.errorMessage.value
-                        
-                        Log.d("SignUpCompleteFragment", "=== 로딩 완료 후 상태 확인 ===")
+
+                        Log.d("SignUpCompleteFragment", "=== 회원가입 요청 종료 후 상태 ===")
                         Log.d("SignUpCompleteFragment", "회원가입 결과: $result")
                         Log.d("SignUpCompleteFragment", "에러 메시지: $errorMessage")
-                        
-                        if (result == null && errorMessage == null) {
-                            // 회원가입 실패 시 LoginActivity로 돌아가기
-                            Log.e("SignUpCompleteFragment", "회원가입 실패: 결과도 에러도 없음")
-                            Toast.makeText(requireContext(), "회원가입에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
-                            navigateToLogin()
-                        } else if (result != null) {
-                            Log.d("SignUpCompleteFragment", "회원가입 성공: $result")
-                            // 로딩 완료 후 사용자 이름 표시
-                            val userName = result.basicInfo?.name ?: result.username
-                            val welcomeText = getString(R.string.signup_welcome_format, userName)
-                            binding.tvSignupDoneUsername.text = welcomeText
-                            
-                            Log.d("SignUpCompleteFragment", "로딩 완료 후 사용자 이름 표시: $userName")
-                        }
-                        Log.d("SignUpCompleteFragment", "=============================")
-                    }
-                }
-            }
-        }
 
-        // 에러 메시지 관찰
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModel.errorMessage.collect { error ->
-                    error?.let {
-                        Log.e("SignUpCompleteFragment", "회원가입 에러 발생: $it")
-                        
-                        // String을 Fail 객체로 변환하여 표시
-                        val fail = com.ssu.assu.util.RetrofitResult.Fail(
-                            statusCode = -1,
-                            code = "SIGNUP_ERROR",
-                            message = it
-                        )
-                        requireContext().showErrorToast(fail, Toast.LENGTH_LONG)
-                        signUpViewModel.clearError()
-                        // 에러 발생 시 LoginActivity로 돌아가기
-                        navigateToLogin()
+                        when {
+                            result != null -> {
+                                Log.d("SignUpCompleteFragment", "회원가입 성공: $result")
+                                applySignupSuccessWelcome()
+                            }
+                            errorMessage != null -> {
+                                Log.e("SignUpCompleteFragment", "회원가입 실패(에러): $errorMessage")
+                                signUpViewModel.consumeExitToLoginAfterError()
+                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                                signUpViewModel.clearError()
+                                navigateToLogin()
+                            }
+                            else -> {
+                                Log.e("SignUpCompleteFragment", "회원가입 실패: 결과·에러 없음")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "회원가입에 실패했습니다. 다시 시도해주세요.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                navigateToLogin()
+                            }
+                        }
+                        wasLoading = false
                     }
                 }
             }
@@ -83,13 +73,24 @@ class SignUpCompleteFragment : BaseFragment<FragmentSignUpCompleteBinding>(R.lay
     }
 
     override fun initView() {
-        // 회원가입 API 호출
-        signUpViewModel.signUp()
+        // 학생 플로우는 확인 화면에서 이미 회원가입 API가 성공한 뒤 진입할 수 있음
+        if (signUpViewModel.signUpResult.value != null) {
+            applySignupSuccessWelcome()
+        } else {
+            signUpViewModel.signUp()
+        }
 
         // 회원가입 완료 후 사용자 타입에 따른 Main Activity로 이동
         binding.btnCompleted.setOnClickListener {
             navigateToMainActivity()
         }
+    }
+
+    private fun applySignupSuccessWelcome() {
+        val result = signUpViewModel.signUpResult.value ?: return
+        val userName = result.basicInfo?.name ?: result.username
+        val welcomeText = getString(R.string.signup_welcome_format, userName)
+        binding.tvSignupDoneUsername.text = welcomeText
     }
 
     // 사용자 타입에 따른 Main Activity로 이동하는 함수

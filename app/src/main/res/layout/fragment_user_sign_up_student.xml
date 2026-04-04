@@ -88,13 +88,55 @@
 
             </LinearLayout>
 
-            <!-- LMS 인증 WebView (처음에는 숨김) -->
+            <!-- LMS 인증 WebView (처음에는 숨김). 첫 페인트 전 검은 화면 완화 -->
             <WebView
                 android:id="@+id/webview_lms_auth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="@color/assu_background" />
 
+        </FrameLayout>
+
+        <!-- LMS 성공 후 서버 검증 중 — LmsLoginActivity loading_overlay와 동일 구성·전체 화면 덮음 -->
+        <FrameLayout
+            android:id="@+id/fl_lms_verify_loading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/assu_background"
+            android:elevation="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp">
+
+                <ProgressBar
+                    android:id="@+id/pb_lms_verify_loading"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateTint="#007AFF" />
+
+                <TextView
+                    android:id="@+id/tv_lms_verify_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/lms_loading_message"
+                    android:textColor="@color/assu_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_bold" />
+            </LinearLayout>
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

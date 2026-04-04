@@ -26,12 +26,14 @@ import com.ssu.assu.domain.usecase.auth.AdminSignUpUseCase
 import com.ssu.assu.domain.usecase.auth.PartnerSignUpUseCase
 import com.ssu.assu.domain.usecase.auth.StudentSignUpUseCase
 import com.ssu.assu.domain.usecase.auth.StudentTokenVerifyUseCase
+import com.ssu.assu.di.ServiceModule
 import com.ssu.assu.util.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -59,6 +61,19 @@ class SignUpViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
+    private var pendingExitToLoginAfterError = false
+
+    fun consumeExitToLoginAfterError(): Boolean {
+        val v = pendingExitToLoginAfterError
+        pendingExitToLoginAfterError = false
+        return v
+    }
+
+    private fun setSignupApiError(mappedMessage: String, exitToLogin: Boolean) {
+        pendingExitToLoginAfterError = exitToLogin
+        _errorMessage.value = mappedMessage
+    }
+
     // 학생 토큰 검증 결과
     private val _studentVerifyResult = MutableStateFlow<StudentTokenVerifyResponseDto?>(null)
     val studentVerifyResult: StateFlow<StudentTokenVerifyResponseDto?> = _studentVerifyResult.asStateFlow()
@@ -84,9 +99,9 @@ class SignUpViewModel @Inject constructor(
         _isEmailVerifying.value = false
     }
 
-    // 전화번호 저장
-    fun setPhoneNumber(phoneNumber: String) {
-        _signUpData.value = _signUpData.value.copy(phoneNumber = phoneNumber)
+    /** LMS 단계 재진입·뒤로가기 시 이전 검증 성과로 다시 네비게이션되지 않도록 초기화 */
+    fun clearStudentVerifyResult() {
+        _studentVerifyResult.value = null
     }
 
     // 사용자 타입 저장
@@ -269,6 +284,7 @@ class SignUpViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            _studentVerifyResult.value = null
             _isLoading.value = true
             _errorMessage.value = null
 
@@ -287,14 +303,33 @@ class SignUpViewModel @Inject constructor(
                     }
                 }
                 is RetrofitResult.Fail -> {
-                    // 서버 에러 메시지는 토스트로 표시하지 않음
-                    // 로그만 남기고 다음 화면으로 진행하지 않음
                     Log.d("SignUpViewModel", "학생 토큰 검증 실패: ${result.message}")
-                    _errorMessage.value = "학생 인증에 실패했습니다. 다시 시도해주세요."
+                    setSignupApiError(
+                        LoginErrorMessageMapper.getLoginErrorMessage(result),
+                        LoginErrorMessageMapper.isDuplicateMemberSignupFailure(result)
+                    )
                 }
                 is RetrofitResult.Error -> {
                     Log.d("SignUpViewModel", "학생 토큰 검증 에러: ${result.exception.message}")
-                    _errorMessage.value = "네트워크 오류가 발생했습니다."
+                    val synthetic = LoginErrorMessageMapper.syntheticFailFromThrowable(result.exception)
+                    if (synthetic != null) {
+                        setSignupApiError(
+                            LoginErrorMessageMapper.getLoginErrorMessage(synthetic),
+                            LoginErrorMessageMapper.isDuplicateMemberSignupFailure(synthetic)
+                        )
+                    } else {
+                        val msg = when {
+                            result.exception.message == ServiceModule.NETWORK_EXCEPTION_OFFLINE_CASE ->
+                                "네트워크 연결을 확인해주세요."
+                            result.exception is IOException ->
+                                "네트워크 오류가 발생했습니다."
+                            else ->
+                                result.exception.message?.takeIf { it.isNotBlank() }
+                                    ?: "네트워크 오류가 발생했습니다."
+                        }
+                        pendingExitToLoginAfterError = false
+                        _errorMessage.value = msg
+                    }
                 }
             }
             _isLoading.value = false
@@ -334,18 +369,18 @@ class SignUpViewModel @Inject constructor(
 
     // 학생 회원가입
     private fun signUpStudent() {
-        val data = _signUpData.value
-        if (!isStudentSignUpDataValid(data)) {
-            _errorMessage.value = "필수 정보가 누락되었습니다."
-            return
-        }
-
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
 
+            val data = _signUpData.value
+            if (!isStudentSignUpDataValid(data)) {
+                _errorMessage.value = "필수 정보가 누락되었습니다."
+                _isLoading.value = false
+                return@launch
+            }
+
             val request = StudentTokenSignUpRequestDto(
-                phoneNumber = data.phoneNumber!!,
                 marketingAgree = data.marketingAgree,
                 locationAgree = data.locationAgree,
                 studentTokenAuth = StudentTokenAuthPayloadDto(
@@ -355,10 +390,7 @@ class SignUpViewModel @Inject constructor(
                 )
             )
 
-            // API 호출 직전 전달되는 정보 로그 출력
-            // API 요청 데이터 로그 출력
             Log.d("SignUpViewModel", "=== 학생 회원가입 API 요청 데이터 ===")
-            Log.d("SignUpViewModel", "📱 phoneNumber: '${request.phoneNumber}'")
             Log.d("SignUpViewModel", "📧 marketingAgree: ${request.marketingAgree}")
             Log.d("SignUpViewModel", "📍 locationAgree: ${request.locationAgree}")
             Log.d("SignUpViewModel", "🎓 studentTokenAuth:")
@@ -402,14 +434,34 @@ class SignUpViewModel @Inject constructor(
                     Log.e("SignUpViewModel", "❌ Status Code: ${result.statusCode}")
                     Log.e("SignUpViewModel", "💬 Message: ${result.message}")
                     Log.e("SignUpViewModel", "==========================================")
-                    _errorMessage.value = result.message
+                    setSignupApiError(
+                        LoginErrorMessageMapper.getLoginErrorMessage(result),
+                        LoginErrorMessageMapper.isDuplicateMemberSignupFailure(result)
+                    )
                 }
                 is RetrofitResult.Error -> {
                     Log.e("SignUpViewModel", "=== 학생 회원가입 API 에러 ===")
                     Log.e("SignUpViewModel", "💥 Exception: ${result.exception}")
                     Log.e("SignUpViewModel", "📝 Exception Message: ${result.exception.message}")
                     Log.e("SignUpViewModel", "==========================================")
-                    _errorMessage.value = result.exception.message ?: "네트워크 오류가 발생했습니다."
+                    val synthetic = LoginErrorMessageMapper.syntheticFailFromThrowable(result.exception)
+                    if (synthetic != null) {
+                        setSignupApiError(
+                            LoginErrorMessageMapper.getLoginErrorMessage(synthetic),
+                            LoginErrorMessageMapper.isDuplicateMemberSignupFailure(synthetic)
+                        )
+                    } else {
+                        val msg = when {
+                            result.exception.message == ServiceModule.NETWORK_EXCEPTION_OFFLINE_CASE ->
+                                "네트워크 연결을 확인해주세요."
+                            result.exception is IOException ->
+                                result.exception.message ?: "네트워크 오류가 발생했습니다."
+                            else ->
+                                result.exception.message ?: "네트워크 오류가 발생했습니다."
+                        }
+                        pendingExitToLoginAfterError = false
+                        _errorMessage.value = msg
+                    }
                 }
             }
             _isLoading.value = false
@@ -681,15 +733,12 @@ class SignUpViewModel @Inject constructor(
 
     // 학생 회원가입 데이터 유효성 검사
     private fun isStudentSignUpDataValid(data: SignUpData): Boolean {
-        val isValid = !data.phoneNumber.isNullOrEmpty() &&
-                !data.sToken.isNullOrEmpty() &&
+        val isValid = !data.sToken.isNullOrEmpty() &&
                 !data.sIdno.isNullOrEmpty() &&
                 data.locationAgree &&
                 data.userType == "user"
         
-        // 유효성 검사 결과 로그 출력
         Log.d("SignUpViewModel", "=== 학생 회원가입 데이터 유효성 검사 ===")
-        Log.d("SignUpViewModel", "Phone Number: '${data.phoneNumber}' (valid: ${!data.phoneNumber.isNullOrEmpty()})")
         Log.d("SignUpViewModel", "Student Token: '${data.sToken}' (valid: ${!data.sToken.isNullOrEmpty()})")
         Log.d("SignUpViewModel", "Student ID: '${data.sIdno}' (valid: ${!data.sIdno.isNullOrEmpty()})")
         Log.d("SignUpViewModel", "Location Agree: ${data.locationAgree}")

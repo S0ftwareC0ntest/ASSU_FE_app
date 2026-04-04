@@ -1,6 +1,5 @@
 package com.ssu.assu.presentation.common.signup
 
-import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ssu.assu.R
@@ -21,79 +20,43 @@ class SignUpTypeFragment : BaseFragment<FragmentSignUpTypeBinding>(R.layout.frag
     override fun initView() {
         binding.ivSignupProgressBar.setProgressBarFillAnimated(
             container = binding.flSignupProgressContainer,
-            fromPercent = 0.25f,
-            toPercent = 0.4f
+            fromPercent = 0.1f,
+            toPercent = 0.25f
         )
         // 완료 버튼 기본 비활성화
         binding.btnCompleted.isEnabled = false
-
-        // 3개 버튼에 클릭 리스너 설정
-        binding.btnAdminType.setOnClickListener {
-            selectType("admin")
-        }
-
-        binding.btnPartnerType.setOnClickListener {
-            selectType("partner")
-        }
 
         binding.btnUserType.setOnClickListener {
             selectType("user")
         }
 
-        // 확인 버튼 클릭 시
+        // 확인 버튼 클릭 시 (학생 가입만 지원)
         binding.btnCompleted.setOnClickListener {
-            when (selectedType) {
-                "admin" -> {
-                    signUpViewModel.setUserType("admin")
-                    val bundle = Bundle().apply {
-                        putString("userType", "admin")
-                    }
-                    findNavController().navigate(R.id.action_type_to_account, bundle)
-                }
-                "partner" -> {
-                    signUpViewModel.setUserType("partner")
-                    val bundle = Bundle().apply {
-                        putString("userType", "partner")
-                    }
-                    findNavController().navigate(R.id.action_type_to_account, bundle)
-                }
-                "user" -> {
-                    signUpViewModel.setUserType("user")
-                    findNavController().navigate(R.id.action_type_to_user_school)
-                }
+            if (selectedType == "user") {
+                signUpViewModel.setUserType("user")
+                findNavController().navigate(R.id.action_type_to_user_school)
             }
         }
+
+        selectType("user")
     }
 
     private fun selectType(type: String) {
         selectedType = type
 
-        // 모든 버튼 기본 배경으로 초기화
         binding.btnAdminType.setBackgroundResource(R.drawable.bg_signup_input_bar)
         binding.btnPartnerType.setBackgroundResource(R.drawable.bg_signup_input_bar)
         binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar)
 
-        binding.flAdminType.alpha = 0.6f
-        binding.flPartnerType.alpha = 0.6f
+        binding.flAdminType.alpha = 0.35f
+        binding.flPartnerType.alpha = 0.35f
         binding.flUserType.alpha = 0.6f
 
-        // 선택된 버튼만 강조 및 투명도 설정
-        when (type) {
-            "admin" -> {
-                binding.btnAdminType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
-                binding.flAdminType.alpha = 1.0f
-            }
-            "partner" -> {
-                binding.btnPartnerType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
-                binding.flPartnerType.alpha = 1.0f
-            }
-            "user" -> {
-                binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
-                binding.flUserType.alpha = 1.0f
-            }
+        if (type == "user") {
+            binding.btnUserType.setBackgroundResource(R.drawable.bg_signup_input_bar_selected)
+            binding.flUserType.alpha = 1.0f
         }
 
-        // 완료 버튼 활성화
         binding.btnCompleted.isEnabled = true
         binding.btnCompleted.setBackgroundResource(R.drawable.btn_basic_selected)
     }

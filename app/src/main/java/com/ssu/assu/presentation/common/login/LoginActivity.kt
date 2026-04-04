@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
@@ -95,12 +96,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         // 로그인 상태 관찰
         loginViewModel.loginState.observe(this) { state ->
             when (state) {
-                is LoginState.Idle -> Unit
+                is LoginState.Idle -> {
+                    hideLoadingOverlay()
+                }
                 is LoginState.Loading -> {
                     setLoginButtonEnabled(false)
+                    showLoadingOverlay(getString(R.string.lms_loading_message))
                     Log.d("LoginActivity", "로그인 중...")
                 }
                 is LoginState.Success -> {
+                    hideLoadingOverlay()
                     setLoginButtonEnabled(true)
                     Log.d("LoginActivity", "로그인 성공!")
                     // 자동 로그인 체크 플래그 설정하여 중복 실행 방지
@@ -109,6 +114,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     navigateToMainActivity(state.loginData.userRole)
                 }
                 is LoginState.Error -> {
+                    hideLoadingOverlay()
                     setLoginButtonEnabled(true)
                     // 로그인 전용 에러 메시지 매퍼 사용
                     val errorMessage = LoginErrorMessageMapper.getLoginErrorMessage(state.fail)
@@ -116,6 +122,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
                     Log.e("LoginActivity", "로그인 실패: code=${state.fail.code}, message=${state.fail.message}")
                 }
                 is LoginState.PendingApproval -> {
+                    hideLoadingOverlay()
                     setLoginButtonEnabled(true)
                     Toast.makeText(this@LoginActivity, "승인 대기 중입니다: ${state.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -160,6 +167,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             this,
             if (enabled) R.drawable.btn_basic_selected else R.drawable.btn_basic_unselected
         )
+    }
+
+    private fun showLoadingOverlay(message: String) {
+        binding.tvLoadingText.text = message
+        binding.loadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        binding.loadingOverlay.visibility = View.GONE
     }
 
 
