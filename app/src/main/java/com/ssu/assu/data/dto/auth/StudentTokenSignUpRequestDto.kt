@@ -3,8 +3,6 @@ package com.ssu.assu.data.dto.auth
 import com.google.gson.annotations.SerializedName
 
 data class StudentTokenSignUpRequestDto(
-    @SerializedName("phoneNumber")
-    val phoneNumber: String,
     @SerializedName("marketingAgree")
     val marketingAgree: Boolean,
     @SerializedName("locationAgree")

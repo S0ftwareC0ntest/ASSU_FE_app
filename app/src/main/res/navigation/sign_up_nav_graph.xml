@@ -2,24 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sign_up_nav_graph"
-    app:startDestination="@id/signUpCommonVerifyFragment">
+    app:startDestination="@id/signUpCommonTypeFragment">
 
-    <!-- 1단계: 인증 -->
-    <fragment
-        android:id="@+id/signUpCommonVerifyFragment"
-        android:name="com.ssu.assu.presentation.common.signup.SignUpVerifyFragment"
-        android:label="회원가입 인증">
-        <action
-            android:id="@+id/action_verify_to_type"
-            app:destination="@id/signUpCommonTypeFragment" />
-
-
-<!--        <action-->
-<!--            android:id="@+id/action_verify_to_info"-->
-<!--            app:destination="@id/signUpAdminInfoFragment"/>-->
-    </fragment>
-
-    <!-- 2단계: 사용자 유형 선택 -->
+    <!-- 1단계: 사용자 유형 선택 -->
     <fragment
         android:id="@+id/signUpCommonTypeFragment"
         android:name="com.ssu.assu.presentation.common.signup.SignUpTypeFragment"

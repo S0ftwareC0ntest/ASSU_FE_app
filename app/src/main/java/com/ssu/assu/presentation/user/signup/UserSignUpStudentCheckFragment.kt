@@ -1,6 +1,9 @@
 package com.ssu.assu.presentation.user.signup
 
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -10,13 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.ssu.assu.R
+import com.ssu.assu.data.dto.auth.StudentTokenVerifyResponseDto
 import com.ssu.assu.databinding.FragmentUserSignUpStudentCheckBinding
-import com.ssu.assu.domain.model.enums.Major
 import com.ssu.assu.presentation.base.BaseFragment
+import com.ssu.assu.presentation.common.login.LoginActivity
 import com.ssu.assu.presentation.user.mypage.UserMypagePrivacyDialogFragment
 import com.ssu.assu.ui.auth.SignUpViewModel
 import com.ssu.assu.util.setProgressBarFillAnimated
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class UserSignUpStudentCheckFragment : 
@@ -25,15 +30,24 @@ class UserSignUpStudentCheckFragment :
     private val signUpViewModel: SignUpViewModel by activityViewModels()
 
     override fun initObserver() {
-        // 학생 검증 결과 관찰하여 화면에 표시
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                signUpViewModel.studentVerifyResult.collect { result ->
-                    result?.let {
-                        // Major enum을 한국어로 변환하여 표시
-                        val majorDisplayName = convertMajorToKorean(it.major)
-                        binding.etStudentMajor.setText(majorDisplayName)
-                        binding.etStudentId.setText(it.studentNumber)
+                launch {
+                    signUpViewModel.studentVerifyResult.collect { result ->
+                        result?.let {
+                            applyVerifiedStudentFields(it)
+                            signUpViewModel.clearStudentVerifyResult()
+                        }
+                    }
+                }
+                launch {
+                    signUpViewModel.isLoading.collect { loading ->
+                        binding.loadingOverlay.visibility =
+                            if (loading) View.VISIBLE else View.GONE
+                        if (loading) {
+                            binding.tvLoadingText.setText(R.string.signup_loading_message)
+                        }
+                        updateButtonState()
                     }
                 }
             }
@@ -71,24 +85,63 @@ class UserSignUpStudentCheckFragment :
             showTermsDialog()
         }
 
-        // 완료 버튼 클릭
+        // 완료 버튼 클릭 — 회원가입 API 성공 후에만 완료 화면으로 이동
         binding.btnCompleted.setOnClickListener {
+            if (signUpViewModel.signUpResult.value != null) {
+                findNavController().navigate(R.id.action_user_student_check_to_complete)
+                return@setOnClickListener
+            }
             val analytics = FirebaseAnalytics.getInstance(requireContext())
             analytics.setUserProperty("user_type", "student")
 
-            findNavController().navigate(R.id.action_user_student_check_to_complete)
+            viewLifecycleOwner.lifecycleScope.launch {
+                signUpViewModel.signUp()
+                signUpViewModel.isLoading.first { it }
+                signUpViewModel.isLoading.first { !it }
+                if (!isAdded) return@launch
+
+                when {
+                    signUpViewModel.signUpResult.value != null ->
+                        findNavController().navigate(R.id.action_user_student_check_to_complete)
+                    signUpViewModel.errorMessage.value != null -> {
+                        val msg = signUpViewModel.errorMessage.value
+                        signUpViewModel.consumeExitToLoginAfterError()
+                        Toast.makeText(requireContext(), msg ?: "", Toast.LENGTH_LONG).show()
+                        signUpViewModel.clearError()
+                        navigateToLogin()
+                    }
+                    else -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "회원가입에 실패했습니다. 다시 시도해주세요.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        navigateToLogin()
+                    }
+                }
+            }
         }
         
+        signUpViewModel.studentVerifyResult.value?.let { applyVerifiedStudentFields(it) }
+
         // 초기 버튼 상태 설정
         updateButtonState()
+    }
+
+    /** 서버가 전공명을 한글 그대로 내려주므로 그대로 표시한다. */
+    private fun applyVerifiedStudentFields(dto: StudentTokenVerifyResponseDto) {
+        val majorText = dto.major.trim().ifEmpty { "학과 정보 없음" }
+        binding.etStudentMajor.setText(majorText)
+        binding.etStudentId.setText(dto.studentNumber)
     }
     
     private fun updateButtonState() {
         val isPrivacyAgreed = binding.cbPrivacyAgree.isChecked
+        val isSignupLoading = signUpViewModel.isLoading.value
 
         // 필수 약관(개인정보 처리방침 + 서비스 이용약관)이 체크되어야 버튼 활성화
         // 선택 약관(cbMarketingAgree)은 체크 여부와 관계없이 진행 가능
-        val isButtonEnabled = isPrivacyAgreed
+        val isButtonEnabled = isPrivacyAgreed && !isSignupLoading
         
         binding.btnCompleted.isEnabled = isButtonEnabled
         binding.btnCompleted.background = ContextCompat.getDrawable(
@@ -164,22 +217,6 @@ class UserSignUpStudentCheckFragment :
         }
     }
 
-    // Major enum을 한국어로 변환하는 함수
-    private fun convertMajorToKorean(majorString: String?): String {
-        if (majorString.isNullOrEmpty()) {
-            return "학과 정보 없음"
-        }
-        
-        return try {
-            // Major enum에서 해당하는 항목을 찾아서 displayName 반환
-            val majorEnum = Major.values().find { it.name == majorString }
-            majorEnum?.displayName ?: majorString
-        } catch (e: Exception) {
-            // 변환 실패 시 원본 문자열 반환
-            majorString
-        }
-    }
-
     // 체크박스 색상 설정
     private fun setupCheckboxColors() {
         val assuMainColor = ContextCompat.getColor(requireContext(), R.color.assu_main)
@@ -198,5 +235,12 @@ class UserSignUpStudentCheckFragment :
         binding.cbAllAgree.buttonTintList = colorStateList
         binding.cbPrivacyAgree.buttonTintList = colorStateList
         binding.cbMarketingAgree.buttonTintList = colorStateList
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

@@ -12,63 +12,158 @@ object LoginErrorMessageMapper {
      * @return 사용자에게 표시할 친화적인 메시지
      */
     fun getLoginErrorMessage(fail: RetrofitResult.Fail): String {
-        val httpStatusCode = fail.code
+        val apiCodeField = fail.code
         val serverMessage = fail.message
         val resultMessage = fail.result ?: ""
-        
-        Log.d("LoginErrorMessageMapper", "로그인 에러 변환 - HTTP code: '$httpStatusCode', message: '$serverMessage', result: '$resultMessage'")
-        
-        // 서버 메시지에서 실제 에러 코드와 결과 메시지 추출
+        val httpStatusStr = fail.statusCode.toString()
+
+        Log.d(
+            "LoginErrorMessageMapper",
+            "로그인 에러 변환 - apiCode='$apiCodeField', http=$httpStatusStr, message='$serverMessage', result='$resultMessage'"
+        )
+
         val extractedData = extractErrorDataFromMessage(serverMessage)
-        val actualErrorCode = extractedData.first
+        val extractedFromJson = extractedData.first
         val extractedResultMessage = extractedData.second
-        
-        Log.d("LoginErrorMessageMapper", "추출된 에러 코드: '$actualErrorCode'")
-        Log.d("LoginErrorMessageMapper", "추출된 결과 메시지: '$extractedResultMessage'")
-        
+        val businessCode = resolveBusinessCode(apiCodeField, extractedFromJson)
+
+        Log.d("LoginErrorMessageMapper", "businessCode='$businessCode'")
+
+        val errorDetail = buildString {
+            if (resultMessage.isNotBlank()) append(resultMessage)
+            if (extractedResultMessage.isNotBlank()) {
+                if (isNotEmpty()) append(' ')
+                append(extractedResultMessage)
+            }
+        }
+
         return when {
-            // 네트워크 에러
-            serverMessage.contains("네트워크") || 
-            serverMessage.contains("network", ignoreCase = true) ||
-            serverMessage.contains("offline", ignoreCase = true) -> 
+            serverMessage.contains("네트워크") ||
+                serverMessage.contains("network", ignoreCase = true) ||
+                serverMessage.contains("offline", ignoreCase = true) ->
                 "네트워크 연결을 확인해주세요."
-            
-            // ===== 로그인 관련 에러 =====
-            actualErrorCode == "MEMBER_4001" -> 
-                "이메일을 확인해주세요."
-            
-            // Bad credentials 체크를 COMMON500보다 먼저 처리
-            actualErrorCode == "COMMON500" && (resultMessage.contains("Bad credentials", ignoreCase = true) || extractedResultMessage.contains("Bad credentials", ignoreCase = true)) -> 
+
+            businessCode == "MEMBER_4001" ->
+                "회원가입을 진행해주세요."
+
+            businessCode == "MEMBER_4009" ->
+                "이미 가입된 회원입니다."
+
+            businessCode == "COMMON500" && (
+                resultMessage.contains("Bad credentials", ignoreCase = true) ||
+                    extractedResultMessage.contains("Bad credentials", ignoreCase = true)
+                ) ->
                 "비밀번호가 틀렸습니다."
-            
-            actualErrorCode == "COMMON500" -> 
+
+            // 서버 DB 등에 구 전공/단과 enum 코드가 남아 있을 때 (예: Major.COM 제거 후)
+            businessCode == "COMMON500" && isNoEnumConstantMajorOrDepartmentError(errorDetail) ->
+                "저장된 학과 정보가 시스템과 맞지 않아 로그인할 수 없습니다. 관리자에게 문의해 주세요."
+
+            businessCode == "COMMON500" ->
                 "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-            
-            actualErrorCode == "SSU4000" -> 
-                "숭실대학교 유세인트 로그인에 실패했습니다."
-            
-            // ===== HTTP 상태 코드 기반 에러 (fallback) =====
-            httpStatusCode == "400" ->
+
+            businessCode == "SSU4000" ->
+                "숭실대학교 유세인트 SSO 로그인에 실패했습니다."
+
+            businessCode == "SSU4001" ->
+                "숭실대학교 유세인트 포털 접근에 실패했습니다."
+
+            businessCode == "SSU4002" ->
+                "숭실대학교 유세인트 포털 정보 확인에 실패했습니다."
+
+            httpStatusStr == "400" ->
                 "잘못된 요청입니다. 입력 정보를 확인해주세요."
-            
-            httpStatusCode == "401" ->
+
+            httpStatusStr == "401" ->
                 "인증에 실패했습니다."
-            
-            httpStatusCode == "403" ->
+
+            httpStatusStr == "403" ->
                 "접근 권한이 없습니다."
-            
-            httpStatusCode == "404" ->
+
+            httpStatusStr == "404" ->
                 "요청한 정보를 찾을 수 없습니다."
-            
-            httpStatusCode == "500" ->
+
+            httpStatusStr == "409" ->
+                "이미 가입된 회원입니다."
+
+            httpStatusStr == "500" ->
                 "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-            
-            // 기본 에러 메시지
+
+            serverMessage.isNotBlank() && !serverMessage.startsWith("{") ->
+                serverMessage.trim()
+
             else -> {
-                Log.w("LoginErrorMessageMapper", "매핑되지 않은 로그인 에러: HTTP code=$httpStatusCode, actual code=$actualErrorCode, message=$serverMessage")
+                Log.w(
+                    "LoginErrorMessageMapper",
+                    "매핑되지 않은 로그인 에러: http=$httpStatusStr, business=$businessCode, message=$serverMessage"
+                )
                 "로그인에 실패했습니다. 잠시 후 다시 시도해주세요."
             }
         }
+    }
+
+    /** 이미 가입(중복 회원가입) 응답이면 회원가입 플로우를 종료하고 로그인 화면으로 보낸다. */
+    fun isDuplicateMemberSignupFailure(fail: RetrofitResult.Fail): Boolean {
+        if (fail.statusCode == 409) return true
+        return businessCodeFor(fail) == "MEMBER_4009"
+    }
+
+    /**
+     * [RetrofitResult.Error] 등으로 떨어졌을 때, 예외 메시지가 JSON 에러 본문이면 [RetrofitResult.Fail]로 복원한다.
+     */
+    fun syntheticFailFromThrowable(t: Throwable): RetrofitResult.Fail? {
+        var current: Throwable? = t
+        while (current != null) {
+            failFromJsonMessage(current.message)?.let { return it }
+            current = current.cause
+        }
+        return null
+    }
+
+    private fun businessCodeFor(fail: RetrofitResult.Fail): String {
+        val extracted = extractErrorDataFromMessage(fail.message)
+        return resolveBusinessCode(fail.code, extracted.first)
+    }
+
+    private fun failFromJsonMessage(raw: String?): RetrofitResult.Fail? {
+        val trimmed = raw?.trim() ?: return null
+        if (!trimmed.startsWith("{")) return null
+        return try {
+            val jo = JSONObject(trimmed)
+            val bizCode = jo.optString("code", "")
+            val httpFromBiz = bizCode.toIntOrNull()?.takeIf { it in 100..599 }
+            val httpFromField = jo.optInt("status", -1).takeIf { it in 100..599 }
+            val statusCode = httpFromBiz ?: httpFromField ?: -1
+            RetrofitResult.Fail(
+                statusCode = statusCode,
+                code = bizCode.ifEmpty { "UNKNOWN" },
+                message = trimmed,
+                result = jo.optString("result", "").takeIf { it.isNotEmpty() }
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /**
+     * BaseResponse 실패 시 [RetrofitResult.Fail.code]에 비즈니스 코드(MEMBER_4001 등)가 온다.
+     * 본문이 JSON인 HttpException 등은 메시지에서 추출한 코드를 사용한다.
+     */
+    private fun isNoEnumConstantMajorOrDepartmentError(detail: String): Boolean {
+        if (detail.isBlank()) return false
+        val d = detail.lowercase()
+        return d.contains("no enum constant") &&
+            (d.contains("major.") || d.contains(".major") || d.contains("department.") || d.contains(".department"))
+    }
+
+    private fun resolveBusinessCode(apiCodeField: String, extractedFromMessage: String): String {
+        val api = apiCodeField.trim()
+        if (api.startsWith("MEMBER_") || api.startsWith("SSU") || api.startsWith("COMMON")) return api
+        val fromJson = extractedFromMessage.trim()
+        if (fromJson.startsWith("MEMBER_") || fromJson.startsWith("SSU") || fromJson.startsWith("COMMON")) {
+            return fromJson
+        }
+        return fromJson.ifBlank { api }
     }
     
     /**

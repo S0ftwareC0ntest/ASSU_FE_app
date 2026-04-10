@@ -39,12 +39,13 @@
 
         </LinearLayout>
 
-        <!-- WebView -->
+        <!-- WebView: 첫 페인트 전 검은 깜빡임 방지용 배경 -->
         <WebView
             android:id="@+id/webview_lms"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/assu_background" />
 
         <!-- 로딩 오버레이 -->
         <FrameLayout
@@ -75,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="로그인 중..."
+                    android:text="@string/lms_loading_message"
                     android:textColor="@color/assu_main"
                     android:textSize="16sp"
                     android:fontFamily="@font/pretendard_bold" />

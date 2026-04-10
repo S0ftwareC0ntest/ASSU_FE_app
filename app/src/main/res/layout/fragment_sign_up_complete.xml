@@ -71,5 +71,46 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- LmsLoginActivity loading_overlay와 동일 구성 -->
+        <FrameLayout
+            android:id="@+id/loading_overlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/assu_background"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateTint="#007AFF" />
+
+                <TextView
+                    android:id="@+id/tv_loading_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/signup_loading_message"
+                    android:textColor="@color/assu_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/pretendard_bold" />
+            </LinearLayout>
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
