@@ -52,7 +52,7 @@ class UserPartnershipSelectFragment :
         // 선택 완료 버튼 초기 상태
         updateCompleteButtonState(false)
 
-        // 선택완료 버튼 클릭 리스너
+
         binding.btnSelectPartnershipComplete.setOnClickListener {
             selectedIndex?.let { index ->
                 if (index < contentList.size) {
@@ -66,17 +66,36 @@ class UserPartnershipSelectFragment :
             }
         }
 
+        binding.clPartnershipSelectToHome.setOnClickListener {
+            requireActivity().finish()
+        }
+
 //        binding.tvPartnershipSelectMarketName.text = viewModel.storeName.value TODO : 임시버전을 위해 주석 처리
 
 
     }
 
     override fun initObserver() {
-        // 제휴사 리스트 옵저빙
-        viewModel.contentList.observe(this) { contents ->
-            contentList = contents
-            bindContentToButtons(contents)
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+
+                binding.loadingOverlay.visibility = View.VISIBLE
+                binding.clPartnershipSelectFragment.visibility = View.INVISIBLE
+                binding.flPartnershipSelectNotExist.visibility = View.GONE // 비어있음 안내도 숨김
+            } else {
+
+                binding.loadingOverlay.visibility = View.GONE
+                checkEmptyState()
+            }
         }
+
+        viewModel.contentList.observe(viewLifecycleOwner) { contents ->
+            contentList = contents
+            if (!contents.isNullOrEmpty()) {
+                bindContentToButtons(contents)
+            }
+        }
+
         // TODO : 임시 버전
         viewModel.storeName.observe(viewLifecycleOwner) { storeName ->
             binding.tvPartnershipSelectMarketName.text = storeName
@@ -86,16 +105,17 @@ class UserPartnershipSelectFragment :
         // ---------------
 
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                // 로딩 중일 때
-                binding.loadingOverlay.visibility = View.VISIBLE
-                binding.clPartnershipSelectFragment.visibility = View.INVISIBLE
-            } else {
-                // 로딩 완료 시
-                binding.loadingOverlay.visibility = View.GONE
-                binding.clPartnershipSelectFragment.visibility = View.VISIBLE
-            }
+
+    }
+    private fun checkEmptyState() {
+        if (contentList.isNullOrEmpty()) {
+            // 데이터가 없음
+            binding.flPartnershipSelectNotExist.visibility = View.VISIBLE
+            binding.clPartnershipSelectFragment.visibility = View.GONE
+        } else {
+            // 데이터가 있음
+            binding.flPartnershipSelectNotExist.visibility = View.GONE
+            binding.clPartnershipSelectFragment.visibility = View.VISIBLE
         }
     }
 
